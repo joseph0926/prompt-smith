@@ -1,0 +1,36 @@
+name: Skill Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate SKILL.md exists
+        run: test -f SKILL.md
+
+      - name: Validate frontmatter
+        run: |
+          head -20 SKILL.md | grep -q "^name:"
+          head -20 SKILL.md | grep -q "^description:"
+
+      - name: Validate i18n structure
+        run: |
+          if [ -d "i18n" ]; then
+            for locale in i18n/*/; do
+              test -f "${locale}SKILL.md"
+            done
+          fi
+
+      - name: Check required directories
+        run: |
+          test -d onboarding
+          test -d playbooks
+          test -d references
+          test -d templates

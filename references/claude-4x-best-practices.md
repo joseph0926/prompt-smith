@@ -1,0 +1,496 @@
+# Claude 4.x Best Practices
+
+Claude 4.x 모델(Sonnet 4, Opus 4.5)의 특성에 맞춘 프롬프트 최적화 가이드입니다.
+
+> **적용 모델**: claude-sonnet-4-5-20250929, claude-opus-4-5-20251101
+
+---
+
+## 핵심 원칙
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              Claude 4.x 프롬프트 원칙                        │
+├─────────────────────────────────────────────────────────────┤
+│  1. EXPLICIT    암시보다 명시 - 원하는 것을 직접 요청        │
+│  2. MOTIVATED   왜 필요한지 동기 제공                        │
+│  3. EXEMPLIFIED 예시 = 기대 출력 형식                        │
+│  4. TRACKED     장기 작업은 상태 관리                        │
+│  5. PARALLELIZED 독립 작업은 병렬, 의존성은 순차             │
+│  6. FORMATTED   XML 태그 또는 JSON 스키마로 구조화           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 1. 명시적 지시 (EXPLICIT)
+
+### Claude 4.x 특성
+Claude 4.x는 지시를 **문자 그대로** 따릅니다. 암시적 기대는 작동하지 않습니다.
+
+### 패턴
+
+| 의도 | ❌ 암시적 | ✅ 명시적 |
+|------|----------|----------|
+| 코드 작성 | "이 기능 구현해줘" | "이 기능을 구현하고 tests/ 폴더에 테스트도 작성해줘" |
+| 분석 | "분석해줘" | "분석하고 결과를 JSON으로 출력해줘" |
+| 제안 | "개선해줘" | "개선 사항 3가지를 제안해줘" (또는 "직접 수정해줘") |
+| 리뷰 | "봐줘" | "코드를 검토하고 문제점을 리스트로 정리해줘" |
+
+### 예시
+
+```markdown
+# ❌ 암시적 (Claude 4.x에서 불완전한 결과)
+API 엔드포인트 만들어줘
+
+# ✅ 명시적 (완전한 결과)
+API 엔드포인트를 만들어줘:
+1. src/routes/users.ts에 GET /users 엔드포인트 구현
+2. src/types/user.ts에 User 타입 정의
+3. src/__tests__/users.test.ts에 테스트 작성
+4. 완료 후 npm test 실행해서 통과 확인
+```
+
+---
+
+## 2. 동기 제공 (MOTIVATED)
+
+### Claude 4.x 특성
+Claude 4.x는 "왜"를 이해하면 더 나은 판단을 합니다.
+
+### 패턴
+
+```markdown
+## Context
+[배경 설명 + 왜 이 작업이 필요한지]
+
+## Goal
+[달성하려는 목표]
+
+## Constraints
+[제약 조건 + 그 이유]
+```
+
+### 예시
+
+```markdown
+# ❌ 동기 없음
+이 함수 최적화해줘
+
+# ✅ 동기 제공
+## Context
+이 함수는 실시간 대시보드에서 매 초 호출됩니다.
+현재 평균 200ms가 걸려서 UI가 버벅입니다.
+
+## Goal
+응답 시간을 50ms 이하로 줄여야 합니다.
+
+## Constraints
+- 메모리 사용량은 현재 수준 유지 (이미 한계에 가까움)
+- 외부 캐시 시스템 추가 불가 (인프라 제약)
+```
+
+---
+
+## 3. 예시 일치 (EXEMPLIFIED)
+
+### Claude 4.x 특성
+Claude 4.x는 예시의 형식을 매우 정확하게 따릅니다.
+
+### 원칙
+**예시 형식 = 원하는 출력 형식**
+
+### 패턴
+
+```markdown
+## Examples
+
+### Example 1
+**Input**: [입력 예시]
+**Output**:
+[정확히 원하는 형식의 출력]
+
+### Example 2
+**Input**: [다른 유형의 입력]
+**Output**:
+[동일한 형식의 출력]
+```
+
+### 예시
+
+```markdown
+# ❌ 예시와 기대 출력 불일치
+예시: "Apple" → 기술 회사
+(자연어 설명)
+
+기대 출력: JSON
+(형식 불일치)
+
+# ✅ 예시 = 기대 출력
+## Examples
+
+**Input**: "Apple announced new iPhone today"
+**Output**:
+```json
+{
+  "entities": [
+    {"name": "Apple", "type": "company"},
+    {"name": "iPhone", "type": "product"}
+  ],
+  "topic": "technology",
+  "date_mentioned": true
+}
+```
+
+**Input**: "The weather is nice"
+**Output**:
+```json
+{
+  "entities": [],
+  "topic": "general",
+  "date_mentioned": false
+}
+```
+```
+
+---
+
+## 4. 상태 관리 (TRACKED)
+
+### Claude 4.x 특성
+Claude 4.x는 장기 작업에서 상태를 체계적으로 관리할 수 있습니다.
+
+### 적용 조건
+- 3단계 이상 멀티스텝 태스크
+- 세션 중단 가능성 있는 작업
+- 10개 이상 파일/항목 처리
+
+### 패턴
+
+```markdown
+## State Tracking
+
+### State Schema
+```json
+{
+  "task_id": "string",
+  "status": "pending | in_progress | completed | failed",
+  "progress": {
+    "total": "number",
+    "completed": "number",
+    "current": "string"
+  },
+  "checkpoint": "ISO timestamp",
+  "errors": ["string"]
+}
+```
+
+### Checkpoint Rules
+- [체크포인트 시점]
+- [저장 위치]
+
+### Resume Protocol
+1. [재개 방법]
+2. [검증 방법]
+```
+
+### 예시
+
+```markdown
+## State Tracking
+
+100개 파일을 마이그레이션하는 작업입니다.
+
+### State File: migration-state.json
+```json
+{
+  "task_id": "jest-to-vitest",
+  "status": "in_progress",
+  "progress": {
+    "total": 100,
+    "completed": 45,
+    "current": "src/utils/date.test.ts"
+  },
+  "checkpoint": "2024-01-15T10:30:00Z",
+  "errors": [
+    "src/legacy/old.test.ts: Cannot convert dynamic import"
+  ]
+}
+```
+
+### Checkpoint Rules
+- 매 10개 파일 완료 후 state 저장
+- 에러 발생 시 즉시 state 저장
+- 각 체크포인트에서 git commit
+
+### Resume Protocol
+1. state.json 읽기
+2. progress.completed 다음 파일부터 계속
+3. 이전 체크포인트 커밋 확인
+```
+
+---
+
+## 5. 병렬/순차 실행 (PARALLELIZED)
+
+### Claude 4.x 특성
+Claude 4.x는 독립적인 도구 호출을 병렬로 실행할 수 있습니다.
+
+### 판단 기준
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  병렬 실행 조건                                              │
+│  ─────────────                                              │
+│  • 작업 간 데이터 의존성 없음                                │
+│  • 결과가 서로 영향 주지 않음                                │
+│  • 순서가 결과에 영향 없음                                   │
+├─────────────────────────────────────────────────────────────┤
+│  순차 실행 조건                                              │
+│  ─────────────                                              │
+│  • 이전 결과가 다음 입력에 필요                              │
+│  • 파일 생성 후 내용 작성                                    │
+│  • 검색 후 결과 기반 추가 작업                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 패턴
+
+```markdown
+## Tool Usage Strategy
+
+### Parallel (독립적)
+[작업 A, B, C를 동시에 실행]
+
+### Sequential (의존적)
+[작업 D] → [작업 E (D 결과 사용)] → [작업 F (E 결과 사용)]
+```
+
+### 예시
+
+```markdown
+## Tool Usage Strategy
+
+### Step 1: 정보 수집 (병렬)
+동시 실행:
+- Glob: `**/*.ts` 파일 목록
+- Glob: `**/*.tsx` 파일 목록
+- Read: `package.json` 읽기
+→ 세 작업은 서로 독립적
+
+### Step 2: 분석 (순차)
+Step 1 완료 후:
+- Step 1의 파일 목록으로 대상 확정
+- 각 파일 Read → 분석
+→ Step 1 결과에 의존
+
+### Step 3: 수정 (순차)
+각 파일에 대해:
+- Read → 분석 → Edit
+→ 파일별 순차 처리 (동일 파일 동시 수정 방지)
+
+### Step 4: 검증 (순차)
+모든 수정 완료 후:
+- Bash: `npm run build`
+- Bash: `npm test`
+→ 빌드 성공 후 테스트
+```
+
+---
+
+## 6. 구조화된 출력 (FORMATTED)
+
+### Claude 4.x 특성
+Claude 4.x는 XML 태그와 JSON 스키마를 정확하게 따릅니다.
+
+### 패턴 선택
+
+| 용도 | 권장 형식 | 이유 |
+|------|----------|------|
+| 데이터 교환 | JSON | 파싱 용이 |
+| 긴 텍스트 구분 | XML 태그 | 구조 명확 |
+| 복합 출력 | JSON + 마크다운 | 유연성 |
+
+### XML 태그 패턴
+
+```markdown
+## Output Format
+
+응답은 다음 XML 구조를 따라주세요:
+
+<response>
+  <analysis>
+    [분석 내용]
+  </analysis>
+  <recommendation>
+    [권장 사항]
+  </recommendation>
+  <code>
+    [코드가 있다면]
+  </code>
+</response>
+```
+
+### JSON 스키마 패턴
+
+```markdown
+## Output Format
+
+```json
+{
+  "analysis": {
+    "summary": "string (100자 이내)",
+    "issues": [
+      {
+        "severity": "critical | major | minor",
+        "location": "string",
+        "description": "string"
+      }
+    ],
+    "metrics": {
+      "complexity": "number (1-10)",
+      "maintainability": "number (1-10)"
+    }
+  },
+  "recommendations": ["string"],
+  "estimated_effort": "string"
+}
+```
+
+Required: analysis.summary, analysis.issues
+Optional: analysis.metrics, recommendations, estimated_effort
+```
+
+---
+
+## 7. Extended Thinking 활용
+
+### Claude 4.x 특성
+복잡한 작업에서 Claude 4.x는 내부적으로 깊이 생각합니다. 명시적으로 요청하면 더 나은 결과를 얻을 수 있습니다.
+
+### 적용 상황
+- 여러 접근법 중 선택이 필요할 때
+- 트레이드오프 분석이 필요할 때
+- 도구 결과를 평가해야 할 때
+
+### 패턴
+
+```markdown
+## Decision Process
+
+다음 결정이 필요할 때 각 옵션을 분석해주세요:
+1. [옵션 A의 장단점]
+2. [옵션 B의 장단점]
+3. [선택 이유]
+
+선택 기준:
+- [기준 1] 우선
+- [기준 2] 다음
+```
+
+### 예시
+
+```markdown
+## Decision Process
+
+데이터베이스 마이그레이션 전략을 결정해야 합니다.
+
+### Options to Evaluate
+1. Big Bang: 한 번에 전체 마이그레이션
+2. Gradual: 점진적 마이그레이션 (듀얼 라이트)
+3. Blue-Green: 새 DB 병렬 운영 후 전환
+
+### Evaluation Criteria (우선순위 순)
+1. 다운타임 최소화 (비즈니스 연속성)
+2. 데이터 일관성 (무결성)
+3. 롤백 용이성 (위험 관리)
+4. 구현 복잡도 (리소스)
+
+각 옵션을 기준에 따라 평가하고 최선의 선택을 제안해주세요.
+```
+
+---
+
+## Anti-Patterns (Claude 4.x에서 피해야 할 것)
+
+### 1. 암시적 기대
+
+```markdown
+# ❌ Anti-Pattern
+코드 리뷰해줘
+(테스트도 작성해주겠지...)
+
+# ✅ Correct
+코드 리뷰하고 발견된 문제에 대한 테스트 케이스도 작성해줘
+```
+
+### 2. 모호한 완료 조건
+
+```markdown
+# ❌ Anti-Pattern
+잘 작동할 때까지 수정해줘
+
+# ✅ Correct
+다음 조건을 모두 만족할 때까지 수정해줘:
+- npm test 통과
+- npm run lint 에러 없음
+- TypeScript 타입 에러 없음
+```
+
+### 3. 도구 사용 미지정
+
+```markdown
+# ❌ Anti-Pattern
+에러 찾아서 고쳐줘
+
+# ✅ Correct
+## Tool Usage
+1. Grep으로 "TODO", "FIXME" 검색
+2. 각 파일 Read로 컨텍스트 확인
+3. Edit으로 수정
+4. Bash로 테스트 실행
+```
+
+### 4. 상태 관리 없는 장기 작업
+
+```markdown
+# ❌ Anti-Pattern
+100개 파일 전부 마이그레이션해줘
+
+# ✅ Correct
+100개 파일 마이그레이션:
+- 진행 상태: migration-state.json에 기록
+- 체크포인트: 10개마다 git commit
+- 실패 시: 에러 기록 후 다음 파일 계속
+- 재개: state 파일 기반으로 이어서 진행
+```
+
+---
+
+## Quick Checklist
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           Claude 4.x 프롬프트 체크리스트                     │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  □ 원하는 행동을 명시적으로 요청했는가?                      │
+│  □ 왜 이 작업이 필요한지 설명했는가?                         │
+│  □ 예시 형식이 기대 출력과 일치하는가?                       │
+│  □ 장기 작업에 상태 관리를 정의했는가?                       │
+│  □ 도구 사용 전략을 명시했는가? (병렬/순차)                  │
+│  □ 출력 형식을 구조화했는가? (JSON/XML)                      │
+│  □ 완료 조건이 검증 가능한가?                                │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 관련 참조
+
+- [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check
+- [anti-patterns.md](anti-patterns.md) - 피해야 할 패턴
+- [../templates/prompt-template.md](../templates/prompt-template.md) - 프롬프트 템플릿
+- [state-tracking-guide.md](state-tracking-guide.md) - 상태 관리 상세
+- [tool-usage-guide.md](tool-usage-guide.md) - 도구 사용 상세
