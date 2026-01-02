@@ -1,6 +1,6 @@
 ---
 name: prompt-smith
-description: "프롬프트 품질관리 스킬. LINT(진단+개선+테스트) + BUILD(요구사항→프롬프트 설계) + INTERCEPT(실시간 개선) 모드로 프롬프트를 운영 가능한 자산으로 관리. 프롬프트 점검/진단/개선/린트/만들어줘/설계 요청 시 활성화. (user)"
+description: "프롬프트 품질관리 스킬. --review 또는 --auto 플래그로 프롬프트 개선. 트리거: prompt-smith 사용, use prompt-smith, 점검, 린트, 만들어줘."
 license: MIT
 compatibility: "Claude Code (primary), claude.ai, VS Code Agent Mode, GitHub Copilot, OpenAI Codex CLI"
 metadata:
@@ -34,8 +34,8 @@ metadata:
 ### When to use this skill
 
 **Intercept Pipeline** (실시간 개선):
-- `/prompt-smith <프롬프트>` - Review Mode (개선 사항 표시, 승인 대기)
-- `/prompt-smith --auto <프롬프트>` - Intercept Mode (자동 개선 후 실행)
+- `prompt-smith 사용 --review <프롬프트>` - Review Mode (개선 사항 표시, 승인 대기)
+- `prompt-smith 사용 --auto <프롬프트>` - Intercept Mode (자동 개선 후 실행)
 
 **LINT Mode** (기존 프롬프트 개선):
 - "프롬프트 점검해줘", "프롬프트 진단해줘"
@@ -56,7 +56,7 @@ metadata:
 | 개선/리뷰/분석 | improve/review/analyze | LINT Mode |
 | 테스트 생성/검증 | test/validate | LINT Mode (테스트 생성) |
 | **만들어줘/설계/작성** | **build/create/design** | **BUILD Mode** |
-| **/prompt-smith** | **/prompt-smith** | **Intercept Pipeline** |
+| **prompt-smith 사용 -r/-a** | **use prompt-smith -r/-a** | **Intercept Pipeline** |
 
 ### Quick Start (설치)
 
@@ -67,39 +67,81 @@ metadata:
 
 ### Activation Rules
 
-- **자동 활성화**: 프롬프트 점검/진단/개선/설계 요청 감지 시 → 즉시 해당 워크플로우 진입
-- **명시 호출**: `"prompt-smith 사용"`, `"프롬프트스미스"` → 모드 선택 표시
-- **인자와 함께 호출**: `/prompt-smith <사용자 프롬프트>` → Intercept Pipeline (Review Mode) 진입
+NOTE: 자연어 호출(`prompt-smith 사용`)이 슬래시 커맨드(`/prompt-smith`)보다 안정적입니다.
 
-#### Argument Handling (CRITICAL)
+#### Flag-based Mode Selection
 
-When this skill is invoked with arguments (e.g., `/prompt-smith Write code to parse JSON`):
+```
+-r ```<prompt>```  → Review Mode (개선안 표시, 승인 대기)
+-a ```<prompt>```  → Intercept Mode (자동 개선 후 실행)
+(no flag)          → 모드 선택 메뉴 표시
+```
 
-1. **Treat the argument as the user's prompt to be improved**
-2. **Immediately enter Review Mode workflow** (see Section 2.3)
-3. **Execute Express LINT on the provided prompt**
-4. **Show Before/After comparison and await approval**
+**필수 형식**: 프롬프트는 플래그 뒤에 반드시 트리플 백틱(```)으로 감싸야 합니다.
+
+```
+prompt-smith 사용 -r ```
+여기에 프롬프트를 작성합니다.
+"따옴표", 줄바꿈, 특수문자도 포함 가능합니다.
+```
+```
+
+**파싱 규칙**: `-r` 또는 `-a` 플래그 뒤의 ``` ``` 사이 내용을 개선할 프롬프트로 추출합니다.
+
+#### WITH -r Flag (Review Mode)
+
+`-r` 플래그와 코드 블록으로 호출 시:
+
+```
+prompt-smith 사용 -r ```
+Write code to parse JSON
+```
+```
+
+1. ``` ``` 안의 내용을 개선할 프롬프트로 추출
+2. Express LINT 즉시 실행
+3. Before/After 비교 표시
+4. 사용자 승인 대기 (y/n/e)
 
 **MUST FOLLOW:**
-1. **ALWAYS show the full improved prompt** - not just changes
-2. **ALWAYS show score comparison** (X/10 → Y/10)
-3. **ALWAYS await user approval** before execution
-4. **NEVER execute silently** without showing improvements
-
-VIOLATION: Executing without showing improvements is prohibited.
+- ALWAYS extract prompt from inside the code block (``` ```)
+- ALWAYS show the full improved prompt text
+- ALWAYS show score comparison (X/10 → Y/10)
+- ALWAYS show `[DEBUG] Final Submitted Prompt` section
+- ALWAYS await user approval before execution
+- NEVER execute without showing improvements
 
 ```
-Example: /prompt-smith Write code to parse JSON
-
-→ The text "Write code to parse JSON" is the prompt to be reviewed/improved
-→ DO NOT show mode selection menu
-→ GO DIRECTLY to Review Mode workflow
-→ MUST show full improved prompt before execution
+Example: prompt-smith 사용 -r ```
+함수를 작성해줘:
+1. JSON 입력 파싱
+2. 에러 처리 포함
 ```
 
-#### 인자 없이 호출
+→ 추출: "함수를 작성해줘:\n1. JSON 입력 파싱\n2. 에러 처리 포함"
+→ RUN Express LINT
+→ SHOW improved prompt + DEBUG section
+→ WAIT for approval
+```
 
-인자 없이 호출 시 (`/prompt-smith`만):
+#### WITH -a Flag (Intercept Mode)
+
+`-a` 플래그와 코드 블록으로 호출 시:
+
+```
+prompt-smith 사용 -a ```
+Write code to parse JSON
+```
+```
+
+1. ``` ``` 안의 내용을 프롬프트로 추출
+2. Express LINT 실행
+3. 개선 자동 적용 (점수가 2점 이상 향상 시)
+4. 즉시 실행
+
+#### WITHOUT Flags → Mode Selection
+
+플래그 없이 호출 시 (`prompt-smith 사용`만):
 
 ```
 🔧 Prompt Smith v2.1 활성화
@@ -457,8 +499,8 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 
 #### 트리거
 
-- `/prompt-smith <사용자-프롬프트>` - Review Mode (기본)
-- `/prompt-smith --auto <사용자-프롬프트>` - Intercept Mode
+- `prompt-smith 사용 -r ```<프롬프트>``` ` - Review Mode
+- `prompt-smith 사용 -a ```<프롬프트>``` ` - Intercept Mode
 
 #### Review Mode 워크플로우
 
@@ -498,6 +540,12 @@ CRITICAL: The improved prompt MUST be shown in full text.
 - [~] INSTRUCTION: [modified instruction]
 - [+] FORMAT: [added output format]
 
+### [DEBUG] Final Submitted Prompt
+The exact prompt that will be sent to Claude:
+\`\`\`
+[full improved prompt text - identical to Improved Prompt section]
+\`\`\`
+
 ### Proceed? (y/n/e)
 - y: Execute with improved prompt
 - n: Execute with original prompt
@@ -508,11 +556,12 @@ CRITICAL: The improved prompt MUST be shown in full text.
 
 #### 옵션
 
-| 옵션 | 기본값 | 설명 |
-|------|--------|------|
-| --auto | false | Intercept Mode 활성화 |
-| --threshold | 2 | 자동 적용 최소 점수 향상 |
-| --verbose | false | 상세 분석 표시 |
+| 플래그 | 설명 |
+|--------|------|
+| -r ```<프롬프트>``` | Review Mode (개선안 표시, 승인 대기) |
+| -a ```<프롬프트>``` | Intercept Mode (자동 개선 후 실행) |
+| --threshold | 자동 적용 최소 점수 향상 (기본값: 2) |
+| --verbose, -v | 상세 분석 표시 |
 
 ---
 

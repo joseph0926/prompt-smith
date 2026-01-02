@@ -30,15 +30,15 @@ cp -r skills/prompt-smith .claude/skills/
 ### Usage
 
 ```
-/prompt-smith "your prompt here"
+use prompt-smith --review "your prompt here"
 ```
 
 ## Modes
 
 | Mode | Trigger | Description |
 |------|---------|-------------|
-| Review | `/prompt-smith <prompt>` | Show improvements, await approval |
-| Intercept | `/prompt-smith --auto <prompt>` | Auto-improve and execute |
+| Review | `use prompt-smith --review <prompt>` | Show improvements, await approval |
+| Intercept | `use prompt-smith --auto <prompt>` | Auto-improve and execute |
 | LINT | `lint this prompt` | Diagnose existing prompts |
 | BUILD | `build a prompt for...` | Design from requirements |
 
@@ -91,14 +91,14 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
 ```
-/prompt-smith "프롬프트 내용"
+prompt-smith 사용 --review "프롬프트 내용"
 ```
 
 ### 모드
 
 | 모드 | 트리거 | 설명 |
 |------|--------|------|
-| Review | `/prompt-smith <프롬프트>` | 개선안 표시 후 승인 대기 |
-| Intercept | `/prompt-smith --auto <프롬프트>` | 자동 개선 후 즉시 실행 |
+| Review | `prompt-smith 사용 --review <프롬프트>` | 개선안 표시 후 승인 대기 |
+| Intercept | `prompt-smith 사용 --auto <프롬프트>` | 자동 개선 후 즉시 실행 |
 | LINT | `이 프롬프트 점검해줘` | 기존 프롬프트 진단 |
 | BUILD | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |

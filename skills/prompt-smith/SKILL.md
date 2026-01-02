@@ -1,6 +1,6 @@
 ---
 name: prompt-smith
-description: "Prompt quality management skill. 7-Point Quality Check, LINT/BUILD modes, and real-time prompt improvement pipeline. Trigger: prompt review, lint, build, improve, /prompt-smith. (Productivity)"
+description: "Prompt quality management skill. Use --review or --auto flag to improve prompts. Trigger: use prompt-smith, prompt-smith 사용, lint, build, improve."
 license: MIT
 compatibility: "Claude Code (primary), claude.ai, VS Code Agent Mode, GitHub Copilot, OpenAI Codex CLI"
 metadata:
@@ -37,8 +37,8 @@ A quality management skill that transforms prompts into operational assets throu
 ### When to use this skill
 
 **Intercept Pipeline** (real-time improvement):
-- `/prompt-smith <your prompt>` - Review Mode (show improvements, await approval)
-- `/prompt-smith --auto <your prompt>` - Intercept Mode (auto-improve and execute)
+- `use prompt-smith --review <your prompt>` - Review Mode (show improvements, await approval)
+- `use prompt-smith --auto <your prompt>` - Intercept Mode (auto-improve and execute)
 
 **LINT Mode** (improve existing prompts):
 - "lint this prompt", "check my prompt"
@@ -58,7 +58,7 @@ A quality management skill that transforms prompts into operational assets throu
 | improve/review/analyze | 개선/리뷰/분석 | LINT Mode |
 | test/validate | 테스트 생성/검증 | LINT Mode (test generation) |
 | **build/create/design** | **만들어줘/설계/작성** | **BUILD Mode** |
-| **/prompt-smith** | **/prompt-smith** | **Intercept Pipeline** |
+| **use prompt-smith -r/-a** | **prompt-smith 사용 -r/-a** | **Intercept Pipeline** |
 
 ### Quick Start (Installation)
 
@@ -85,39 +85,81 @@ cp -r skills/prompt-smith .claude/skills/
 
 ### Activation Rules
 
-- **Auto-activation**: Detected prompt review/diagnosis/improvement/design requests → enter corresponding workflow
-- **Explicit invocation**: `"use prompt-smith"`, `"/prompt-smith"` → show mode selection
-- **With arguments**: `/prompt-smith <user-prompt>` → enter Intercept Pipeline (Review Mode)
+NOTE: Natural language invocation (`use prompt-smith`) is more reliable than slash command (`/prompt-smith`).
 
-#### Argument Handling (CRITICAL)
+#### Flag-based Mode Selection
 
-When this skill is invoked with arguments (e.g., `/prompt-smith Write code to parse JSON`):
+```
+-r ```<prompt>```  → Review Mode (show improvements, await approval)
+-a ```<prompt>```  → Intercept Mode (auto-improve and execute)
+(no flag)          → Show mode selection menu
+```
 
-1. **Treat the argument as the user's prompt to be improved**
-2. **Immediately enter Review Mode workflow** (see Section 2.3)
-3. **Execute Express LINT on the provided prompt**
-4. **Show Before/After comparison and await approval**
+**Required Format**: The prompt MUST be enclosed in triple backticks (```) immediately after the flag.
+
+```
+use prompt-smith -r ```
+Your prompt here.
+Can include "quotes", newlines, and special characters.
+```
+```
+
+**Parsing Rule**: Extract everything between the opening ``` and closing ``` after `-r` or `-a` flag as the prompt to improve.
+
+#### WITH -r Flag (Review Mode)
+
+When invoked with `-r` followed by a code block:
+
+```
+use prompt-smith -r ```
+Write code to parse JSON
+```
+```
+
+1. Extract content inside ``` ``` as the prompt to improve
+2. Execute Express LINT immediately
+3. Show Before/After comparison
+4. Await user approval (y/n/e)
 
 **MUST FOLLOW:**
-1. **ALWAYS show the full improved prompt** - not just changes
-2. **ALWAYS show score comparison** (X/10 → Y/10)
-3. **ALWAYS await user approval** before execution
-4. **NEVER execute silently** without showing improvements
-
-VIOLATION: Executing without showing improvements is prohibited.
+- ALWAYS extract prompt from inside the code block (``` ```)
+- ALWAYS show the full improved prompt text
+- ALWAYS show score comparison (X/10 → Y/10)
+- ALWAYS show `[DEBUG] Final Submitted Prompt` section
+- ALWAYS await user approval before execution
+- NEVER execute without showing improvements
 
 ```
-Example: /prompt-smith Write code to parse JSON
-
-→ The text "Write code to parse JSON" is the prompt to be reviewed/improved
-→ DO NOT show mode selection menu
-→ GO DIRECTLY to Review Mode workflow
-→ MUST show full improved prompt before execution
+Example: use prompt-smith -r ```
+Write a function that:
+1. Parses JSON input
+2. Handles errors gracefully
 ```
 
-#### No Arguments
+→ Extract: "Write a function that:\n1. Parses JSON input\n2. Handles errors gracefully"
+→ RUN Express LINT
+→ SHOW improved prompt + DEBUG section
+→ WAIT for approval
+```
 
-When invoked without arguments (`/prompt-smith` only):
+#### WITH -a Flag (Intercept Mode)
+
+When invoked with `-a` followed by a code block:
+
+```
+use prompt-smith -a ```
+Write code to parse JSON
+```
+```
+
+1. Extract content inside ``` ``` as the prompt
+2. Execute Express LINT
+3. Auto-apply improvements (if score improves by 2+ points)
+4. Execute immediately
+
+#### WITHOUT Flags → Mode Selection
+
+When invoked without flags (`use prompt-smith` only):
 
 ```
 Prompt Smith v2.1 Activated
@@ -410,8 +452,8 @@ Real-time prompt improvement before execution.
 
 #### Trigger
 
-- `/prompt-smith <user-prompt>` - Review Mode (default)
-- `/prompt-smith --auto <user-prompt>` - Intercept Mode
+- `use prompt-smith -r ```<prompt>``` ` - Review Mode
+- `use prompt-smith -a ```<prompt>``` ` - Intercept Mode
 
 #### Review Mode Workflow
 
@@ -451,6 +493,12 @@ CRITICAL: The improved prompt MUST be shown in full text.
 - [~] INSTRUCTION: [modified instruction]
 - [+] FORMAT: [added output format]
 
+### [DEBUG] Final Submitted Prompt
+The exact prompt that will be sent to Claude:
+\`\`\`
+[full improved prompt text - identical to Improved Prompt section]
+\`\`\`
+
 ### Proceed? (y/n/e)
 - y: Execute with improved prompt
 - n: Execute with original prompt
@@ -461,11 +509,12 @@ CRITICAL: The improved prompt MUST be shown in full text.
 
 #### Configuration
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| --auto | false | Enable Intercept Mode |
-| --threshold | 2 | Minimum score improvement for auto-apply |
-| --verbose | false | Show detailed analysis |
+| Flag | Description |
+|------|-------------|
+| -r ```<prompt>``` | Review Mode (show improvements, await approval) |
+| -a ```<prompt>``` | Intercept Mode (auto-improve and execute) |
+| --threshold | Minimum score improvement for auto-apply (default: 2) |
+| --verbose, -v | Show detailed analysis |
 
 ---
 
@@ -573,7 +622,9 @@ Check this prompt:
 
 **Input (user)**:
 ```
-/prompt-smith Write code to parse JSON
+use prompt-smith -r ```
+Write code to parse JSON
+```
 ```
 
 **Output (Prompt Smith)**:
