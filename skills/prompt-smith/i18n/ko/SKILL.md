@@ -1,21 +1,25 @@
 ---
 name: prompt-smith
-description: "프롬프트 품질관리 스킬. LINT(진단+개선+테스트) + BUILD(요구사항→프롬프트 설계) 모드로 프롬프트를 운영 가능한 자산으로 관리. 프롬프트 점검/진단/개선/린트/만들어줘/설계 요청 시 활성화. (user)"
+description: "프롬프트 품질관리 스킬. LINT(진단+개선+테스트) + BUILD(요구사항→프롬프트 설계) + INTERCEPT(실시간 개선) 모드로 프롬프트를 운영 가능한 자산으로 관리. 프롬프트 점검/진단/개선/린트/만들어줘/설계 요청 시 활성화. (user)"
 license: MIT
 compatibility: "Claude Code (primary), claude.ai, VS Code Agent Mode, GitHub Copilot, OpenAI Codex CLI"
 metadata:
-  short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + 테스트 생성)"
+  short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.0.0"
+  version: "2.1.0"
   target: "claude-code"
-  updated: "2026-01-01"
+  updated: "2026-01-02"
   category: "productivity"
-  tags: "prompt, quality, testing, lint, build, engineering, validation, improvement, claude-4x"
+  tags: "prompt, quality, testing, lint, build, intercept, engineering, validation, improvement, claude-4x"
 ---
 
-# Prompt Smith v2.0.0
+# Prompt Smith v2.1.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
+
+**v2.1 주요 변경**:
+- **Intercept Pipeline** 추가 (Review/Intercept 모드로 실시간 프롬프트 개선)
+- 영어 Primary + i18n 지원
 
 **v2.0 주요 변경**:
 - 5-Point → **7-Point Quality Check** (Claude 4.x 최적화: STATE_TRACKING, TOOL_USAGE 추가)
@@ -28,6 +32,10 @@ metadata:
 > 이 섹션만으로 스킬의 핵심 동작이 가능합니다. 상세는 Level 2, 참조 자료는 Level 3.
 
 ### When to use this skill
+
+**Intercept Pipeline** (실시간 개선):
+- `/prompt-smith <프롬프트>` - Review Mode (개선 사항 표시, 승인 대기)
+- `/prompt-smith --auto <프롬프트>` - Intercept Mode (자동 개선 후 실행)
 
 **LINT Mode** (기존 프롬프트 개선):
 - "프롬프트 점검해줘", "프롬프트 진단해줘"
@@ -48,6 +56,7 @@ metadata:
 | 개선/리뷰/분석 | improve/review/analyze | LINT Mode |
 | 테스트 생성/검증 | test/validate | LINT Mode (테스트 생성) |
 | **만들어줘/설계/작성** | **build/create/design** | **BUILD Mode** |
+| **/prompt-smith** | **/prompt-smith** | **Intercept Pipeline** |
 
 ### Quick Start (설치)
 
@@ -60,16 +69,47 @@ metadata:
 
 - **자동 활성화**: 프롬프트 점검/진단/개선/설계 요청 감지 시 → 즉시 해당 워크플로우 진입
 - **명시 호출**: `"prompt-smith 사용"`, `"프롬프트스미스"` → 모드 선택 표시
+- **인자와 함께 호출**: `/prompt-smith <사용자 프롬프트>` → Intercept Pipeline (Review Mode) 진입
 
-명시 호출 시 응답:
+#### Argument Handling (CRITICAL)
+
+When this skill is invoked with arguments (e.g., `/prompt-smith Write code to parse JSON`):
+
+1. **Treat the argument as the user's prompt to be improved**
+2. **Immediately enter Review Mode workflow** (see Section 2.3)
+3. **Execute Express LINT on the provided prompt**
+4. **Show Before/After comparison and await approval**
+
+**MUST FOLLOW:**
+1. **ALWAYS show the full improved prompt** - not just changes
+2. **ALWAYS show score comparison** (X/10 → Y/10)
+3. **ALWAYS await user approval** before execution
+4. **NEVER execute silently** without showing improvements
+
+VIOLATION: Executing without showing improvements is prohibited.
+
 ```
-🔧 Prompt Smith v2.0 활성화
+Example: /prompt-smith Write code to parse JSON
+
+→ The text "Write code to parse JSON" is the prompt to be reviewed/improved
+→ DO NOT show mode selection menu
+→ GO DIRECTLY to Review Mode workflow
+→ MUST show full improved prompt before execution
+```
+
+#### 인자 없이 호출
+
+인자 없이 호출 시 (`/prompt-smith`만):
+
+```
+🔧 Prompt Smith v2.1 활성화
 
 어떤 작업을 도와드릴까요?
 
 1) 🔍 LINT - 기존 프롬프트 진단 + 개선 + 테스트 생성
 2) 🏗️ BUILD - 요구사항 → 신규 프롬프트 설계
-3) 🐛 DEBUG - 실패 분석 + 재발 방지 (Phase 3 예정)
+3) 🚀 INTERCEPT - 실시간 프롬프트 개선 파이프라인
+4) 🐛 DEBUG - 실패 분석 + 재발 방지 (Phase 3 예정)
 
 번호 또는 편하게 말해주세요.
 ```
@@ -125,7 +165,14 @@ metadata:
 │  □ 자체 LINT로 8점 이상인가?                                    │
 │  □ 테스트 케이스 5개를 생성했는가?                              │
 │                                                                 │
-│  → 하나라도 No면 해당 항목 보완 후 응답!                        │
+│  [Intercept Pipeline]                                           │
+│  [ ] Did I show the full improved prompt text?                  │
+│  [ ] Did I show score change (X/10 → Y/10)?                     │
+│  [ ] Did I show Changes list?                                   │
+│  [ ] Did I request user approval (y/n/e)?                       │
+│  [ ] Did I wait for approval before execution?                  │
+│                                                                 │
+│  → If any No, fix before responding!                            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -404,7 +451,72 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 
 ---
 
-### 2.3 안티패턴 탐지
+### 2.3 Intercept Pipeline
+
+실시간 프롬프트 개선 파이프라인입니다.
+
+#### 트리거
+
+- `/prompt-smith <사용자-프롬프트>` - Review Mode (기본)
+- `/prompt-smith --auto <사용자-프롬프트>` - Intercept Mode
+
+#### Review Mode 워크플로우
+
+1. 사용자 프롬프트 수신
+2. Express LINT 실행 (7-Point 빠른 점검)
+3. 개선 사항 + Before/After 비교 표시
+4. 사용자 승인 대기 (`y` 승인, `n` 원본 사용, `e` 추가 편집)
+5. 승인된 프롬프트 실행
+
+#### Intercept Mode 워크플로우
+
+1. 사용자 프롬프트 수신
+2. Express LINT 실행
+3. 개선 자동 적용 (점수가 2점 이상 향상 시)
+4. 개선 요약 표시 + 즉시 실행
+
+#### Output Format (MUST FOLLOW)
+
+CRITICAL: The improved prompt MUST be shown in full text.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Express LINT Results                                         │
+├─────────────────────────────────────────────────────────────┤
+│ Original Score: X/10 → Improved Score: Y/10 (+Z)            │
+└─────────────────────────────────────────────────────────────┘
+
+### Original Prompt
+> [full original prompt text]
+
+### Improved Prompt (copy-paste ready)
+> [full improved prompt text]
+
+### Changes Made
+- [+] ROLE: [added role]
+- [+] CONTEXT: [added context]
+- [~] INSTRUCTION: [modified instruction]
+- [+] FORMAT: [added output format]
+
+### Proceed? (y/n/e)
+- y: Execute with improved prompt
+- n: Execute with original prompt
+- e: Edit further
+```
+
+[Intercept Mode] Auto-executing improved prompt...
+
+#### 옵션
+
+| 옵션 | 기본값 | 설명 |
+|------|--------|------|
+| --auto | false | Intercept Mode 활성화 |
+| --threshold | 2 | 자동 적용 최소 점수 향상 |
+| --verbose | false | 상세 분석 표시 |
+
+---
+
+### 2.4 안티패턴 탐지
 
 LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 
@@ -443,6 +555,10 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 - [playbooks/build/build-mode.md](playbooks/build/build-mode.md) - BUILD 워크플로우 상세
 - [playbooks/build/requirement-gathering.md](playbooks/build/requirement-gathering.md) - 요구사항 수집 가이드
 - [playbooks/build/template-selection.md](playbooks/build/template-selection.md) - 템플릿 선택 가이드
+
+**Intercept:**
+- [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Review 모드 가이드
+- [playbooks/intercept/intercept-mode.md](playbooks/intercept/intercept-mode.md) - Intercept 모드 가이드
 
 **Team:**
 - [playbooks/team/prompt-pr.md](playbooks/team/prompt-pr.md) - PR 룰
@@ -617,6 +733,7 @@ Review the provided Python code and:
 | Phase | 기능 | 상태 |
 |-------|------|------|
 | **1.0** | LINT Mode (5-Point) | ✅ 완료 |
-| **2.0** | BUILD Mode + 7-Point | ✅ 현재 |
+| **2.0** | BUILD Mode + 7-Point | ✅ 완료 |
+| **2.1** | Intercept Pipeline | ✅ 현재 |
 | **3.0** | DEBUG Mode (실패 분석 + 재발 방지) | 예정 |
 | **4.0** | 자동 회귀 테스트 연동 | 예정 |

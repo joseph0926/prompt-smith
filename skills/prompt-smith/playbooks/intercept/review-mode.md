@@ -81,21 +81,33 @@ Based on your choice, the prompt is executed.
 
 ---
 
-## Output Format
+## Output Format (MANDATORY)
+
+This format MUST be followed. No omissions allowed.
 
 ```
-Original Prompt (Score: X/10)
-> [original prompt text]
+┌─────────────────────────────────────────────────────────────┐
+│ Express LINT Results                                         │
+├─────────────────────────────────────────────────────────────┤
+│ Original Score: X/10 → Improved Score: Y/10 (+Z)            │
+└─────────────────────────────────────────────────────────────┘
 
-Improved Prompt (Score: Y/10)
-> [improved prompt text]
+### Original Prompt
+> [full original prompt text]
 
-Changes:
-- [+] [addition]
-- [-] [removal]
-- [~] [modification]
+### Improved Prompt (copy-paste ready)
+> [full improved prompt text]
 
-Proceed? (y/n/e): _
+### Changes Made
+- [+] ROLE: [added role]
+- [+] CONTEXT: [added context]
+- [~] INSTRUCTION: [modified instruction]
+- [+] FORMAT: [added output format]
+
+### Proceed? (y/n/e)
+- y: Execute with improved prompt
+- n: Execute with original prompt
+- e: Edit further
 ```
 
 ---
@@ -238,6 +250,62 @@ Proceed? (y/n/e): _
 - [Intercept Mode](intercept-mode.md) - Auto-improvement without approval
 - [Express LINT](../lint/express-lint.md) - Quick diagnosis details
 - [7-Point Quality Check](../../references/quality-checklist.md)
+
+---
+
+## Anti-Patterns
+
+### Bad Example 1: Execute without showing improvements
+
+```
+User: /prompt-smith Write code
+Assistant: I'll write the code... [executes immediately]
+```
+
+Problem: Did not show improvement process.
+
+### Bad Example 2: Show only changes without full prompt
+
+```
+Changes:
+- [+] Added ROLE
+- [+] Added FORMAT
+```
+
+Problem: Did not show the full improved prompt.
+
+### Good Example
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Express LINT Results                                         │
+├─────────────────────────────────────────────────────────────┤
+│ Original Score: 2/10 → Improved Score: 8/10 (+6)            │
+└─────────────────────────────────────────────────────────────┘
+
+### Original Prompt
+> Write code
+
+### Improved Prompt (copy-paste ready)
+> You are a senior software engineer.
+>
+> Write code that [specific task].
+>
+> Requirements:
+> - Include error handling
+> - Add comments
+>
+> Output format:
+> - Code with inline comments
+> - Brief explanation
+
+### Changes Made
+- [+] ROLE: senior software engineer
+- [+] INSTRUCTION: specific requirements
+- [+] FORMAT: code + explanation
+
+### Proceed? (y/n/e)
+```
 
 ---
 

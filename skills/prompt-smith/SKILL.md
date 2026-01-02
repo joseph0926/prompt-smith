@@ -62,7 +62,23 @@ A quality management skill that transforms prompts into operational assets throu
 
 ### Quick Start (Installation)
 
-- **Claude Code**: `~/.claude/skills/prompt-smith/` or project `.claude/skills/prompt-smith/`
+**Claude Code (Global)**:
+```bash
+git clone https://github.com/kyh/prompt-smith
+cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+```
+
+**Claude Code (Project)**:
+```bash
+cp -r skills/prompt-smith .claude/skills/
+```
+
+**Plugin**:
+```bash
+/plugin install prompt-smith@kyh/prompt-smith
+```
+
+**Other Platforms**:
 - **claude.ai**: Settings > Capabilities > Skills (upload ZIP)
 - **VS Code/GitHub Copilot**: `.github/skills/prompt-smith/` or `.claude/skills/prompt-smith/`
 - **OpenAI Codex CLI**: `~/.codex/skills/prompt-smith/` or project `.codex/skills/prompt-smith/`
@@ -71,8 +87,38 @@ A quality management skill that transforms prompts into operational assets throu
 
 - **Auto-activation**: Detected prompt review/diagnosis/improvement/design requests → enter corresponding workflow
 - **Explicit invocation**: `"use prompt-smith"`, `"/prompt-smith"` → show mode selection
+- **With arguments**: `/prompt-smith <user-prompt>` → enter Intercept Pipeline (Review Mode)
 
-Explicit invocation response:
+#### Argument Handling (CRITICAL)
+
+When this skill is invoked with arguments (e.g., `/prompt-smith Write code to parse JSON`):
+
+1. **Treat the argument as the user's prompt to be improved**
+2. **Immediately enter Review Mode workflow** (see Section 2.3)
+3. **Execute Express LINT on the provided prompt**
+4. **Show Before/After comparison and await approval**
+
+**MUST FOLLOW:**
+1. **ALWAYS show the full improved prompt** - not just changes
+2. **ALWAYS show score comparison** (X/10 → Y/10)
+3. **ALWAYS await user approval** before execution
+4. **NEVER execute silently** without showing improvements
+
+VIOLATION: Executing without showing improvements is prohibited.
+
+```
+Example: /prompt-smith Write code to parse JSON
+
+→ The text "Write code to parse JSON" is the prompt to be reviewed/improved
+→ DO NOT show mode selection menu
+→ GO DIRECTLY to Review Mode workflow
+→ MUST show full improved prompt before execution
+```
+
+#### No Arguments
+
+When invoked without arguments (`/prompt-smith` only):
+
 ```
 Prompt Smith v2.1 Activated
 
@@ -138,11 +184,13 @@ The core criteria for prompt quality evaluation. All diagnoses are performed fro
 |  [ ] Did I generate 5 test cases?                                    |
 |                                                                      |
 |  [Intercept Pipeline]                                                |
-|  [ ] Did I perform Express LINT?                                     |
-|  [ ] Did I show Before/After comparison?                             |
-|  [ ] Did I respect user's mode choice (Review/Intercept)?            |
+|  [ ] Did I show the full improved prompt text?                       |
+|  [ ] Did I show score change (X/10 → Y/10)?                          |
+|  [ ] Did I show Changes list?                                        |
+|  [ ] Did I request user approval (y/n/e)?                            |
+|  [ ] Did I wait for approval before execution?                       |
 |                                                                      |
-|  -> If any No, address that item before responding!                  |
+|  -> If any No, fix before responding!                                |
 +----------------------------------------------------------------------+
 ```
 
@@ -380,23 +428,36 @@ Real-time prompt improvement before execution.
 3. Auto-apply improvements (if score improves by 2+ points)
 4. Show improvement summary + execute immediately
 
-#### Output Format
+#### Output Format (MUST FOLLOW)
+
+CRITICAL: The improved prompt MUST be shown in full text.
 
 ```
-Original Prompt (Score: 5/10)
-> [original prompt]
+┌─────────────────────────────────────────────────────────────┐
+│ Express LINT Results                                         │
+├─────────────────────────────────────────────────────────────┤
+│ Original Score: X/10 → Improved Score: Y/10 (+Z)            │
+└─────────────────────────────────────────────────────────────┘
 
-Improved Prompt (Score: 8/10)
-> [improved prompt]
+### Original Prompt
+> [full original prompt text]
 
-Changes:
-- [+] Added ROLE clarity
-- [+] Specified output FORMAT
-- [~] Enhanced INSTRUCTION specificity
+### Improved Prompt (copy-paste ready)
+> [full improved prompt text]
 
-[Review Mode] Proceed? (y/n/e): _
+### Changes Made
+- [+] ROLE: [added role]
+- [+] CONTEXT: [added context]
+- [~] INSTRUCTION: [modified instruction]
+- [+] FORMAT: [added output format]
+
+### Proceed? (y/n/e)
+- y: Execute with improved prompt
+- n: Execute with original prompt
+- e: Edit further
+```
+
 [Intercept Mode] Auto-executing improved prompt...
-```
 
 #### Configuration
 

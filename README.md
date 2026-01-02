@@ -8,9 +8,26 @@
 
 ## Quick Start
 
+### Option 1: Global Skill (all projects)
+
 ```bash
-cp -r prompt-smith ~/.claude/skills/
+git clone https://github.com/kyh/prompt-smith
+cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
+
+### Option 2: Project Local Skill (this project only)
+
+```bash
+cp -r skills/prompt-smith .claude/skills/
+```
+
+### Option 3: Plugin Installation
+
+```bash
+/plugin install prompt-smith@kyh/prompt-smith
+```
+
+### Usage
 
 ```
 /prompt-smith "your prompt here"
@@ -48,27 +65,13 @@ cp -r prompt-smith ~/.claude/skills/
 - GitHub Copilot
 - OpenAI Codex CLI
 
-## Installation
-
-### Claude Code
-
-```bash
-cp -r prompt-smith ~/.claude/skills/prompt-smith/
-```
-
-### Project-level
-
-```bash
-cp -r prompt-smith .claude/skills/prompt-smith/
-```
-
 ## Documentation
 
-- [Quick Start](onboarding/quick-start.md)
-- [LINT Mode](playbooks/lint/full-lint.md)
-- [BUILD Mode](playbooks/build/build-mode.md)
-- [Intercept Pipeline](playbooks/intercept/review-mode.md)
-- [Quality Checklist](references/quality-checklist.md)
+- [Quick Start](skills/prompt-smith/onboarding/quick-start.md)
+- [LINT Mode](skills/prompt-smith/playbooks/lint/full-lint.md)
+- [BUILD Mode](skills/prompt-smith/playbooks/build/build-mode.md)
+- [Intercept Pipeline](skills/prompt-smith/playbooks/intercept/review-mode.md)
+- [Quality Checklist](skills/prompt-smith/references/quality-checklist.md)
 
 ## License
 
@@ -78,12 +81,13 @@ MIT License - see [LICENSE](LICENSE)
 
 ## 한국어
 
-[한국어 문서 바로가기](i18n/ko/SKILL.md)
+[한국어 문서 바로가기](skills/prompt-smith/i18n/ko/SKILL.md)
 
 ### 빠른 시작
 
 ```bash
-cp -r prompt-smith ~/.claude/skills/
+git clone https://github.com/kyh/prompt-smith
+cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
 ```
