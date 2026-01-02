@@ -4,6 +4,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![ps_demo_01](https://github.com/user-attachments/assets/133323b9-878e-43aa-bfed-633d493c4dc7)
+
 **Features**: 7-Point Quality Check | LINT Mode | BUILD Mode | Auto-Improve Pipeline
 
 ## Quick Start
