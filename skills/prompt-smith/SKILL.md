@@ -2,7 +2,7 @@
 name: prompt-smith
 description: "Prompt quality management skill. Use --review or --auto flag to improve prompts. Trigger: use prompt-smith, prompt-smith 사용, lint, build, improve."
 license: MIT
-compatibility: "Claude Code (primary), claude.ai, VS Code Agent Mode, GitHub Copilot, OpenAI Codex CLI"
+compatibility: "Claude Code"
 metadata:
   short-description: "Prompt QA skill (7-Point Check + BUILD + Test Generation)"
   author: joseph0926
@@ -62,26 +62,16 @@ A quality management skill that transforms prompts into operational assets throu
 
 ### Quick Start (Installation)
 
-**Claude Code (Global)**:
+**Global (all projects)**:
 ```bash
 git clone https://github.com/kyh/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
-**Claude Code (Project)**:
+**Project Local (this project only)**:
 ```bash
 cp -r skills/prompt-smith .claude/skills/
 ```
-
-**Plugin**:
-```bash
-/plugin install prompt-smith@kyh/prompt-smith
-```
-
-**Other Platforms**:
-- **claude.ai**: Settings > Capabilities > Skills (upload ZIP)
-- **VS Code/GitHub Copilot**: `.github/skills/prompt-smith/` or `.claude/skills/prompt-smith/`
-- **OpenAI Codex CLI**: `~/.codex/skills/prompt-smith/` or project `.codex/skills/prompt-smith/`
 
 ### Activation Rules
 

@@ -2,7 +2,7 @@
 name: prompt-smith
 description: "프롬프트 품질관리 스킬. --review 또는 --auto 플래그로 프롬프트 개선. 트리거: prompt-smith 사용, use prompt-smith, 점검, 린트, 만들어줘."
 license: MIT
-compatibility: "Claude Code (primary), claude.ai, VS Code Agent Mode, GitHub Copilot, OpenAI Codex CLI"
+compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
@@ -60,10 +60,16 @@ metadata:
 
 ### Quick Start (설치)
 
-- **Claude Code**: `~/.claude/skills/prompt-smith/` 또는 프로젝트 `.claude/skills/prompt-smith/`에 배치
-- **claude.ai**: Settings > Capabilities > Skills에서 ZIP 업로드
-- **VS Code/GitHub Copilot**: `.github/skills/prompt-smith/` 또는 `.claude/skills/prompt-smith/`에 배치
-- **OpenAI Codex CLI**: `~/.codex/skills/prompt-smith/` 또는 프로젝트 `.codex/skills/prompt-smith/`에 배치
+**Global (모든 프로젝트)**:
+```bash
+git clone https://github.com/kyh/prompt-smith
+cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+```
+
+**Project Local (현재 프로젝트만)**:
+```bash
+cp -r skills/prompt-smith .claude/skills/
+```
 
 ### Activation Rules
 

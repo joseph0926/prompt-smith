@@ -1,0 +1,47 @@
+{
+  "name": "prompt-smith",
+  "version": "2.1.0",
+  "description": "Prompt quality management skill with 7-Point Quality Check, LINT/BUILD modes, and Intercept Pipeline for real-time prompt improvement.",
+  "short_description": "Prompt QA skill (7-Point Check + LINT + BUILD + Intercept)",
+  "author": "joseph0926",
+  "license": "MIT",
+  "repository": "https://github.com/kyh/prompt-smith",
+  "homepage": "https://github.com/kyh/prompt-smith",
+  "keywords": [
+    "prompt",
+    "quality",
+    "lint",
+    "build",
+    "testing",
+    "improvement",
+    "claude-4x",
+    "engineering"
+  ],
+  "category": "productivity",
+  "compatibility": {
+    "claude-code": ">=1.0.0"
+  },
+  "i18n": {
+    "locales": ["en", "ko"],
+    "default": "en"
+  },
+  "install": {
+    "command": "/plugin install prompt-smith@kyh/prompt-smith",
+    "manual": "cp -r skills/prompt-smith ~/.claude/skills/"
+  },
+  "features": [
+    "7-Point Quality Check (ROLE, CONTEXT, INSTRUCTION, EXAMPLE, FORMAT, STATE_TRACKING, TOOL_USAGE)",
+    "LINT Mode - Diagnose and improve existing prompts",
+    "BUILD Mode - Design new prompts from requirements",
+    "Intercept Pipeline - Real-time prompt improvement with -r (review) and -a (auto) flags",
+    "Test case generation (normal, edge, injection defense)",
+    "Anti-pattern detection",
+    "Bilingual support (English/Korean)"
+  ],
+  "triggers": [
+    "use prompt-smith -r ```<prompt>```",
+    "use prompt-smith -a ```<prompt>```",
+    "lint this prompt",
+    "build a prompt for..."
+  ]
+}

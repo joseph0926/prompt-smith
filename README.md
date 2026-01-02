@@ -6,7 +6,7 @@
 
 ![ps_demo_01](https://github.com/user-attachments/assets/133323b9-878e-43aa-bfed-633d493c4dc7)
 
-**Features**: 7-Point Quality Check | LINT Mode | BUILD Mode | Auto-Improve Pipeline
+**Features**: 7-Point Quality Check | LINT Mode | BUILD Mode | Intercept Pipeline
 
 ## Quick Start
 
@@ -23,24 +23,24 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 cp -r skills/prompt-smith .claude/skills/
 ```
 
-### Option 3: Plugin Installation
-
-```bash
-/plugin install prompt-smith@kyh/prompt-smith
-```
-
 ### Usage
 
-```
-use prompt-smith --review "your prompt here"
-```
+````
+use prompt-smith -r ```
+Your prompt here.
+Can include "quotes", newlines, and special characters.
+````
+
+````
+
+> **Note**: The prompt MUST be enclosed in triple backticks (```) after the flag.
 
 ## Modes
 
 | Mode | Trigger | Description |
 |------|---------|-------------|
-| Review | `use prompt-smith --review <prompt>` | Show improvements, await approval |
-| Intercept | `use prompt-smith --auto <prompt>` | Auto-improve and execute |
+| Review | `use prompt-smith -r ```<prompt>``` ` | Show improvements, await approval |
+| Intercept | `use prompt-smith -a ```<prompt>``` ` | Auto-improve and execute |
 | LINT | `lint this prompt` | Diagnose existing prompts |
 | BUILD | `build a prompt for...` | Design from requirements |
 
@@ -59,13 +59,9 @@ use prompt-smith --review "your prompt here"
 **Base Score**: Dimensions 1-5 (max 10)
 **Extended Score**: All 7 dimensions (normalized)
 
-## Platforms
+## Platform
 
-- Claude Code (primary)
-- claude.ai
-- VS Code Agent Mode
-- GitHub Copilot
-- OpenAI Codex CLI
+- **Claude Code** (CLI / VS Code extension)
 
 ## Documentation
 
@@ -90,17 +86,24 @@ MIT License - see [LICENSE](LICENSE)
 ```bash
 git clone https://github.com/kyh/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
-```
+````
 
-```
-prompt-smith 사용 --review "프롬프트 내용"
-```
+````
+prompt-smith 사용 -r ```
+프롬프트 내용을 여기에 작성합니다.
+"따옴표", 줄바꿈, 특수문자도 사용 가능합니다.
+````
+
+````
+
+> **참고**: 프롬프트는 플래그 뒤에 반드시 트리플 백틱(```)으로 감싸야 합니다.
 
 ### 모드
 
 | 모드 | 트리거 | 설명 |
 |------|--------|------|
-| Review | `prompt-smith 사용 --review <프롬프트>` | 개선안 표시 후 승인 대기 |
-| Intercept | `prompt-smith 사용 --auto <프롬프트>` | 자동 개선 후 즉시 실행 |
+| Review | `prompt-smith 사용 -r ```<프롬프트>``` ` | 개선안 표시 후 승인 대기 |
+| Intercept | `prompt-smith 사용 -a ```<프롬프트>``` ` | 자동 개선 후 즉시 실행 |
 | LINT | `이 프롬프트 점검해줘` | 기존 프롬프트 진단 |
 | BUILD | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |
+````
