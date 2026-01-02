@@ -27,34 +27,33 @@ cp -r skills/prompt-smith .claude/skills/
 
 ````
 use prompt-smith -r ```
-Your prompt here.
-Can include "quotes", newlines, and special characters.
-````
-
+<Your prompt here.
+Can include "quotes", newlines, and special characters.>
+```
 ````
 
 > **Note**: The prompt MUST be enclosed in triple backticks (```) after the flag.
 
 ## Modes
 
-| Mode | Trigger | Description |
-|------|---------|-------------|
-| Review | `use prompt-smith -r ```<prompt>``` ` | Show improvements, await approval |
-| Intercept | `use prompt-smith -a ```<prompt>``` ` | Auto-improve and execute |
-| LINT | `lint this prompt` | Diagnose existing prompts |
-| BUILD | `build a prompt for...` | Design from requirements |
+| Mode      | Trigger                                 | Description                       |
+| --------- | --------------------------------------- | --------------------------------- |
+| Review    | ` use prompt-smith -r ```<prompt>```  ` | Show improvements, await approval |
+| Intercept | ` use prompt-smith -a ```<prompt>```  ` | Auto-improve and execute          |
+| LINT      | `lint this prompt`                      | Diagnose existing prompts         |
+| BUILD     | `build a prompt for...`                 | Design from requirements          |
 
 ## 7-Point Quality Check
 
-| # | Dimension | Score |
-|---|-----------|-------|
-| 1 | ROLE | 0-2 |
-| 2 | CONTEXT | 0-2 |
-| 3 | INSTRUCTION | 0-2 |
-| 4 | EXAMPLE | 0-2 |
-| 5 | FORMAT | 0-2 |
-| 6 | STATE_TRACKING | 0-2 |
-| 7 | TOOL_USAGE | 0-2 |
+| #   | Dimension      | Score |
+| --- | -------------- | ----- |
+| 1   | ROLE           | 0-2   |
+| 2   | CONTEXT        | 0-2   |
+| 3   | INSTRUCTION    | 0-2   |
+| 4   | EXAMPLE        | 0-2   |
+| 5   | FORMAT         | 0-2   |
+| 6   | STATE_TRACKING | 0-2   |
+| 7   | TOOL_USAGE     | 0-2   |
 
 **Base Score**: Dimensions 1-5 (max 10)
 **Extended Score**: All 7 dimensions (normalized)
@@ -86,24 +85,22 @@ MIT License - see [LICENSE](LICENSE)
 ```bash
 git clone https://github.com/kyh/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
-````
+```
 
 ````
 prompt-smith 사용 -r ```
 프롬프트 내용을 여기에 작성합니다.
 "따옴표", 줄바꿈, 특수문자도 사용 가능합니다.
-````
-
+```
 ````
 
 > **참고**: 프롬프트는 플래그 뒤에 반드시 트리플 백틱(```)으로 감싸야 합니다.
 
 ### 모드
 
-| 모드 | 트리거 | 설명 |
-|------|--------|------|
-| Review | `prompt-smith 사용 -r ```<프롬프트>``` ` | 개선안 표시 후 승인 대기 |
-| Intercept | `prompt-smith 사용 -a ```<프롬프트>``` ` | 자동 개선 후 즉시 실행 |
-| LINT | `이 프롬프트 점검해줘` | 기존 프롬프트 진단 |
-| BUILD | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |
-````
+| 모드      | 트리거                                     | 설명                       |
+| --------- | ------------------------------------------ | -------------------------- |
+| Review    | ` prompt-smith 사용 -r ```<프롬프트>```  ` | 개선안 표시 후 승인 대기   |
+| Intercept | ` prompt-smith 사용 -a ```<프롬프트>```  ` | 자동 개선 후 즉시 실행     |
+| LINT      | `이 프롬프트 점검해줘`                     | 기존 프롬프트 진단         |
+| BUILD     | `~하는 프롬프트 만들어줘`                  | 요구사항에서 프롬프트 설계 |
