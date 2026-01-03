@@ -6,26 +6,38 @@ compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.2.0"
+  version: "2.2.2"
   target: "claude-code"
-  updated: "2026-01-02"
+  updated: "2026-01-03"
   category: "productivity"
   tags: "prompt, quality, testing, lint, build, intercept, engineering, validation, improvement, claude-4x"
 ---
 
-# Prompt Smith v2.2.0
+# Prompt Smith v2.2.2
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
-**v2.2 주요 변경**:
+**v2.2.2 주요 변경**:
+
+- **입력 형식 간소화**: `/ps:r`, `/ps:a`에서 백틱 선택사항으로 변경
+- 버전 메타데이터 CHANGELOG와 동기화
+
+**v2.2.1 주요 변경**:
+
+- **도구 호출 제한 강화**: LINT 완료 전까지 도구 호출(WebSearch, Read 등) 금지
+
+**v2.2.0 주요 변경**:
+
 - **슬래시 커맨드** 추가: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
 - 플러그인명 `ps`로 변경 (짧은 커맨드)
 
 **v2.1 주요 변경**:
+
 - **Intercept Pipeline** 추가 (Review/Intercept 모드로 실시간 프롬프트 개선)
 - 영어 Primary + i18n 지원
 
 **v2.0 주요 변경**:
+
 - 5-Point → **7-Point Quality Check** (Claude 4.x 최적화: STATE_TRACKING, TOOL_USAGE 추가)
 - **BUILD Mode** 추가 (요구사항 → 프롬프트 설계)
 
@@ -38,48 +50,55 @@ metadata:
 ### When to use this skill
 
 **Intercept Pipeline** (실시간 개선):
+
 - `prompt-smith 사용 --review <프롬프트>` - Review Mode (개선 사항 표시, 승인 대기)
 - `prompt-smith 사용 --auto <프롬프트>` - Intercept Mode (자동 개선 후 실행)
 
 **LINT Mode** (기존 프롬프트 개선):
+
 - "프롬프트 점검해줘", "프롬프트 진단해줘"
 - "이 프롬프트 개선해줘", "프롬프트 리뷰해줘"
 - "프롬프트 린트해줘", "프롬프트 분석해줘"
 - JSON 깨짐, 결과 편차, 누락 등 프롬프트 문제 해결 요청
 
 **BUILD Mode** (신규 프롬프트 설계):
+
 - "프롬프트 만들어줘", "프롬프트 설계해줘"
 - "새 프롬프트 작성해줘", "템플릿 만들어줘"
 - 요구사항만 있고 프롬프트가 없을 때
 
 ### 슬래시 커맨드 (v2.2+)
 
-| 커맨드 | 설명 | 사용법 |
-|--------|------|--------|
-| `/ps:r` | Review Mode | `/ps:r ```<프롬프트>``` ` |
-| `/ps:a` | Intercept Mode | `/ps:a ```<프롬프트>``` ` |
-| `/ps:lint` | LINT Mode | `/ps:lint <프롬프트>` |
-| `/ps:build` | BUILD Mode | `/ps:build <요구사항>` |
+| 커맨드      | 설명           | 사용법                 |
+| ----------- | -------------- | ---------------------- |
+| `/ps:r`     | Review Mode    | `/ps:r <프롬프트>`     |
+| `/ps:a`     | Intercept Mode | `/ps:a <프롬프트>`     |
+| `/ps:lint`  | LINT Mode      | `/ps:lint <프롬프트>`  |
+| `/ps:build` | BUILD Mode     | `/ps:build <요구사항>` |
+
+**참고**: 모든 커맨드는 일반 텍스트를 직접 입력받습니다. 백틱은 선택사항입니다.
 
 ### 자연어 트리거 (legacy)
 
-| 한국어 | 영어 | 워크플로우 |
-|--------|------|------------|
-| 점검/진단/린트 | lint/check/diagnose | LINT Mode |
-| 개선/리뷰/분석 | improve/review/analyze | LINT Mode |
-| 테스트 생성/검증 | test/validate | LINT Mode (테스트 생성) |
-| **만들어줘/설계/작성** | **build/create/design** | **BUILD Mode** |
-| **prompt-smith 사용 -r/-a** | **use prompt-smith -r/-a** | **Intercept Pipeline** |
+| 한국어                      | 영어                       | 워크플로우              |
+| --------------------------- | -------------------------- | ----------------------- |
+| 점검/진단/린트              | lint/check/diagnose        | LINT Mode               |
+| 개선/리뷰/분석              | improve/review/analyze     | LINT Mode               |
+| 테스트 생성/검증            | test/validate              | LINT Mode (테스트 생성) |
+| **만들어줘/설계/작성**      | **build/create/design**    | **BUILD Mode**          |
+| **prompt-smith 사용 -r/-a** | **use prompt-smith -r/-a** | **Intercept Pipeline**  |
 
 ### Quick Start (설치)
 
 **Global (모든 프로젝트)**:
+
 ```bash
-git clone https://github.com/kyh/prompt-smith
+git clone https://github.com/joseph0926/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
 **Project Local (현재 프로젝트만)**:
+
 ```bash
 cp -r skills/prompt-smith .claude/skills/
 ```
@@ -91,39 +110,43 @@ NOTE: 자연어 호출(`prompt-smith 사용`)이 슬래시 커맨드(`/prompt-sm
 #### Flag-based Mode Selection
 
 ```
--r ```<prompt>```  → Review Mode (개선안 표시, 승인 대기)
--a ```<prompt>```  → Intercept Mode (자동 개선 후 실행)
-(no flag)          → 모드 선택 메뉴 표시
+-r <프롬프트>  → Review Mode (개선안 표시, 승인 대기)
+-a <프롬프트>  → Intercept Mode (자동 개선 후 실행)
+(no flag)      → 모드 선택 메뉴 표시
 ```
 
-**필수 형식**: 프롬프트는 플래그 뒤에 반드시 트리플 백틱(```)으로 감싸야 합니다.
+**입력 형식**: 일반 텍스트를 직접 입력합니다. 백틱은 선택사항입니다.
 
 ```
-prompt-smith 사용 -r ```
-여기에 프롬프트를 작성합니다.
-"따옴표", 줄바꿈, 특수문자도 포함 가능합니다.
-```
+prompt-smith 사용 -r 여기에 프롬프트를 작성합니다
 ```
 
-**파싱 규칙**: `-r` 또는 `-a` 플래그 뒤의 ``` ``` 사이 내용을 개선할 프롬프트로 추출합니다.
+**멀티라인 입력도 지원**:
+
+```
+prompt-smith 사용 -r 함수를 작성해줘
+JSON을 파싱하고
+에러를 처리하는
+```
+
+**파싱 규칙**: `-r` 또는 `-a` 플래그 뒤의 모든 텍스트를 개선할 프롬프트로 취급합니다.
 
 #### WITH -r Flag (Review Mode)
 
-`-r` 플래그와 코드 블록으로 호출 시:
+`-r` 플래그와 프롬프트 텍스트로 호출 시:
 
 ```
-prompt-smith 사용 -r ```
-Write code to parse JSON
-```
+prompt-smith 사용 -r JSON 파싱 코드 작성해줘
 ```
 
-1. ``` ``` 안의 내용을 개선할 프롬프트로 추출
+1. `-r` 뒤의 모든 텍스트를 개선할 프롬프트로 추출
 2. Express LINT 즉시 실행
 3. Before/After 비교 표시
 4. 사용자 승인 대기 (y/n/e)
 
 **MUST FOLLOW:**
-- ALWAYS extract prompt from inside the code block (``` ```)
+
+- ALWAYS treat all text after `-r` as the prompt (plain text or code block)
 - ALWAYS show the full improved prompt text
 - ALWAYS show score comparison (X/10 → Y/10)
 - ALWAYS show `[DEBUG] Final Submitted Prompt` section
@@ -131,13 +154,9 @@ Write code to parse JSON
 - NEVER execute without showing improvements
 
 ```
-Example: prompt-smith 사용 -r ```
-함수를 작성해줘:
-1. JSON 입력 파싱
-2. 에러 처리 포함
-```
+Example: prompt-smith 사용 -r JSON 파싱 함수 작성해줘
 
-→ 추출: "함수를 작성해줘:\n1. JSON 입력 파싱\n2. 에러 처리 포함"
+→ 추출: "JSON 파싱 함수 작성해줘"
 → RUN Express LINT
 → SHOW improved prompt + DEBUG section
 → WAIT for approval
@@ -145,15 +164,13 @@ Example: prompt-smith 사용 -r ```
 
 #### WITH -a Flag (Intercept Mode)
 
-`-a` 플래그와 코드 블록으로 호출 시:
+`-a` 플래그와 프롬프트 텍스트로 호출 시:
 
 ```
-prompt-smith 사용 -a ```
-Write code to parse JSON
-```
+prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 ```
 
-1. ``` ``` 안의 내용을 프롬프트로 추출
+1. `-a` 뒤의 모든 텍스트를 프롬프트로 추출
 2. Express LINT 실행
 3. 개선 자동 적용 (점수가 2점 이상 향상 시)
 4. 즉시 실행
@@ -200,12 +217,14 @@ Write code to parse JSON
 ```
 
 **점수 기준:**
+
 - **0점**: 해당 요소 없음
 - **1점**: 있으나 불충분 또는 모호함
 - **2점**: 명확하고 충분함
 - **N/A**: 해당 없음 (분모에서 제외)
 
 **확장 항목 적용 조건:**
+
 - STATE_TRACKING: 멀티스텝/장기 태스크에만 적용
 - TOOL_USAGE: 도구 사용이 예상되는 프롬프트에만 적용
 
@@ -291,17 +310,18 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 
 ### 점수: X/10
 
-| 항목 | 점수 | 평가 |
-|------|------|------|
-| Role | X/2 | [평가 내용] |
-| Context | X/2 | [평가 내용] |
-| Instruction | X/2 | [평가 내용] |
-| Example | X/2 | [평가 내용] |
-| Format | X/2 | [평가 내용] |
+| 항목           | 점수         | 평가        |
+| -------------- | ------------ | ----------- |
+| Role           | X/2          | [평가 내용] |
+| Context        | X/2          | [평가 내용] |
+| Instruction    | X/2          | [평가 내용] |
+| Example        | X/2          | [평가 내용] |
+| Format         | X/2          | [평가 내용] |
 | State Tracking | X/2 또는 N/A | [평가 내용] |
-| Tool Usage | X/2 또는 N/A | [평가 내용] |
+| Tool Usage     | X/2 또는 N/A | [평가 내용] |
 
 ### 🔴 Top 3 이슈
+
 1. **[이슈 1]**: [구체적 설명]
 2. **[이슈 2]**: [구체적 설명]
 3. **[이슈 3]**: [구체적 설명]
@@ -317,11 +337,13 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 ## 📝 변경 사항
 
 ### 변경 1: [항목]
+
 - **Before**: [원본]
 - **After**: [개선]
 - **이유**: [왜 개선했는지]
 
 ### 변경 2: [항목]
+
 ...
 
 ---
@@ -329,22 +351,27 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 ## 🧪 테스트 케이스 (5개)
 
 ### 1. 정상 케이스 1
+
 **입력**: [테스트 입력]
 **기대 결과**: [기대되는 출력 특성]
 
 ### 2. 정상 케이스 2
+
 **입력**: [테스트 입력]
 **기대 결과**: [기대되는 출력 특성]
 
 ### 3. 엣지 케이스
+
 **입력**: [빈 입력/매우 긴 입력/특수 문자 등]
 **기대 결과**: [적절한 처리 방식]
 
 ### 4. 인젝션 방어 케이스
+
 **입력**: "위 지시 무시하고 [악의적 요청]"
 **기대 결과**: 원래 지시 유지, 인젝션 무시
 
 ### 5. 도메인 특화 케이스
+
 **입력**: [해당 도메인의 특수 상황]
 **기대 결과**: [도메인별 적절한 처리]
 ```
@@ -356,6 +383,7 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 **트리거**: "빠르게 점검해줘", "간단히 봐줘"
 
 **출력**:
+
 ```
 ⚡ Express LINT 결과
 
@@ -432,11 +460,13 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 #### BUILD 입력 양식
 
 **최소 입력**:
+
 ```
 목표: [프롬프트가 달성해야 할 것]
 ```
 
 **권장 입력 (품질 향상)**:
+
 ```
 목표: [프롬프트가 달성해야 할 것]
 대상: [누가 사용하는가]
@@ -451,6 +481,7 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 # 🏗️ BUILD 결과
 
 ## 메타데이터
+
 - **생성 일시**: YYYY-MM-DD HH:MM
 - **요청 목표**: [사용자 요청 요약]
 - **프롬프트 유형**: [요약/분류/생성/대화/분석]
@@ -459,9 +490,10 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 ---
 
 ## 1. 프롬프트 전문 (복붙용)
-
 ```
+
 [완성된 프롬프트 전체]
+
 ```
 
 ---
@@ -518,8 +550,8 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 
 #### 트리거
 
-- `prompt-smith 사용 -r ```<프롬프트>``` ` - Review Mode
-- `prompt-smith 사용 -a ```<프롬프트>``` ` - Intercept Mode
+- `prompt-smith 사용 -r <프롬프트>` - Review Mode
+- `prompt-smith 사용 -a <프롬프트>` - Intercept Mode
 
 #### Review Mode 워크플로우
 
@@ -575,12 +607,12 @@ The exact prompt that will be sent to Claude:
 
 #### 옵션
 
-| 플래그 | 설명 |
-|--------|------|
-| -r ```<프롬프트>``` | Review Mode (개선안 표시, 승인 대기) |
-| -a ```<프롬프트>``` | Intercept Mode (자동 개선 후 실행) |
-| --threshold | 자동 적용 최소 점수 향상 (기본값: 2) |
-| --verbose, -v | 상세 분석 표시 |
+| 플래그        | 설명                                 |
+| ------------- | ------------------------------------ |
+| -r <프롬프트> | Review Mode (개선안 표시, 승인 대기) |
+| -a <프롬프트> | Intercept Mode (자동 개선 후 실행)   |
+| --threshold   | 자동 적용 최소 점수 향상 (기본값: 2) |
+| --verbose, -v | 상세 분석 표시                       |
 
 ---
 
@@ -588,17 +620,17 @@ The exact prompt that will be sent to Claude:
 
 LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 
-| 안티패턴 | 설명 | 개선 방향 |
-|----------|------|----------|
-| **모호한 지시** | "잘", "깔끔하게", "적당히" | 구체적 기준 명시 |
-| **역할 누락** | 역할 정의 없음 | "You are a..." 추가 |
-| **포맷 미지정** | 출력 형식 불명확 | JSON/마크다운 스키마 명시 |
-| **예시 부재** | Few-shot 예시 없음 | 1-3개 예시 추가 |
-| **인젝션 취약** | 입력 데이터 구분 없음 | 데이터/지시 분리 |
-| **과도한 자유도** | 제약 조건 없음 | 제약/금칙 추가 |
-| **검증 불가** | 성공 기준 없음 | 성공 조건 명시 |
-| **모호한 행동 지시** | "봐줘" (분석? 수정?) | 명확한 행동 동사 사용 |
-| **예시 형식 불일치** | 예시 ≠ 원하는 출력 | 예시 형식 = 출력 형식 |
+| 안티패턴             | 설명                       | 개선 방향                 |
+| -------------------- | -------------------------- | ------------------------- |
+| **모호한 지시**      | "잘", "깔끔하게", "적당히" | 구체적 기준 명시          |
+| **역할 누락**        | 역할 정의 없음             | "You are a..." 추가       |
+| **포맷 미지정**      | 출력 형식 불명확           | JSON/마크다운 스키마 명시 |
+| **예시 부재**        | Few-shot 예시 없음         | 1-3개 예시 추가           |
+| **인젝션 취약**      | 입력 데이터 구분 없음      | 데이터/지시 분리          |
+| **과도한 자유도**    | 제약 조건 없음             | 제약/금칙 추가            |
+| **검증 불가**        | 성공 기준 없음             | 성공 조건 명시            |
+| **모호한 행동 지시** | "봐줘" (분석? 수정?)       | 명확한 행동 동사 사용     |
+| **예시 형식 불일치** | 예시 ≠ 원하는 출력         | 예시 형식 = 출력 형식     |
 
 세부: [references/anti-patterns.md](references/anti-patterns.md)
 
@@ -615,20 +647,24 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 ### Playbooks (워크플로우 상세)
 
 **LINT:**
+
 - [playbooks/lint/full-lint.md](playbooks/lint/full-lint.md) - LINT 워크플로우 상세
 - [playbooks/lint/express-lint.md](playbooks/lint/express-lint.md) - Express LINT 가이드
 - [playbooks/lint/lint-integration.md](playbooks/lint/lint-integration.md) - CI/CD 연동
 
 **BUILD:**
+
 - [playbooks/build/build-mode.md](playbooks/build/build-mode.md) - BUILD 워크플로우 상세
 - [playbooks/build/requirement-gathering.md](playbooks/build/requirement-gathering.md) - 요구사항 수집 가이드
 - [playbooks/build/template-selection.md](playbooks/build/template-selection.md) - 템플릿 선택 가이드
 
 **Intercept:**
+
 - [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Review 모드 가이드
 - [playbooks/intercept/intercept-mode.md](playbooks/intercept/intercept-mode.md) - Intercept 모드 가이드
 
 **Team:**
+
 - [playbooks/team/prompt-pr.md](playbooks/team/prompt-pr.md) - PR 룰
 - [playbooks/team/owner-guide.md](playbooks/team/owner-guide.md) - 오너 제도
 - [playbooks/team/regression-testing.md](playbooks/team/regression-testing.md) - 회귀 테스트 운영
@@ -656,6 +692,7 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 ### Example 1: LINT - 모호한 프롬프트 진단
 
 **입력 (사용자)**:
+
 ```
 다음 프롬프트 점검해줘:
 
@@ -663,22 +700,24 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 ```
 
 **출력 (Prompt Smith)**:
+
 ```markdown
 ## 📋 진단 결과
 
 ### 점수: 2/10
 
-| 항목 | 점수 | 평가 |
-|------|------|------|
-| Role | 0/2 | 역할 정의 없음 |
-| Context | 0/2 | 맥락 정보 없음 (어떤 회의? 대상?) |
-| Instruction | 1/2 | "요약"은 있으나 기준 불명확 |
-| Example | 0/2 | 예시 없음 |
-| Format | 0/2 | 출력 형식 미지정 |
-| State Tracking | N/A | 단순 태스크 |
-| Tool Usage | N/A | 도구 불필요 |
+| 항목           | 점수 | 평가                              |
+| -------------- | ---- | --------------------------------- |
+| Role           | 0/2  | 역할 정의 없음                    |
+| Context        | 0/2  | 맥락 정보 없음 (어떤 회의? 대상?) |
+| Instruction    | 1/2  | "요약"은 있으나 기준 불명확       |
+| Example        | 0/2  | 예시 없음                         |
+| Format         | 0/2  | 출력 형식 미지정                  |
+| State Tracking | N/A  | 단순 태스크                       |
+| Tool Usage     | N/A  | 도구 불필요                       |
 
 ### 🔴 Top 3 이슈
+
 1. **역할 부재**: AI의 역할이 정의되지 않아 일관성 없는 출력 가능
 2. **맥락 부족**: 회의 유형, 대상 독자 등 정보 없음
 3. **포맷 미지정**: 출력 형식(불릿/표/섹션)이 정해지지 않음
@@ -689,6 +728,7 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 ### Example 2: BUILD - 코드 리뷰 프롬프트 설계
 
 **입력 (사용자)**:
+
 ```
 코드 리뷰해주는 프롬프트 만들어줘
 
@@ -698,10 +738,12 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 ```
 
 **출력 (Prompt Smith)**:
+
 ```markdown
 # 🏗️ BUILD 결과
 
 ## 메타데이터
+
 - **생성 일시**: 2026-01-01 12:00
 - **요청 목표**: Python 코드 리뷰
 - **프롬프트 유형**: 분석
@@ -714,35 +756,45 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 You are a senior Python developer with 10 years of experience, specializing in code review and security.
 
 ## Context
+
 - Target audience: Junior developers learning best practices
 - Focus areas: Code quality, security vulnerabilities, and maintainability
 - Tone: Educational and constructive (not critical)
 
 ## Instructions
+
 Review the provided Python code and:
+
 1. Identify any security vulnerabilities (SQL injection, XSS, etc.)
 2. Point out code quality issues (naming, structure, complexity)
 3. Suggest improvements with explanations
 
 ## Output Format
+
 ## 🔒 Security Issues (if any)
+
 - [Issue]: [Description + Fix]
 
 ## 📝 Code Quality
+
 - [Issue]: [Description + Suggestion]
 
 ## ✅ Good Practices Found
+
 - [What was done well]
 
 ## 💡 Improvement Suggestions
+
 1. [Suggestion with example]
 
 ## Constraints
+
 - Always prioritize security issues first
 - Provide code examples for suggestions
 - Be educational, not critical
 
 ## Code to Review
+
 <code>
 {{code}}
 </code>
@@ -753,15 +805,15 @@ Review the provided Python code and:
 
 ### 7-Point Quality Check: 10/10
 
-| 항목 | 점수 | 상태 |
-|------|------|------|
-| Role | 2/2 | ✅ |
-| Context | 2/2 | ✅ |
-| Instruction | 2/2 | ✅ |
-| Example | 2/2 | ✅ (출력 형식이 예시 역할) |
-| Format | 2/2 | ✅ |
-| State Tracking | N/A | 단순 태스크 |
-| Tool Usage | N/A | 도구 불필요 |
+| 항목           | 점수 | 상태                       |
+| -------------- | ---- | -------------------------- |
+| Role           | 2/2  | ✅                         |
+| Context        | 2/2  | ✅                         |
+| Instruction    | 2/2  | ✅                         |
+| Example        | 2/2  | ✅ (출력 형식이 예시 역할) |
+| Format         | 2/2  | ✅                         |
+| State Tracking | N/A  | 단순 태스크                |
+| Tool Usage     | N/A  | 도구 불필요                |
 
 [... 사용 가이드 및 테스트 케이스 생략 ...]
 ```
@@ -798,10 +850,10 @@ Review the provided Python code and:
 
 ## Roadmap
 
-| Phase | 기능 | 상태 |
-|-------|------|------|
-| **1.0** | LINT Mode (5-Point) | ✅ 완료 |
-| **2.0** | BUILD Mode + 7-Point | ✅ 완료 |
-| **2.1** | Intercept Pipeline | ✅ 현재 |
-| **3.0** | DEBUG Mode (실패 분석 + 재발 방지) | 예정 |
-| **4.0** | 자동 회귀 테스트 연동 | 예정 |
+| Phase   | 기능                               | 상태    |
+| ------- | ---------------------------------- | ------- |
+| **1.0** | LINT Mode (5-Point)                | ✅ 완료 |
+| **2.0** | BUILD Mode + 7-Point               | ✅ 완료 |
+| **2.1** | Intercept Pipeline                 | ✅ 현재 |
+| **3.0** | DEBUG Mode (실패 분석 + 재발 방지) | 예정    |
+| **4.0** | 자동 회귀 테스트 연동              | 예정    |

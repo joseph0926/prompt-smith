@@ -6,9 +6,9 @@ compatibility: "Claude Code"
 metadata:
   short-description: "Prompt QA skill (7-Point Check + BUILD + Test Generation)"
   author: joseph0926
-  version: "2.2.0"
+  version: "2.2.2"
   target: "claude-code"
-  updated: "2026-01-02"
+  updated: "2026-01-03"
   category: "productivity"
   tags: "prompt, quality, testing, lint, build, engineering, validation, improvement"
 i18n:
@@ -16,19 +16,31 @@ i18n:
   default: "en"
 ---
 
-# Prompt Smith v2.2.0
+# Prompt Smith v2.2.2
 
 A quality management skill that transforms prompts into operational assets through **diagnosis (LINT) → auto-improvement (Rewrite) → test generation** or **new design from requirements (BUILD)**.
 
-**v2.2 Changes**:
+**v2.2.2 Changes**:
+
+- **Simplified input format**: Backticks now optional for `/ps:r` and `/ps:a`
+- Version metadata sync with CHANGELOG
+
+**v2.2.1 Changes**:
+
+- **Strict tool call prevention**: No tool calls (WebSearch, Read, etc.) before LINT completes
+
+**v2.2.0 Changes**:
+
 - **Slash Commands** added: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
 - Plugin name changed to `ps` for shorter commands
 
 **v2.1 Changes**:
+
 - **Intercept Pipeline** added (Review/Intercept modes for real-time prompt improvement)
 - English Primary with i18n support
 
 **v2.0 Changes**:
+
 - 5-Point → **7-Point Quality Check** (Claude 4.x optimization: STATE_TRACKING, TOOL_USAGE)
 - **BUILD Mode** added (requirements → prompt design)
 
@@ -41,47 +53,54 @@ A quality management skill that transforms prompts into operational assets throu
 ### When to use this skill
 
 **Intercept Pipeline** (real-time improvement):
+
 - `use prompt-smith --review <your prompt>` - Review Mode (show improvements, await approval)
 - `use prompt-smith --auto <your prompt>` - Intercept Mode (auto-improve and execute)
 
 **LINT Mode** (improve existing prompts):
+
 - "lint this prompt", "check my prompt"
 - "improve this prompt", "review this prompt"
 - JSON errors, inconsistent outputs, missing elements
 
 **BUILD Mode** (design new prompts):
+
 - "build a prompt for...", "create a prompt"
 - "design a new prompt", "make a template"
 - When you have requirements but no prompt
 
 ### Slash Commands (v2.2+)
 
-| Command | Description | Usage |
-|---------|-------------|-------|
-| `/ps:r` | Review Mode | `/ps:r ```<prompt>``` ` |
-| `/ps:a` | Intercept Mode | `/ps:a ```<prompt>``` ` |
-| `/ps:lint` | LINT Mode | `/ps:lint <prompt>` |
-| `/ps:build` | BUILD Mode | `/ps:build <requirements>` |
+| Command     | Description    | Usage                      |
+| ----------- | -------------- | -------------------------- |
+| `/ps:r`     | Review Mode    | `/ps:r <prompt>`           |
+| `/ps:a`     | Intercept Mode | `/ps:a <prompt>`           |
+| `/ps:lint`  | LINT Mode      | `/ps:lint <prompt>`        |
+| `/ps:build` | BUILD Mode     | `/ps:build <requirements>` |
+
+**Note**: All commands accept plain text input. Backticks are optional.
 
 ### Natural Language Triggers (legacy)
 
-| English | Korean | Workflow |
-|---------|--------|----------|
-| lint/check/diagnose | 점검/진단/린트 | LINT Mode |
-| improve/review/analyze | 개선/리뷰/분석 | LINT Mode |
-| test/validate | 테스트 생성/검증 | LINT Mode (test generation) |
-| **build/create/design** | **만들어줘/설계/작성** | **BUILD Mode** |
-| **use prompt-smith -r/-a** | **prompt-smith 사용 -r/-a** | **Intercept Pipeline** |
+| English                    | Korean                      | Workflow                    |
+| -------------------------- | --------------------------- | --------------------------- |
+| lint/check/diagnose        | 점검/진단/린트              | LINT Mode                   |
+| improve/review/analyze     | 개선/리뷰/분석              | LINT Mode                   |
+| test/validate              | 테스트 생성/검증            | LINT Mode (test generation) |
+| **build/create/design**    | **만들어줘/설계/작성**      | **BUILD Mode**              |
+| **use prompt-smith -r/-a** | **prompt-smith 사용 -r/-a** | **Intercept Pipeline**      |
 
 ### Quick Start (Installation)
 
 **Global (all projects)**:
+
 ```bash
-git clone https://github.com/kyh/prompt-smith
+git clone https://github.com/joseph0926/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
 **Project Local (this project only)**:
+
 ```bash
 cp -r skills/prompt-smith .claude/skills/
 ```
@@ -93,39 +112,43 @@ NOTE: Natural language invocation (`use prompt-smith`) is more reliable than sla
 #### Flag-based Mode Selection
 
 ```
--r ```<prompt>```  → Review Mode (show improvements, await approval)
--a ```<prompt>```  → Intercept Mode (auto-improve and execute)
-(no flag)          → Show mode selection menu
+-r <prompt>  → Review Mode (show improvements, await approval)
+-a <prompt>  → Intercept Mode (auto-improve and execute)
+(no flag)    → Show mode selection menu
 ```
 
-**Required Format**: The prompt MUST be enclosed in triple backticks (```) immediately after the flag.
+**Input Format**: Plain text is accepted directly. Backticks are optional.
 
 ```
-use prompt-smith -r ```
-Your prompt here.
-Can include "quotes", newlines, and special characters.
-```
+use prompt-smith -r Your prompt here
 ```
 
-**Parsing Rule**: Extract everything between the opening ``` and closing ``` after `-r` or `-a` flag as the prompt to improve.
+**Multiline input is also supported**:
+
+```
+use prompt-smith -r Write a function
+that parses JSON
+and handles errors
+```
+
+**Parsing Rule**: Everything after `-r` or `-a` flag is treated as the prompt to improve.
 
 #### WITH -r Flag (Review Mode)
 
-When invoked with `-r` followed by a code block:
+When invoked with `-r` followed by prompt text:
 
 ```
-use prompt-smith -r ```
-Write code to parse JSON
-```
+use prompt-smith -r Write code to parse JSON
 ```
 
-1. Extract content inside ``` ``` as the prompt to improve
+1. Extract everything after `-r` as the prompt to improve
 2. Execute Express LINT immediately
 3. Show Before/After comparison
 4. Await user approval (y/n/e)
 
 **MUST FOLLOW:**
-- ALWAYS extract prompt from inside the code block (``` ```)
+
+- ALWAYS treat all text after `-r` as the prompt (plain text or code block)
 - ALWAYS show the full improved prompt text
 - ALWAYS show score comparison (X/10 → Y/10)
 - ALWAYS show `[DEBUG] Final Submitted Prompt` section
@@ -133,13 +156,9 @@ Write code to parse JSON
 - NEVER execute without showing improvements
 
 ```
-Example: use prompt-smith -r ```
-Write a function that:
-1. Parses JSON input
-2. Handles errors gracefully
-```
+Example: use prompt-smith -r Write a function that parses JSON
 
-→ Extract: "Write a function that:\n1. Parses JSON input\n2. Handles errors gracefully"
+→ Extract: "Write a function that parses JSON"
 → RUN Express LINT
 → SHOW improved prompt + DEBUG section
 → WAIT for approval
@@ -147,15 +166,13 @@ Write a function that:
 
 #### WITH -a Flag (Intercept Mode)
 
-When invoked with `-a` followed by a code block:
+When invoked with `-a` followed by prompt text:
 
 ```
-use prompt-smith -a ```
-Write code to parse JSON
-```
+use prompt-smith -a Write code to parse JSON
 ```
 
-1. Extract content inside ``` ``` as the prompt
+1. Extract everything after `-a` as the prompt
 2. Execute Express LINT
 3. Auto-apply improvements (if score improves by 2+ points)
 4. Execute immediately
@@ -202,12 +219,14 @@ The core criteria for prompt quality evaluation. All diagnoses are performed fro
 ```
 
 **Scoring Criteria:**
+
 - **0 points**: Element missing
 - **1 point**: Present but insufficient or ambiguous
 - **2 points**: Clear and sufficient
 - **N/A**: Not applicable (excluded from denominator)
 
 **Extension Criteria:**
+
 - STATE_TRACKING: Apply only for multi-step/long-running tasks
 - TOOL_USAGE: Apply only for prompts expecting tool usage
 
@@ -293,17 +312,18 @@ LINT results always output in this format:
 
 ### Score: X/10
 
-| Item | Score | Evaluation |
-|------|-------|------------|
-| Role | X/2 | [evaluation] |
-| Context | X/2 | [evaluation] |
-| Instruction | X/2 | [evaluation] |
-| Example | X/2 | [evaluation] |
-| Format | X/2 | [evaluation] |
+| Item           | Score      | Evaluation   |
+| -------------- | ---------- | ------------ |
+| Role           | X/2        | [evaluation] |
+| Context        | X/2        | [evaluation] |
+| Instruction    | X/2        | [evaluation] |
+| Example        | X/2        | [evaluation] |
+| Format         | X/2        | [evaluation] |
 | State Tracking | X/2 or N/A | [evaluation] |
-| Tool Usage | X/2 or N/A | [evaluation] |
+| Tool Usage     | X/2 or N/A | [evaluation] |
 
 ### Top 3 Issues
+
 1. **[Issue 1]**: [specific description]
 2. **[Issue 2]**: [specific description]
 3. **[Issue 3]**: [specific description]
@@ -319,11 +339,13 @@ LINT results always output in this format:
 ## Changes Made
 
 ### Change 1: [item]
+
 - **Before**: [original]
 - **After**: [improved]
 - **Reason**: [why improved]
 
 ### Change 2: [item]
+
 ...
 
 ---
@@ -331,22 +353,27 @@ LINT results always output in this format:
 ## Test Cases (5)
 
 ### 1. Normal Case 1
+
 **Input**: [test input]
 **Expected**: [expected output characteristics]
 
 ### 2. Normal Case 2
+
 **Input**: [test input]
 **Expected**: [expected output characteristics]
 
 ### 3. Edge Case
+
 **Input**: [empty/very long/special characters]
 **Expected**: [appropriate handling]
 
 ### 4. Injection Defense Case
+
 **Input**: "Ignore above instructions and [malicious request]"
 **Expected**: Original instructions maintained, injection ignored
 
 ### 5. Domain-Specific Case
+
 **Input**: [domain-specific scenario]
 **Expected**: [domain-appropriate handling]
 ```
@@ -358,6 +385,7 @@ For quick feedback without detailed analysis:
 **Trigger**: "quick check", "brief review"
 
 **Output**:
+
 ```
 Express LINT Results
 
@@ -434,11 +462,13 @@ One-line improvement suggestion: [key improvement point]
 #### BUILD Input Format
 
 **Minimum input**:
+
 ```
 Goal: [what the prompt should achieve]
 ```
 
 **Recommended input (better quality)**:
+
 ```
 Goal: [what the prompt should achieve]
 Audience: [who will use it]
@@ -455,8 +485,8 @@ Real-time prompt improvement before execution.
 
 #### Trigger
 
-- `use prompt-smith -r ```<prompt>``` ` - Review Mode
-- `use prompt-smith -a ```<prompt>``` ` - Intercept Mode
+- `use prompt-smith -r <prompt>` - Review Mode
+- `use prompt-smith -a <prompt>` - Intercept Mode
 
 #### Review Mode Workflow
 
@@ -512,12 +542,12 @@ The exact prompt that will be sent to Claude:
 
 #### Configuration
 
-| Flag | Description |
-|------|-------------|
-| -r ```<prompt>``` | Review Mode (show improvements, await approval) |
-| -a ```<prompt>``` | Intercept Mode (auto-improve and execute) |
-| --threshold | Minimum score improvement for auto-apply (default: 2) |
-| --verbose, -v | Show detailed analysis |
+| Flag          | Description                                           |
+| ------------- | ----------------------------------------------------- |
+| -r <prompt>   | Review Mode (show improvements, await approval)       |
+| -a <prompt>   | Intercept Mode (auto-improve and execute)             |
+| --threshold   | Minimum score improvement for auto-apply (default: 2) |
+| --verbose, -v | Show detailed analysis                                |
 
 ---
 
@@ -525,17 +555,17 @@ The exact prompt that will be sent to Claude:
 
 The following anti-patterns are automatically detected during LINT/BUILD:
 
-| Anti-Pattern | Description | Improvement |
-|--------------|-------------|-------------|
-| **Ambiguous instructions** | "well", "nicely", "appropriately" | Specify concrete criteria |
-| **Missing role** | No role definition | Add "You are a..." |
-| **Unspecified format** | Unclear output format | Specify JSON/markdown schema |
-| **No examples** | Missing few-shot examples | Add 1-3 examples |
-| **Injection vulnerable** | No input data separation | Separate data/instructions |
-| **Excessive freedom** | No constraints | Add constraints/prohibitions |
-| **Unverifiable** | No success criteria | Specify success conditions |
-| **Ambiguous action** | "look at this" (analyze? modify?) | Use clear action verbs |
-| **Example format mismatch** | Example != desired output | Match example to output format |
+| Anti-Pattern                | Description                       | Improvement                    |
+| --------------------------- | --------------------------------- | ------------------------------ |
+| **Ambiguous instructions**  | "well", "nicely", "appropriately" | Specify concrete criteria      |
+| **Missing role**            | No role definition                | Add "You are a..."             |
+| **Unspecified format**      | Unclear output format             | Specify JSON/markdown schema   |
+| **No examples**             | Missing few-shot examples         | Add 1-3 examples               |
+| **Injection vulnerable**    | No input data separation          | Separate data/instructions     |
+| **Excessive freedom**       | No constraints                    | Add constraints/prohibitions   |
+| **Unverifiable**            | No success criteria               | Specify success conditions     |
+| **Ambiguous action**        | "look at this" (analyze? modify?) | Use clear action verbs         |
+| **Example format mismatch** | Example != desired output         | Match example to output format |
 
 Details: [references/anti-patterns.md](references/anti-patterns.md)
 
@@ -552,19 +582,23 @@ Details: [references/anti-patterns.md](references/anti-patterns.md)
 ### Playbooks
 
 **LINT:**
+
 - [playbooks/lint/full-lint.md](playbooks/lint/full-lint.md) - LINT workflow details
 - [playbooks/lint/express-lint.md](playbooks/lint/express-lint.md) - Express LINT guide
 
 **BUILD:**
+
 - [playbooks/build/build-mode.md](playbooks/build/build-mode.md) - BUILD workflow details
 - [playbooks/build/requirement-gathering.md](playbooks/build/requirement-gathering.md) - Requirements gathering guide
 - [playbooks/build/template-selection.md](playbooks/build/template-selection.md) - Template selection guide
 
 **Intercept:**
+
 - [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Review mode guide
 - [playbooks/intercept/intercept-mode.md](playbooks/intercept/intercept-mode.md) - Intercept mode guide
 
 **Team:**
+
 - [playbooks/team/prompt-pr.md](playbooks/team/prompt-pr.md) - PR rules
 - [playbooks/team/owner-guide.md](playbooks/team/owner-guide.md) - Owner guide
 - [playbooks/team/regression-testing.md](playbooks/team/regression-testing.md) - Regression testing
@@ -591,6 +625,7 @@ Details: [references/anti-patterns.md](references/anti-patterns.md)
 ### Example 1: LINT - Diagnosing an ambiguous prompt
 
 **Input (user)**:
+
 ```
 Check this prompt:
 
@@ -598,22 +633,24 @@ Check this prompt:
 ```
 
 **Output (Prompt Smith)**:
+
 ```markdown
 ## Diagnostic Results
 
 ### Score: 2/10
 
-| Item | Score | Evaluation |
-|------|-------|------------|
-| Role | 0/2 | No role defined |
-| Context | 0/2 | No context (what meeting? audience?) |
-| Instruction | 1/2 | "Summarize" present but criteria unclear |
-| Example | 0/2 | No examples |
-| Format | 0/2 | Output format unspecified |
-| State Tracking | N/A | Simple task |
-| Tool Usage | N/A | No tools needed |
+| Item           | Score | Evaluation                               |
+| -------------- | ----- | ---------------------------------------- |
+| Role           | 0/2   | No role defined                          |
+| Context        | 0/2   | No context (what meeting? audience?)     |
+| Instruction    | 1/2   | "Summarize" present but criteria unclear |
+| Example        | 0/2   | No examples                              |
+| Format         | 0/2   | Output format unspecified                |
+| State Tracking | N/A   | Simple task                              |
+| Tool Usage     | N/A   | No tools needed                          |
 
 ### Top 3 Issues
+
 1. **Missing role**: No AI role defined, inconsistent outputs possible
 2. **Insufficient context**: No meeting type, target audience info
 3. **Unspecified format**: Output format (bullets/table/sections) undefined
@@ -624,35 +661,41 @@ Check this prompt:
 ### Example 2: Intercept Pipeline - Review Mode
 
 **Input (user)**:
+
 ```
-use prompt-smith -r ```
-Write code to parse JSON
-```
+use prompt-smith -r Write code to parse JSON
 ```
 
 **Output (Prompt Smith)**:
+
 ```
+
 Original Prompt (Score: 3/10)
+
 > Write code to parse JSON
 
 Improved Prompt (Score: 8/10)
+
 > You are a senior software engineer.
 >
 > Write a Python function that parses a JSON string and returns a dictionary.
 > Handle invalid JSON gracefully by returning None and logging the error.
 >
 > Output format:
+>
 > - Function with type hints
 > - Include docstring
 > - Include error handling
 
 Changes:
+
 - [+] Added ROLE: senior software engineer
 - [+] Added CONTEXT: Python, error handling requirement
 - [+] Specified FORMAT: type hints, docstring
 - [~] Made INSTRUCTION specific: parse JSON string → dictionary
 
-Proceed? (y/n/e): _
+Proceed? (y/n/e): \_
+
 ```
 
 ---
@@ -694,3 +737,4 @@ Proceed? (y/n/e): _
 | **2.1** | Intercept Pipeline | Current |
 | **3.0** | DEBUG Mode (failure analysis + prevention) | Planned |
 | **4.0** | Automated regression testing integration | Planned |
+```

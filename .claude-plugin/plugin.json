@@ -1,10 +1,10 @@
 {
   "name": "ps",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "description": "Prompt quality management. /ps:r, /ps:a, /ps:lint, /ps:build commands.",
   "author": {
     "name": "joseph0926"
   },
   "license": "MIT",
-  "repository": "https://github.com/kyh/prompt-smith"
+  "repository": "https://github.com/joseph0926/prompt-smith"
 }

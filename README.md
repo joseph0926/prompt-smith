@@ -53,11 +53,9 @@ with multiple lines               # Review Mode (multiline)
 
 **Natural Language (alternative)**:
 
-````
-use prompt-smith -r ```
-<Your prompt here.>
 ```
-````
+use prompt-smith -r Your prompt here
+```
 
 ## Modes
 
@@ -150,11 +148,9 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 
 **자연어 (대안)**:
 
-````
-prompt-smith 사용 -r ```
-프롬프트 내용
 ```
-````
+prompt-smith 사용 -r 프롬프트 내용
+```
 
 ### 모드
 

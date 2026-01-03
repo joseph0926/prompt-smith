@@ -345,4 +345,4 @@ Assistant:
 
 ---
 
-*Prompt Smith v2.2.1*
+*Prompt Smith v2.2.2*

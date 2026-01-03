@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.2] - 2026-01-03
+
+### Summary
+Prompt Smith v2.2.2 simplifies input format for `/ps:r` and `/ps:a`. Backticks are now **optional** - plain text input is accepted directly.
+
+### Changed
+
+#### Input Format Simplification
+- **Backticks optional**: `/ps:r Write a function` now works (no need for triple backticks)
+- **Multiline support**: Plain multiline text accepted without code block wrapper
+- **Documentation sync**: SKILL.md examples updated to show simpler format
+- **Version metadata**: Synced with CHANGELOG
+
+#### Updated Documentation
+- `SKILL.md`: Removed backtick requirements from all examples
+- `i18n/ko/SKILL.md`: Korean version synced with same changes
+
+### Fixed
+- Version mismatch between SKILL.md (2.2.0) and CHANGELOG.md (2.2.1)
+
+---
+
 ## [2.2.1] - 2026-01-03
 
 ### Summary
