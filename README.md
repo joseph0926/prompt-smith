@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![ps_demo_01](https://github.com/user-attachments/assets/133323b9-878e-43aa-bfed-633d493c4dc7)
+![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 
 **Features**: 7-Point Quality Check | LINT Mode | BUILD Mode | Intercept Pipeline
 
@@ -102,6 +102,8 @@ MIT License - see [LICENSE](LICENSE)
 ## 한국어
 
 [한국어 문서 바로가기](skills/prompt-smith/i18n/ko/SKILL.md)
+
+![ps_demo_01](https://github.com/user-attachments/assets/fe3d2a32-9317-4df4-a418-b4d3ac42d920)
 
 ### 빠른 시작
 
