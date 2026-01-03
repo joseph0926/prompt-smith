@@ -1,6 +1,6 @@
 # prompt-smith
 
-> Real-time prompt quality management for Claude Code
+> prompt quality management for Claude Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -10,25 +10,40 @@
 
 ## Quick Start
 
-### Option 1: Global Skill (all projects)
+### Option 1: Plugin Install (slash commands enabled)
+
+```bash
+git clone https://github.com/kyh/prompt-smith
+claude --plugin-dir ./prompt-smith
+```
+
+> **Note**: Marketplace distribution is not yet available. Use `--plugin-dir` for local plugin loading.
+
+### Option 2: Skill Only (natural language triggers)
 
 ```bash
 git clone https://github.com/kyh/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
-### Option 2: Project Local Skill (this project only)
-
-```bash
-cp -r skills/prompt-smith .claude/skills/
-```
+> **Note**: This method only enables natural language triggers (`use prompt-smith -r`), not slash commands.
 
 ### Usage
 
+**Slash Commands (recommended)**:
+
+````
+/ps:r ```your prompt here```      # Review Mode
+/ps:a ```your prompt here```      # Intercept Mode
+/ps:lint your prompt              # LINT Mode
+/ps:build requirements            # BUILD Mode
+````
+
+**Natural Language (alternative)**:
+
 ````
 use prompt-smith -r ```
-<Your prompt here.
-Can include "quotes", newlines, and special characters.>
+<Your prompt here.>
 ```
 ````
 
@@ -36,12 +51,12 @@ Can include "quotes", newlines, and special characters.>
 
 ## Modes
 
-| Mode      | Trigger                                 | Description                       |
-| --------- | --------------------------------------- | --------------------------------- |
-| Review    | ` use prompt-smith -r ```<prompt>```  ` | Show improvements, await approval |
-| Intercept | ` use prompt-smith -a ```<prompt>```  ` | Auto-improve and execute          |
-| LINT      | `lint this prompt`                      | Diagnose existing prompts         |
-| BUILD     | `build a prompt for...`                 | Design from requirements          |
+| Mode      | Slash Command             | Natural Language        | Description                       |
+| --------- | ------------------------- | ----------------------- | --------------------------------- |
+| Review    | ` /ps:r ```<prompt>```  ` | `use prompt-smith -r`   | Show improvements, await approval |
+| Intercept | ` /ps:a ```<prompt>```  ` | `use prompt-smith -a`   | Auto-improve and execute          |
+| LINT      | `/ps:lint`                | `lint this prompt`      | Diagnose existing prompts         |
+| BUILD     | `/ps:build`               | `build a prompt for...` | Design from requirements          |
 
 ## 7-Point Quality Check
 
@@ -82,15 +97,38 @@ MIT License - see [LICENSE](LICENSE)
 
 ### 빠른 시작
 
+**방법 1: 플러그인 설치 (슬래시 커맨드 활성화)**
+
+```bash
+git clone https://github.com/kyh/prompt-smith
+claude --plugin-dir ./prompt-smith
+```
+
+> **참고**: 마켓플레이스 배포는 아직 준비 중입니다. `--plugin-dir`로 로컬 플러그인을 로드하세요.
+
+**방법 2: 스킬만 설치 (자연어 트리거)**
+
 ```bash
 git clone https://github.com/kyh/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
+> **참고**: 이 방법은 자연어 트리거(`prompt-smith 사용 -r`)만 활성화됩니다. 슬래시 커맨드는 사용 불가.
+
+**슬래시 커맨드 (권장)**:
+
+````
+/ps:r ```프롬프트```      # Review Mode
+/ps:a ```프롬프트```      # Intercept Mode
+/ps:lint 프롬프트         # LINT Mode
+/ps:build 요구사항        # BUILD Mode
+````
+
+**자연어 (대안)**:
+
 ````
 prompt-smith 사용 -r ```
-프롬프트 내용을 여기에 작성합니다.
-"따옴표", 줄바꿈, 특수문자도 사용 가능합니다.
+프롬프트 내용
 ```
 ````
 
@@ -98,9 +136,9 @@ prompt-smith 사용 -r ```
 
 ### 모드
 
-| 모드      | 트리거                                     | 설명                       |
-| --------- | ------------------------------------------ | -------------------------- |
-| Review    | ` prompt-smith 사용 -r ```<프롬프트>```  ` | 개선안 표시 후 승인 대기   |
-| Intercept | ` prompt-smith 사용 -a ```<프롬프트>```  ` | 자동 개선 후 즉시 실행     |
-| LINT      | `이 프롬프트 점검해줘`                     | 기존 프롬프트 진단         |
-| BUILD     | `~하는 프롬프트 만들어줘`                  | 요구사항에서 프롬프트 설계 |
+| 모드      | 슬래시 커맨드               | 자연어                    | 설명                       |
+| --------- | --------------------------- | ------------------------- | -------------------------- |
+| Review    | ` /ps:r ```<프롬프트>```  ` | `prompt-smith 사용 -r`    | 개선안 표시 후 승인 대기   |
+| Intercept | ` /ps:a ```<프롬프트>```  ` | `prompt-smith 사용 -a`    | 자동 개선 후 즉시 실행     |
+| LINT      | `/ps:lint`                  | `이 프롬프트 점검해줘`    | 기존 프롬프트 진단         |
+| BUILD     | `/ps:build`                 | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |

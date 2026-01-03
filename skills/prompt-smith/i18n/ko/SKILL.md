@@ -6,16 +6,20 @@ compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.1.0"
+  version: "2.2.0"
   target: "claude-code"
   updated: "2026-01-02"
   category: "productivity"
   tags: "prompt, quality, testing, lint, build, intercept, engineering, validation, improvement, claude-4x"
 ---
 
-# Prompt Smith v2.1.0
+# Prompt Smith v2.2.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
+
+**v2.2 주요 변경**:
+- **슬래시 커맨드** 추가: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
+- 플러그인명 `ps`로 변경 (짧은 커맨드)
 
 **v2.1 주요 변경**:
 - **Intercept Pipeline** 추가 (Review/Intercept 모드로 실시간 프롬프트 개선)
@@ -48,7 +52,16 @@ metadata:
 - "새 프롬프트 작성해줘", "템플릿 만들어줘"
 - 요구사항만 있고 프롬프트가 없을 때
 
-### Trigger Keywords
+### 슬래시 커맨드 (v2.2+)
+
+| 커맨드 | 설명 | 사용법 |
+|--------|------|--------|
+| `/ps:r` | Review Mode | `/ps:r ```<프롬프트>``` ` |
+| `/ps:a` | Intercept Mode | `/ps:a ```<프롬프트>``` ` |
+| `/ps:lint` | LINT Mode | `/ps:lint <프롬프트>` |
+| `/ps:build` | BUILD Mode | `/ps:build <요구사항>` |
+
+### 자연어 트리거 (legacy)
 
 | 한국어 | 영어 | 워크플로우 |
 |--------|------|------------|

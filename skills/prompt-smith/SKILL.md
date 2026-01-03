@@ -6,7 +6,7 @@ compatibility: "Claude Code"
 metadata:
   short-description: "Prompt QA skill (7-Point Check + BUILD + Test Generation)"
   author: joseph0926
-  version: "2.1.0"
+  version: "2.2.0"
   target: "claude-code"
   updated: "2026-01-02"
   category: "productivity"
@@ -16,9 +16,13 @@ i18n:
   default: "en"
 ---
 
-# Prompt Smith v2.1.0
+# Prompt Smith v2.2.0
 
 A quality management skill that transforms prompts into operational assets through **diagnosis (LINT) → auto-improvement (Rewrite) → test generation** or **new design from requirements (BUILD)**.
+
+**v2.2 Changes**:
+- **Slash Commands** added: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
+- Plugin name changed to `ps` for shorter commands
 
 **v2.1 Changes**:
 - **Intercept Pipeline** added (Review/Intercept modes for real-time prompt improvement)
@@ -50,7 +54,16 @@ A quality management skill that transforms prompts into operational assets throu
 - "design a new prompt", "make a template"
 - When you have requirements but no prompt
 
-### Trigger Keywords
+### Slash Commands (v2.2+)
+
+| Command | Description | Usage |
+|---------|-------------|-------|
+| `/ps:r` | Review Mode | `/ps:r ```<prompt>``` ` |
+| `/ps:a` | Intercept Mode | `/ps:a ```<prompt>``` ` |
+| `/ps:lint` | LINT Mode | `/ps:lint <prompt>` |
+| `/ps:build` | BUILD Mode | `/ps:build <requirements>` |
+
+### Natural Language Triggers (legacy)
 
 | English | Korean | Workflow |
 |---------|--------|----------|
