@@ -12,10 +12,13 @@
 
 ### Option 1: Plugin Install (slash commands enabled)
 
-```bash
-/plugin marketplace add joseph0926/prompt-smith
-/plugin install ps@prompt-smith
-```
+1. In VS Code, type `/plugin` to open plugin terminal
+2. Press `Tab` to navigate to "Add Marketplace"
+3. Enter: `joseph0926/prompt-smith`
+4. Press `Tab` to navigate to "Install Plugin"
+5. Select `ps@prompt-smith`
+
+![Install Guide](assets/install_g_01.png)
 
 ### Option 2: Local Plugin (development)
 
@@ -104,10 +107,13 @@ MIT License - see [LICENSE](LICENSE)
 
 **방법 1: 플러그인 설치 (슬래시 커맨드 활성화)**
 
-```bash
-/plugin marketplace add joseph0926/prompt-smith
-/plugin install ps@prompt-smith
-```
+1. VS Code에서 `/plugin` 입력하여 플러그인 터미널 열기
+2. `Tab` 키로 "Add Marketplace" 이동
+3. `joseph0926/prompt-smith` 입력
+4. `Tab` 키로 "Install Plugin" 이동
+5. `ps@prompt-smith` 선택
+
+![설치 가이드](assets/install_g_01.png)
 
 **방법 2: 로컬 플러그인 (개발용)**
 
