@@ -6,16 +6,22 @@ compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.2.2"
+  version: "2.2.3"
   target: "claude-code"
   updated: "2026-01-03"
   category: "productivity"
   tags: "prompt, quality, testing, lint, build, intercept, engineering, validation, improvement, claude-4x"
 ---
 
-# Prompt Smith v2.2.2
+# Prompt Smith v2.2.3
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
+
+**v2.2.3 주요 변경**:
+
+- **문서 일관성 개선**: "5-Point" → "7-Point" 참조 수정 (6곳)
+- **API 파라미터 가이드 추가**: temperature/max_tokens 최적화 섹션
+- **Prompt Chaining 플레이북 추가**: 복잡한 멀티스텝 작업을 위한 체이닝 전략
 
 **v2.2.2 주요 변경**:
 

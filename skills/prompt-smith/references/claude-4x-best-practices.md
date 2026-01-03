@@ -411,6 +411,58 @@ Optional: analysis.metrics, recommendations, estimated_effort
 
 ---
 
+## 8. API 파라미터 최적화 (API_PARAMETERS)
+
+### Claude 4.x 특성
+Claude API 호출 시 적절한 파라미터 설정이 품질과 일관성에 영향을 줍니다.
+
+### 권장 파라미터
+
+| 파라미터 | 권장값 | 용도 |
+|----------|--------|------|
+| **temperature** | 0-0.3 | 정확성 중심 (코드, 추출, 분류) |
+| **temperature** | 0.7-1.0 | 창의성 중심 (브레인스토밍, 글쓰기) |
+| **max_tokens** | 응답 예상 길이 × 1.5 | 안전 마진 확보 |
+| **top_p** | 0.9 (기본) | 대부분 기본값 사용 |
+| **stop_sequences** | 작업별 지정 | 체이닝 시 응답 구분 |
+
+### 상황별 설정
+
+```markdown
+## 코드 생성
+temperature: 0.1-0.3
+max_tokens: 2048+
+stop_sequences: ["```\n\n", "---"]
+
+## 분석/요약
+temperature: 0.3-0.5
+max_tokens: 1024
+
+## 창의적 작업
+temperature: 0.8-1.0
+max_tokens: 작업별 조정
+```
+
+### 패턴
+
+```markdown
+# ❌ Anti-Pattern
+프롬프트만으로 출력 제어 시도
+(온도 기본값으로 모든 작업 수행)
+
+# ✅ Correct
+API 파라미터 + 프롬프트 조합
+- 정확성 필요 시 temperature 낮춤
+- Structured Outputs 활용 (출력 형식 보장)
+- stop_sequences로 응답 경계 제어
+```
+
+### Claude Code 참고
+Claude Code 환경에서는 API 파라미터보다 **CLAUDE.md 규칙 파일**이 더 큰 레버리지를 제공합니다.
+프롬프트 포맷에 집중하기보다 프로젝트 규칙 파일을 잘 관리하세요.
+
+---
+
 ## Anti-Patterns (Claude 4.x에서 피해야 할 것)
 
 ### 1. 암시적 기대

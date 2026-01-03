@@ -290,4 +290,4 @@ Executing improved prompt...
 
 ---
 
-*Prompt Smith v2.2.2*
+*Prompt Smith v2.2.3*

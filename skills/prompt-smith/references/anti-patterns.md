@@ -428,6 +428,6 @@ IMPORTANT:
 
 ## 관련 참조
 
-- [quality-checklist.md](quality-checklist.md) - 5-Point Quality Check
+- [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check
 - [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT 워크플로우
 - [../templates/prompt-template.md](../templates/prompt-template.md) - 올바른 프롬프트 템플릿

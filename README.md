@@ -91,6 +91,7 @@ use prompt-smith -r Your prompt here
 - [LINT Mode](skills/prompt-smith/playbooks/lint/full-lint.md)
 - [BUILD Mode](skills/prompt-smith/playbooks/build/build-mode.md)
 - [Intercept Pipeline](skills/prompt-smith/playbooks/intercept/review-mode.md)
+- [Prompt Chaining](skills/prompt-smith/playbooks/prompt-chaining.md)
 - [Quality Checklist](skills/prompt-smith/references/quality-checklist.md)
 
 ## License

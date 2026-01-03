@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.3] - 2026-01-03
+
+### Summary
+Prompt Smith v2.2.3 improves documentation consistency, adds API parameter optimization guide, and introduces Prompt Chaining playbook for complex multi-step workflows.
+
+### Added
+
+#### API Parameters Optimization Guide
+- **New section in claude-4x-best-practices.md**: Temperature, max_tokens, stop_sequences recommendations
+- Situation-specific settings: code generation (0.1-0.3), analysis (0.3-0.5), creative (0.8-1.0)
+- Claude Code note: "CLAUDE.md rules provide bigger leverage than API parameters"
+
+#### Prompt Chaining Playbook
+- **New file**: `playbooks/prompt-chaining.md`
+- Three chaining patterns: Sequential, Branching, Parallel
+- State management with JSON checkpoint structure
+- Error handling strategies: Retry, Fallback, Skip, Rollback, Abort
+- Example: Document migration chain with 5 steps
+
+### Fixed
+
+#### Documentation Consistency
+- Fixed "5-Point" → "7-Point" references in 6 locations across 5 files:
+  - `references/anti-patterns.md`
+  - `references/team-workflow.md`
+  - `templates/prompt-template.md`
+  - `templates/diagnostic-report.md`
+  - `playbooks/lint-mode.md` (2 locations)
+
+### Changed
+- `references/claude-4x-best-practices.md`: Added Section 8 (API_PARAMETERS)
+- Version bumped to 2.2.3 across all metadata files
+
+---
+
 ## [2.2.2] - 2026-01-03
 
 ### Summary

@@ -392,5 +392,5 @@ Output: [예시 출력]
 ## 관련 참조
 
 - [test-case-template.md](test-case-template.md) - 테스트 케이스 템플릿
-- [../references/quality-checklist.md](../references/quality-checklist.md) - 5-Point Quality Check
+- [../references/quality-checklist.md](../references/quality-checklist.md) - 7-Point Quality Check
 - [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT 워크플로우

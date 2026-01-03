@@ -6,7 +6,7 @@ compatibility: "Claude Code"
 metadata:
   short-description: "Prompt QA skill (7-Point Check + BUILD + Test Generation)"
   author: joseph0926
-  version: "2.2.2"
+  version: "2.2.3"
   target: "claude-code"
   updated: "2026-01-03"
   category: "productivity"
@@ -16,9 +16,15 @@ i18n:
   default: "en"
 ---
 
-# Prompt Smith v2.2.2
+# Prompt Smith v2.2.3
 
 A quality management skill that transforms prompts into operational assets through **diagnosis (LINT) → auto-improvement (Rewrite) → test generation** or **new design from requirements (BUILD)**.
+
+**v2.2.3 Changes**:
+
+- **Documentation consistency**: Fixed "5-Point" → "7-Point" references across all documents
+- **API Parameters guide**: Added temperature/max_tokens optimization section to claude-4x-best-practices.md
+- **Prompt Chaining guide**: New playbook for multi-step prompt strategies
 
 **v2.2.2 Changes**:
 
