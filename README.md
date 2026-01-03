@@ -41,11 +41,15 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 **Slash Commands (recommended)**:
 
 ````
-/ps:r ```your prompt here```      # Review Mode
-/ps:a ```your prompt here```      # Intercept Mode
+/ps:r your prompt here            # Review Mode (single line)
+/ps:r your prompt here
+with multiple lines               # Review Mode (multiline)
+/ps:a your prompt here            # Intercept Mode
 /ps:lint your prompt              # LINT Mode
 /ps:build requirements            # BUILD Mode
 ````
+
+> **Note**: Triple backticks (```) are optional. Plain text and multiline input are fully supported.
 
 **Natural Language (alternative)**:
 
@@ -55,16 +59,14 @@ use prompt-smith -r ```
 ```
 ````
 
-> **Note**: The prompt MUST be enclosed in triple backticks (```) after the flag.
-
 ## Modes
 
-| Mode      | Slash Command             | Natural Language        | Description                       |
-| --------- | ------------------------- | ----------------------- | --------------------------------- |
-| Review    | ` /ps:r ```<prompt>```  ` | `use prompt-smith -r`   | Show improvements, await approval |
-| Intercept | ` /ps:a ```<prompt>```  ` | `use prompt-smith -a`   | Auto-improve and execute          |
-| LINT      | `/ps:lint`                | `lint this prompt`      | Diagnose existing prompts         |
-| BUILD     | `/ps:build`               | `build a prompt for...` | Design from requirements          |
+| Mode      | Slash Command        | Natural Language        | Description                       |
+| --------- | -------------------- | ----------------------- | --------------------------------- |
+| Review    | `/ps:r <prompt>`     | `use prompt-smith -r`   | Show improvements, await approval |
+| Intercept | `/ps:a <prompt>`     | `use prompt-smith -a`   | Auto-improve and execute          |
+| LINT      | `/ps:lint <prompt>`  | `lint this prompt`      | Diagnose existing prompts         |
+| BUILD     | `/ps:build <goal>`   | `build a prompt for...` | Design from requirements          |
 
 ## 7-Point Quality Check
 
@@ -136,11 +138,15 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 **슬래시 커맨드 (권장)**:
 
 ````
-/ps:r ```프롬프트```      # Review Mode
-/ps:a ```프롬프트```      # Intercept Mode
-/ps:lint 프롬프트         # LINT Mode
-/ps:build 요구사항        # BUILD Mode
+/ps:r 프롬프트                     # Review Mode (한 줄)
+/ps:r 프롬프트
+여러 줄로 작성 가능                # Review Mode (여러 줄)
+/ps:a 프롬프트                     # Intercept Mode
+/ps:lint 프롬프트                  # LINT Mode
+/ps:build 요구사항                 # BUILD Mode
 ````
+
+> **참고**: 트리플 백틱(```)은 선택사항입니다. 일반 텍스트와 여러 줄 입력을 완전히 지원합니다.
 
 **자연어 (대안)**:
 
@@ -150,13 +156,11 @@ prompt-smith 사용 -r ```
 ```
 ````
 
-> **참고**: 프롬프트는 플래그 뒤에 반드시 트리플 백틱(```)으로 감싸야 합니다.
-
 ### 모드
 
-| 모드      | 슬래시 커맨드               | 자연어                    | 설명                       |
-| --------- | --------------------------- | ------------------------- | -------------------------- |
-| Review    | ` /ps:r ```<프롬프트>```  ` | `prompt-smith 사용 -r`    | 개선안 표시 후 승인 대기   |
-| Intercept | ` /ps:a ```<프롬프트>```  ` | `prompt-smith 사용 -a`    | 자동 개선 후 즉시 실행     |
-| LINT      | `/ps:lint`                  | `이 프롬프트 점검해줘`    | 기존 프롬프트 진단         |
-| BUILD     | `/ps:build`                 | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |
+| 모드      | 슬래시 커맨드          | 자연어                    | 설명                       |
+| --------- | ---------------------- | ------------------------- | -------------------------- |
+| Review    | `/ps:r <프롬프트>`     | `prompt-smith 사용 -r`    | 개선안 표시 후 승인 대기   |
+| Intercept | `/ps:a <프롬프트>`     | `prompt-smith 사용 -a`    | 자동 개선 후 즉시 실행     |
+| LINT      | `/ps:lint <프롬프트>`  | `이 프롬프트 점검해줘`    | 기존 프롬프트 진단         |
+| BUILD     | `/ps:build <목표>`     | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |

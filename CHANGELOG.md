@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.1] - 2026-01-03
+
+### Summary
+Prompt Smith v2.1.1 improves input parsing for Review/Intercept modes.
+
+### Fixed
+
+#### Multiline Prompt Support
+- `/ps:r` and `/ps:a` now accept multiline prompts without requiring triple backticks
+- Both formats now work:
+  - `/ps:r Write a function` (single line)
+  - `/ps:r Write a function\nthat parses JSON` (multiline)
+  - `/ps:r ```prompt```` (code block - legacy)
+
+#### Strict Prompt Treatment
+- Added CRITICAL rule: Input to `/ps:r` and `/ps:a` is ALWAYS treated as a prompt to improve
+- Prevents semantic interpretation (e.g., "fix this bug" → improves the prompt, doesn't fix bugs)
+- Ensures consistent LINT → Improve → Execute workflow
+
+### Changed
+- `commands/r.md`: Updated parsing logic + added CRITICAL rule
+- `commands/a.md`: Updated parsing logic + added CRITICAL rule
+- `argument-hint` changed from ` ```<prompt>``` ` to `<prompt text>`
+
+---
+
 ## [2.1.0] - 2026-01-02
 
 ### Summary
