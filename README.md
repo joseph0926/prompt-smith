@@ -13,16 +13,21 @@
 ### Option 1: Plugin Install (slash commands enabled)
 
 ```bash
-git clone https://github.com/kyh/prompt-smith
+/plugin marketplace add joseph0926/prompt-smith
+/plugin install ps@prompt-smith
+```
+
+### Option 2: Local Plugin (development)
+
+```bash
+git clone https://github.com/joseph0926/prompt-smith
 claude --plugin-dir ./prompt-smith
 ```
 
-> **Note**: Marketplace distribution is not yet available. Use `--plugin-dir` for local plugin loading.
-
-### Option 2: Skill Only (natural language triggers)
+### Option 3: Skill Only (natural language triggers)
 
 ```bash
-git clone https://github.com/kyh/prompt-smith
+git clone https://github.com/joseph0926/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
@@ -100,16 +105,21 @@ MIT License - see [LICENSE](LICENSE)
 **방법 1: 플러그인 설치 (슬래시 커맨드 활성화)**
 
 ```bash
-git clone https://github.com/kyh/prompt-smith
+/plugin marketplace add joseph0926/prompt-smith
+/plugin install ps@prompt-smith
+```
+
+**방법 2: 로컬 플러그인 (개발용)**
+
+```bash
+git clone https://github.com/joseph0926/prompt-smith
 claude --plugin-dir ./prompt-smith
 ```
 
-> **참고**: 마켓플레이스 배포는 아직 준비 중입니다. `--plugin-dir`로 로컬 플러그인을 로드하세요.
-
-**방법 2: 스킬만 설치 (자연어 트리거)**
+**방법 3: 스킬만 설치 (자연어 트리거)**
 
 ```bash
-git clone https://github.com/kyh/prompt-smith
+git clone https://github.com/joseph0926/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
