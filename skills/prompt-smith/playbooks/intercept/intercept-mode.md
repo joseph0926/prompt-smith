@@ -238,4 +238,56 @@ Executing original prompt...
 
 ---
 
-*Prompt Smith v2.1.0*
+## Anti-Patterns
+
+### Bad Example 1: Tool calls before LINT
+
+```
+User: /prompt-smith --auto 이 파일을 읽고 분석해줘
+Assistant: [Read 호출] 파일을 읽겠습니다...
+```
+
+Problem: Interpreted "파일을 읽고" as a command to call Read tool.
+
+**Correct behavior**: Treat entire input as a prompt, improve it, then execute.
+
+```
+User: /prompt-smith --auto 이 파일을 읽고 분석해줘
+Assistant:
+Auto-improved (2/10 -> 7/10)
+
+Changes:
+- [+] Added ROLE: code analyst
+- [+] Specified analysis criteria
+- [+] Defined output format
+
+Executing improved prompt...
+```
+
+### Bad Example 2: Web search before LINT
+
+```
+User: /prompt-smith --auto 최신 AI 트렌드를 검색해서 요약해줘
+Assistant: [WebSearch 호출] AI 트렌드를 검색하겠습니다...
+```
+
+Problem: Interpreted "검색" as a command to call WebSearch tool.
+
+**Correct behavior**: LINT first, then execute improved prompt.
+
+```
+User: /prompt-smith --auto 최신 AI 트렌드를 검색해서 요약해줘
+Assistant:
+Auto-improved (3/10 -> 8/10)
+
+Changes:
+- [+] Added ROLE: AI researcher
+- [+] Specified search scope and criteria
+- [+] Defined summary format
+
+Executing improved prompt...
+```
+
+---
+
+*Prompt Smith v2.2.1*

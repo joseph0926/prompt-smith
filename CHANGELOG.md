@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.1] - 2026-01-03
+
+### Summary
+Prompt Smith v2.2.1 adds strict tool call prevention for Review/Intercept modes. When `/ps:r` or `/ps:a` is invoked, Claude will now **always** perform Express LINT first, even if the input contains keywords like "웹검색", "파일 읽기", "search", "read file".
+
+### Added
+
+#### Strict Tool Call Prevention
+- **FORBIDDEN tool list**: WebSearch, Read, Bash, Edit are blocked until LINT completes
+- **Trigger keywords to ignore**: "검색", "파일", "최신", "search", "read", "execute", etc.
+- **Execution Sequence enforcement**: No tools may be called between steps 1-5
+
+#### Enhanced Anti-Patterns Documentation
+- `review-mode.md`: Added "Bad Example 3: Tool calls before LINT"
+- `intercept-mode.md`: Added new Anti-Patterns section with 2 examples
+
+### Changed
+- `commands/r.md`: CRITICAL section expanded (~60 lines) with explicit forbidden tools table
+- `commands/a.md`: CRITICAL section expanded (~55 lines) with explicit forbidden tools table
+- Step 1 in both commands now includes WARNING about semantic interpretation
+
+### Fixed
+- Issue where `/ps:r 최신 웹검색을 통해...` would trigger WebSearch before LINT
+- Issue where `/ps:a 이 파일을 읽고...` would trigger Read before LINT
+
+---
+
 ## [2.1.1] - 2026-01-03
 
 ### Summary

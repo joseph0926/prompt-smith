@@ -307,6 +307,42 @@ Problem: Did not show the full improved prompt.
 ### Proceed? (y/n/e)
 ```
 
+### Bad Example 3: Tool calls before LINT
+
+```
+User: /prompt-smith 최신 뉴스를 웹검색해서 정리해줘
+Assistant: [WebSearch 호출] 뉴스를 검색하겠습니다...
+```
+
+Problem: Interpreted "웹검색" as a command to call WebSearch tool.
+
+**Correct behavior**: Treat entire input as a prompt to improve.
+
+```
+User: /prompt-smith 최신 뉴스를 웹검색해서 정리해줘
+Assistant:
+┌─────────────────────────────────────────────────────────────┐
+│ Express LINT Results                                         │
+├─────────────────────────────────────────────────────────────┤
+│ Original Score: 3/10 → Improved Score: 8/10 (+5)            │
+└─────────────────────────────────────────────────────────────┘
+
+### Original Prompt
+> 최신 뉴스를 웹검색해서 정리해줘
+
+### Improved Prompt (copy-paste ready)
+> You are a news researcher with expertise in current events.
+>
+> Search for the latest news and organize them by:
+> - Topic category
+> - Importance level
+> - Date
+>
+> Output format:
+> - Brief summary per article
+> - Source attribution
+```
+
 ---
 
-*Prompt Smith v2.1.0*
+*Prompt Smith v2.2.1*
