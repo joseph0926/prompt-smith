@@ -43,3 +43,63 @@ jobs:
           if [ -f "${{ env.SKILL_PATH }}/marketplace.json" ]; then
             python3 -c "import json; json.load(open('${{ env.SKILL_PATH }}/marketplace.json'))"
           fi
+
+      - name: Check deprecated /prompt-smith references
+        run: |
+          # Exclude CHANGELOG.md and review reports from check
+          # Use -h to suppress filename prefixes, avoiding false negatives from path filtering
+          FOUND=$(grep -rh "/prompt-smith" --include="*.md" \
+            --exclude="CHANGELOG.md" \
+            --exclude="*-review-report.md" \
+            ${{ env.SKILL_PATH }}/ 2>/dev/null | \
+            grep -v "github.com/.*prompt-smith" | wc -l || echo "0")
+          if [ "$FOUND" -gt 0 ]; then
+            echo "Found deprecated /prompt-smith command references:"
+            grep -r "/prompt-smith" --include="*.md" \
+              --exclude="CHANGELOG.md" \
+              --exclude="*-review-report.md" \
+              ${{ env.SKILL_PATH }}/ | \
+              grep -v "github.com/.*prompt-smith" | \
+              grep -v "skills/prompt-smith"
+            echo ""
+            echo "Please use /ps:r or /ps:a instead."
+            exit 1
+          fi
+
+      - name: Check SKILL.md size
+        run: |
+          SIZE=$(wc -c < ${{ env.SKILL_PATH }}/SKILL.md)
+          if [ "$SIZE" -gt 30000 ]; then
+            echo "SKILL.md exceeds 30KB limit: $SIZE bytes"
+            echo "Consider moving content to references/ directory"
+            exit 1
+          fi
+          echo "SKILL.md size: $SIZE bytes (limit: 30000)"
+
+      - name: Check version consistency
+        run: |
+          PLUGIN_VER=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          SKILL_MARKETPLACE_VER=$(python3 -c "import json; print(json.load(open('${{ env.SKILL_PATH }}/marketplace.json'))['version'])")
+
+          echo "Plugin version: $PLUGIN_VER"
+          echo "Skill marketplace version: $SKILL_MARKETPLACE_VER"
+
+          if [ "$PLUGIN_VER" != "$SKILL_MARKETPLACE_VER" ]; then
+            echo "Version mismatch detected!"
+            echo "  .claude-plugin/plugin.json: $PLUGIN_VER"
+            echo "  ${{ env.SKILL_PATH }}/marketplace.json: $SKILL_MARKETPLACE_VER"
+            exit 1
+          fi
+          echo "Version consistency check passed: $PLUGIN_VER"
+
+      - name: Check forbidden tokens
+        run: |
+          # Use -- to prevent patterns starting with - from being interpreted as options
+          FOUND=$(grep -rE -- '--threshold|--verbose' --include="*.md" ${{ env.SKILL_PATH }}/ 2>/dev/null | \
+            grep -v "CHANGELOG.md" | wc -l || echo "0")
+          if [ "$FOUND" -gt 0 ]; then
+            echo "Forbidden tokens found (--threshold, --verbose are removed options):"
+            grep -rE -- '--threshold|--verbose' --include="*.md" ${{ env.SKILL_PATH }}/ | grep -v "CHANGELOG.md"
+            exit 1
+          fi
+          echo "No forbidden tokens found"
