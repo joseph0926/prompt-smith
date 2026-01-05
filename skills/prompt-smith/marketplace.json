@@ -1,6 +1,6 @@
 {
   "name": "prompt-smith",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Prompt quality management skill with 7-Point Quality Check, LINT/BUILD modes, and Intercept Pipeline for real-time prompt improvement.",
   "short_description": "Prompt QA skill (7-Point Check + LINT + BUILD + Intercept)",
   "author": "joseph0926",
@@ -22,7 +22,10 @@
     "claude-code": ">=1.0.0"
   },
   "i18n": {
-    "locales": ["ko", "en"],
+    "locales": [
+      "ko",
+      "en"
+    ],
     "default": "ko"
   },
   "features": [

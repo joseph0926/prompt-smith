@@ -153,12 +153,38 @@ Top 3 이슈:
 
 ---
 
+## 권한 설정 (Allowlist)
+
+커맨드가 차단되면 `~/.claude/settings.json` 또는 프로젝트의 `.claude/settings.local.json`에 다음을 추가하세요:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Skill(ps:r)",
+      "Skill(ps:r:*)",
+      "Skill(ps:a)",
+      "Skill(ps:a:*)",
+      "Skill(ps:lint)",
+      "Skill(ps:lint:*)",
+      "Skill(ps:build)",
+      "Skill(ps:build:*)",
+      "Skill(ps:help)",
+      "Skill(ps:help:*)"
+    ]
+  }
+}
+```
+
+---
+
 ## 도움말
 
 문제가 있으시면:
 - [SKILL.md](../SKILL.md)에서 상세 문서 확인
 - [안티패턴](../references/anti-patterns.md)에서 흔한 실수 확인
+- `/ps:help`로 명령어 목록 확인
 
 ---
 
-*Prompt Smith v2.3.0*
+*Prompt Smith v2.4.0*

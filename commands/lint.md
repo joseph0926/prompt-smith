@@ -67,7 +67,7 @@ Create 5 test cases:
 
 ### Step 6: Output Report
 
-Use diagnostic report format from templates/diagnostic-report.md
+Use diagnostic report format from skills/prompt-smith/templates/diagnostic-report.md
 
 ## Express Mode
 

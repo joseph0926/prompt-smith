@@ -31,8 +31,8 @@ Thank you for your interest in contributing to prompt-smith!
 
 ## Code Style
 
-- English for all code and documentation (Primary)
-- Korean translations go in `i18n/ko/`
+- Korean for all code and documentation (Primary)
+- English translations go in `i18n/en/`
 - Follow existing file structure
 - No comments in code
 
@@ -58,9 +58,10 @@ Before submitting:
 
 ## i18n Guidelines
 
-1. Primary language: English
-2. Korean translations: `i18n/ko/`
+1. Primary language: Korean (root level)
+2. English translations: `i18n/en/`
 3. Keep structure identical across languages
+4. Maintain `default: "ko"` in marketplace.json
 
 ## Questions?
 

@@ -1,12 +1,12 @@
 ---
 name: prompt-smith
-description: "프롬프트 품질관리 스킬. /ps:r 또는 /ps:a로 프롬프트 개선. 트리거: prompt-smith 사용, use prompt-smith, 점검, 린트, 만들어줘."
+description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:build로 프롬프트 개선. 트리거: 프롬프트 점검, 프롬프트 린트, prompt lint, prompt review."
 license: MIT
 compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.3.0"
+  version: "2.4.0"
   target: "claude-code"
   updated: "2026-01-05"
   category: "productivity"
@@ -16,11 +16,11 @@ i18n:
   default: "ko"
 ---
 
-# Prompt Smith v2.3.0
+# Prompt Smith v2.4.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
-**v2.3.0**: 커맨드 표준화 (`/ps:r`, `/ps:a`), CI 자동화, 토큰 최적화, i18n/en 문서 추가
+**v2.4.0**: `/ps:help` 커맨드 추가, 출력 레벨 분리, 크로스플랫폼 스크립트, CI 강화, 트리거 정교화
 
 **이전 버전**: [CHANGELOG.md](../../CHANGELOG.md) 참조
 
@@ -63,13 +63,15 @@ i18n:
 
 ### 자연어 트리거 (legacy)
 
-| 한국어                      | 영어                       | 워크플로우              |
-| --------------------------- | -------------------------- | ----------------------- |
-| 점검/진단/린트              | lint/check/diagnose        | LINT Mode               |
-| 개선/리뷰/분석              | improve/review/analyze     | LINT Mode               |
-| 테스트 생성/검증            | test/validate              | LINT Mode (테스트 생성) |
-| **만들어줘/설계/작성**      | **build/create/design**    | **BUILD Mode**          |
-| **prompt-smith 사용 -r/-a** | **use prompt-smith -r/-a** | **Intercept Pipeline**  |
+| 한국어                         | 영어                          | 워크플로우              |
+| ------------------------------ | ----------------------------- | ----------------------- |
+| 프롬프트 점검/진단/린트        | prompt lint/check/diagnose    | LINT Mode               |
+| 프롬프트 개선/리뷰/분석        | prompt improve/review/analyze | LINT Mode               |
+| 프롬프트 테스트 생성           | prompt test/validate          | LINT Mode (테스트 생성) |
+| **프롬프트 만들어줘/설계**     | **prompt build/create/design**| **BUILD Mode**          |
+| **prompt-smith 사용 -r/-a**    | **use prompt-smith -r/-a**    | **Intercept Pipeline**  |
+
+> **참고**: "만들어줘", "봐줘" 같은 일반적인 동사는 오발동을 방지하기 위해 "프롬프트"와 함께 사용해야 합니다.
 
 ### Quick Start (설치)
 
@@ -359,26 +361,32 @@ LINT 결과는 항상 다음 형식으로 출력합니다:
 **기대 결과**: [도메인별 적절한 처리]
 ```
 
-#### Express Mode (빠른 진단)
+#### 출력 레벨 (Output Levels)
 
-상세 분석 없이 빠른 피드백이 필요할 때:
+상황에 따라 다른 출력 레벨을 사용할 수 있습니다:
 
-**트리거**: "빠르게 점검해줘", "간단히 봐줘"
+| 레벨 | 트리거 | 출력 내용 | 토큰 |
+|------|--------|-----------|------|
+| **Default** | (기본) | 점수 + Top 3 이슈 + 개선 프롬프트 + 변경사항 | ~800 |
+| **Express** | "빠르게", "quick" | 점수 + 한 줄 제안 | ~100 |
+| **Detail** | "자세히", "detail" | 전체 7-Point + 변경사항 + 5개 테스트 케이스 | ~2000 |
 
-**출력**:
+**Express Mode (빠른 진단)**:
 
 ```
-⚡ Express LINT 결과
+⚡ Express LINT: X/10 → Y/10
 
-점수: X/10
-
-주요 이슈:
-1. [이슈 1]
-2. [이슈 2]
-3. [이슈 3]
-
-한 줄 개선 제안: [핵심 개선 포인트]
+Top Issues: [이슈1], [이슈2], [이슈3]
+Quick Fix: [핵심 개선 포인트]
 ```
+
+**Default Mode (기본)**:
+
+점수 + Top 3 이슈 + 개선 프롬프트(코드블록) + 변경사항 요약
+
+**Detail Mode (상세)**:
+
+전체 진단 리포트 형식 + 5개 테스트 케이스 포함
 
 ---
 

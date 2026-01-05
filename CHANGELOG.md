@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.0] - 2026-01-05
+
+### Summary
+Prompt Smith v2.4.0 focuses on release quality and developer experience. Fixes broken links, adds cross-platform tooling, strengthens CI, and introduces the `/ps:help` command for discoverability.
+
+### Added
+
+#### New Command: `/ps:help`
+- **Help topics**: commands, lint, build, review, 7point
+- **Quick reference**: Version, command list, recommended workflow
+- **Scannable output**: Box-drawing headers, concise sections
+
+#### Cross-Platform Scripts
+- **`scripts/sync-version.py`**: Python-based version sync (replaces shell script)
+  - Platform independent (macOS, Linux, Windows)
+  - Syncs VERSION → plugin.json, marketplace.json, SKILL.md, i18n/en/SKILL.md
+- **`scripts/package.sh`**: Clean packaging for releases
+  - Excludes .git, __MACOSX, .DS_Store, .env files
+  - Outputs tar.gz and zip archives
+
+#### CI Enhancements
+- **Forbidden artifacts check**: Blocks .DS_Store, __MACOSX, .env files
+- **Internal link validation**: Detects broken markdown links in skills/
+- **Extended version consistency**: Checks i18n/*/SKILL.md versions
+
+#### Output Levels (LINT Mode)
+- **Default**: Score + Top 3 issues + improved prompt (~800 tokens)
+- **Express**: Score + one-line suggestion (~100 tokens)
+- **Detail**: Full 7-Point + all changes + 5 test cases (~2000 tokens)
+
+### Changed
+
+#### i18n Policy Clarification
+- **CONTRIBUTING.md**: Updated to "Korean Primary" policy
+- **Triggers**: "프롬프트" prefix required (e.g., "프롬프트 만들어줘" instead of "만들어줘")
+- **README.md**: Fixed Korean docs link → `skills/prompt-smith/SKILL.md`
+
+#### Documentation Improvements
+- **README.md**: Added "Commands at a Glance" table at top
+- **quick-start.md**: Added allowlist configuration guide
+- **commands/lint.md**: Fixed relative path for diagnostic-report template
+
+### Fixed
+- Broken link in README.md (i18n/ko/SKILL.md → SKILL.md)
+- Broken link in commands/lint.md (templates/ → skills/prompt-smith/templates/)
+
+---
+
 ## [2.3.0] - 2026-01-05
 
 ### Summary

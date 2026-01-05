@@ -1,12 +1,12 @@
 ---
 name: prompt-smith
-description: "A prompt quality management skill. Improve prompts with /ps:r or /ps:a. Triggers: prompt-smith, use prompt-smith, check, lint, create."
+description: "A prompt quality management skill. Improve prompts with /ps:r, /ps:a, /ps:lint, /ps:build. Triggers: prompt lint, prompt check, prompt review."
 license: MIT
 compatibility: "Claude Code"
 metadata:
   short-description: "Prompt quality management skill (7-Point diagnostics + BUILD + INTERCEPT + test generation)"
   author: joseph0926
-  version: "2.3.0"
+  version: "2.4.0"
   target: "claude-code"
   updated: "2026-01-05"
   category: "productivity"
@@ -16,11 +16,11 @@ i18n:
   default: "ko"
 ---
 
-# Prompt Smith v2.3.0
+# Prompt Smith v2.4.0
 
 A prompt quality management skill that turns prompts into operational assets by running **Diagnostics (LINT) → Auto Improvement (Rewrite) → Test Generation**, or by designing from requirements via **BUILD (Requirements → New Prompt Design)**.
 
-**v2.3.0**: Command standardization (`/ps:r`, `/ps:a`), CI automation, token optimization, i18n/en docs added
+**v2.4.0**: `/ps:help` command, output levels, cross-platform scripts, CI enhancements, trigger refinement
 
 **Previous versions**: See [CHANGELOG.md](../../../../CHANGELOG.md)
 

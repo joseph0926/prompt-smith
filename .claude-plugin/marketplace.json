@@ -5,21 +5,27 @@
   },
   "metadata": {
     "description": "Prompt quality management plugin for Claude Code",
-    "version": "2.3.0"
+    "version": "2.4.0"
   },
   "plugins": [
     {
       "name": "ps",
       "source": "./",
       "description": "Prompt quality management. /ps:r, /ps:a, /ps:lint, /ps:build commands.",
-      "version": "2.3.0",
+      "version": "2.4.0",
       "author": {
         "name": "joseph0926"
       },
       "homepage": "https://github.com/joseph0926/prompt-smith",
       "repository": "https://github.com/joseph0926/prompt-smith",
       "license": "MIT",
-      "keywords": ["prompt", "quality", "lint", "build", "testing"],
+      "keywords": [
+        "prompt",
+        "quality",
+        "lint",
+        "build",
+        "testing"
+      ],
       "category": "productivity"
     }
   ]

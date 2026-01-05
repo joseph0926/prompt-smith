@@ -105,3 +105,121 @@ jobs:
             exit 1
           fi
           echo "No forbidden tokens found"
+
+      - name: Check forbidden artifacts
+        run: |
+          echo "Checking for forbidden artifacts..."
+          ERRORS=0
+
+          # Check for .DS_Store files
+          DS_STORE=$(find . -name ".DS_Store" -not -path "./.git/*" 2>/dev/null | wc -l || echo "0")
+          if [ "$DS_STORE" -gt 0 ]; then
+            echo "❌ Found .DS_Store files:"
+            find . -name ".DS_Store" -not -path "./.git/*"
+            ERRORS=$((ERRORS + 1))
+          fi
+
+          # Check for __MACOSX directories
+          MACOSX=$(find . -name "__MACOSX" -type d -not -path "./.git/*" 2>/dev/null | wc -l || echo "0")
+          if [ "$MACOSX" -gt 0 ]; then
+            echo "❌ Found __MACOSX directories:"
+            find . -name "__MACOSX" -type d -not -path "./.git/*"
+            ERRORS=$((ERRORS + 1))
+          fi
+
+          # Check for .env files (should not be committed)
+          ENV_FILES=$(find . -name ".env" -o -name ".env.*" 2>/dev/null | grep -v "./.git/" | wc -l || echo "0")
+          if [ "$ENV_FILES" -gt 0 ]; then
+            echo "❌ Found .env files:"
+            find . -name ".env" -o -name ".env.*" | grep -v "./.git/"
+            ERRORS=$((ERRORS + 1))
+          fi
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "Please remove forbidden artifacts before committing."
+            exit 1
+          fi
+          echo "✅ No forbidden artifacts found"
+
+      - name: Check internal markdown links
+        run: |
+          echo "Checking internal markdown links..."
+          ERRORS=0
+
+          # Check links in skills directory
+          for file in $(find ${{ env.SKILL_PATH }} -name "*.md" 2>/dev/null); do
+            # Extract markdown links [text](path)
+            links=$(grep -oE '\[([^\]]+)\]\(([^)]+)\)' "$file" 2>/dev/null | \
+              grep -oE '\]\([^)]+\)' | sed 's/\](//' | sed 's/)$//' || true)
+
+            dir=$(dirname "$file")
+            for link in $links; do
+              # Skip external URLs, anchors, and mailto
+              if [[ "$link" == http* ]] || [[ "$link" == "#"* ]] || [[ "$link" == "mailto:"* ]]; then
+                continue
+              fi
+
+              # Remove anchor from link
+              link_path="${link%%#*}"
+              if [ -z "$link_path" ]; then
+                continue
+              fi
+
+              # Resolve relative path
+              if [[ "$link_path" == /* ]]; then
+                target="$link_path"
+              else
+                target="$dir/$link_path"
+              fi
+
+              # Check if file exists
+              if [ ! -f "$target" ] && [ ! -d "$target" ]; then
+                echo "❌ Broken link in $file: $link"
+                ERRORS=$((ERRORS + 1))
+              fi
+            done
+          done
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "Found $ERRORS broken links. Please fix them."
+            exit 1
+          fi
+          echo "✅ All internal links are valid"
+
+      - name: Check extended version consistency
+        run: |
+          VERSION_FILE=$(cat VERSION 2>/dev/null || echo "")
+          if [ -z "$VERSION_FILE" ]; then
+            echo "VERSION file not found, skipping extended check"
+            exit 0
+          fi
+
+          ERRORS=0
+          echo "VERSION file: $VERSION_FILE"
+
+          # Check .claude-plugin/marketplace.json
+          if [ -f ".claude-plugin/marketplace.json" ]; then
+            MARKET_VER=$(python3 -c "import json; print(json.load(open('.claude-plugin/marketplace.json'))['metadata']['version'])")
+            if [ "$VERSION_FILE" != "$MARKET_VER" ]; then
+              echo "❌ .claude-plugin/marketplace.json version mismatch: $MARKET_VER"
+              ERRORS=$((ERRORS + 1))
+            fi
+          fi
+
+          # Check i18n SKILL.md files
+          for skill_file in $(find ${{ env.SKILL_PATH }}/i18n -name "SKILL.md" 2>/dev/null); do
+            SKILL_VER=$(grep -oE '^version:\s*"?([0-9.]+)"?' "$skill_file" | grep -oE '[0-9.]+' || echo "")
+            if [ -n "$SKILL_VER" ] && [ "$VERSION_FILE" != "$SKILL_VER" ]; then
+              echo "❌ $skill_file version mismatch: $SKILL_VER"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "Run 'python3 scripts/sync-version.py' to fix version mismatches."
+            exit 1
+          fi
+          echo "✅ Extended version consistency check passed"

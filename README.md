@@ -10,6 +10,23 @@
 
 ## Quick Start
 
+### Commands at a Glance
+
+| Command | Description | Best For |
+|---------|-------------|----------|
+| `/ps:r <prompt>` | **Review Mode** - Show improvements, await approval | Daily use (safe) |
+| `/ps:lint <prompt>` | **LINT Mode** - Full diagnosis with test cases | Debugging prompts |
+| `/ps:a <prompt>` | **Auto Mode** - Improve and execute immediately | Quick tasks |
+| `/ps:build <goal>` | **BUILD Mode** - Design from requirements | New prompts |
+
+**Quick Example**:
+```
+/ps:r Write a function to parse JSON
+```
+→ Shows score (3/10 → 8/10), changes, asks "Proceed? (y/n/e)"
+
+---
+
 ### Option 1: Plugin Install (slash commands enabled)
 
 1. In VS Code, type `/plugin` to open plugin terminal
@@ -102,7 +119,7 @@ MIT License - see [LICENSE](LICENSE)
 
 ## 한국어
 
-[한국어 문서 바로가기](skills/prompt-smith/i18n/ko/SKILL.md)
+[한국어 문서 바로가기](skills/prompt-smith/SKILL.md)
 
 ![ps_demo_01](https://github.com/user-attachments/assets/fe3d2a32-9317-4df4-a418-b4d3ac42d920)
 
