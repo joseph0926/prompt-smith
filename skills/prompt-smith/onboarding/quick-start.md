@@ -1,164 +1,164 @@
-# Quick Start: 5-Minute Guide
+# Quick Start: 5분 가이드
 
-Get started with Prompt Smith in 5 minutes.
+Prompt Smith를 5분 안에 시작하세요.
 
 ---
 
-## What is Prompt Smith?
+## Prompt Smith란?
 
 ```
 +-------------------------------------------------------------+
 |                     Prompt Smith                             |
 +-------------------------------------------------------------+
-|  Prompt Quality Management Skill                             |
+|  프롬프트 품질관리 스킬                                       |
 |                                                             |
-|  LINT Mode: Diagnose + improve + test existing prompts      |
-|  BUILD Mode: Design prompts from requirements               |
-|  INTERCEPT: Real-time prompt improvement pipeline           |
+|  LINT Mode: 기존 프롬프트 진단 + 개선 + 테스트 생성          |
+|  BUILD Mode: 요구사항에서 프롬프트 설계                      |
+|  INTERCEPT: 실시간 프롬프트 개선 파이프라인                   |
 |                                                             |
-|  Transform prompts into operational assets with 7-Point QC  |
+|  7-Point QC로 프롬프트를 운영 가능한 자산으로 변환           |
 +-------------------------------------------------------------+
 ```
 
 ---
 
-## Minute 1: Try LINT
+## 1분: LINT 체험
 
-If you have an existing prompt, diagnose it right away.
+기존 프롬프트가 있다면 바로 진단해보세요.
 
-### Input
+### 입력
 ```
-Lint this prompt:
+프롬프트 점검해줘:
 
-Analyze user feedback and extract the main issues
-```
-
-### Output (example)
-```
-Diagnostic Report
-
-Score: 3/10 (Grade: D)
-
-Top 3 Issues:
-1. No role definition
-2. No examples
-3. Output format unclear
-
-Improved Prompt:
-[7-Point compliant improved version]
+사용자 피드백을 분석하고 주요 이슈를 추출해줘
 ```
 
----
-
-## Minute 2: EXPRESS Diagnosis
-
-For quick checks:
-
-### Input
+### 출력 (예시)
 ```
-Quick check:
+진단 리포트
 
-[prompt text]
-```
+점수: 3/10 (등급: D)
 
-### Output (example)
-```
-Express Diagnostic Report
+Top 3 이슈:
+1. 역할 정의 없음
+2. 예시 없음
+3. 출력 형식 불명확
 
-Score: 3/10
-
-Top 3 Issues:
-1. No role
-2. No examples
-3. Format partial
-
-One-line improvement: Add role + 2 examples + JSON format
+개선 프롬프트:
+[7-Point 충족 개선 버전]
 ```
 
 ---
 
-## Minute 3: Try BUILD
+## 2분: EXPRESS 진단
 
-If you need a new prompt:
+빠른 점검이 필요할 때:
 
-### Input
+### 입력
 ```
-Build a prompt:
-A prompt that classifies customer inquiries and assigns priority
+빠르게 점검해줘:
+
+[프롬프트 텍스트]
 ```
 
-### Process
-1. **GATHER**: "What domain?", "Success criteria?"
-2. **CLASSIFY**: Classification task, medium complexity
-3. **DESIGN**: 7-Point design
-4. **DRAFT**: Write initial draft
-5. **SELF-LINT**: Verify 8+ score
-6. **TEST**: Generate 5 test cases
-7. **DELIVER**: Complete prompt + guide
+### 출력 (예시)
+```
+Express 진단 리포트
+
+점수: 3/10
+
+Top 3 이슈:
+1. 역할 없음
+2. 예시 없음
+3. 포맷 부분적
+
+한 줄 개선 제안: 역할 + 예시 2개 + JSON 형식 추가
+```
 
 ---
 
-## Minute 4: Understand 7-Point
+## 3분: BUILD 체험
 
-| # | Item | Question |
-|---|------|----------|
-| 1 | ROLE | Is the AI role clear? |
-| 2 | CONTEXT | Is background/context sufficient? |
-| 3 | INSTRUCTION | Are instructions specific? |
-| 4 | EXAMPLE | Are there 2+ examples? |
-| 5 | FORMAT | Is output format specified? |
-| 6 | STATE_TRACKING | Is there state management? (multi-step) |
-| 7 | TOOL_USAGE | Are tool instructions clear? (tool usage) |
+새 프롬프트가 필요하다면:
 
-**Score**: Each item 0-2 points, normalized to 10 points
+### 입력
+```
+프롬프트 만들어줘:
+고객 문의를 분류하고 우선순위를 부여하는 프롬프트
+```
+
+### 프로세스
+1. **GATHER**: "어떤 도메인?", "성공 기준?"
+2. **CLASSIFY**: 분류 태스크, 중간 복잡도
+3. **DESIGN**: 7-Point 설계
+4. **DRAFT**: 초안 작성
+5. **SELF-LINT**: 8점 이상 검증
+6. **TEST**: 테스트 케이스 5개 생성
+7. **DELIVER**: 완성 프롬프트 + 가이드
 
 ---
 
-## Minute 5: Trigger Keywords
+## 4분: 7-Point 이해
+
+| # | 항목 | 질문 |
+|---|------|------|
+| 1 | ROLE | AI 역할이 명확한가? |
+| 2 | CONTEXT | 배경/맥락이 충분한가? |
+| 3 | INSTRUCTION | 지시가 구체적인가? |
+| 4 | EXAMPLE | 예시가 2개 이상인가? |
+| 5 | FORMAT | 출력 형식이 지정되었는가? |
+| 6 | STATE_TRACKING | 상태 관리가 있는가? (멀티스텝) |
+| 7 | TOOL_USAGE | 도구 지시가 명확한가? (도구 사용) |
+
+**점수**: 각 항목 0-2점, 10점 만점으로 정규화
+
+---
+
+## 5분: 트리거 키워드
 
 ### LINT Mode
-- "diagnose", "analyze", "lint"
-- "check", "review"
+- "진단", "분석", "점검"
+- "체크", "리뷰"
 
 ### EXPRESS Mode
-- "quick", "brief", "fast"
+- "빠르게", "간단히", "짧게"
 
 ### BUILD Mode
-- "build", "design", "create"
-- "new prompt"
+- "만들어줘", "설계", "작성"
+- "새 프롬프트"
 
 ### INTERCEPT Pipeline
-- `/prompt-smith <your prompt>` - Review Mode
-- `/prompt-smith --auto <your prompt>` - Intercept Mode
+- `/ps:r <프롬프트>` - Review Mode
+- `/ps:a <프롬프트>` - Intercept Mode
 
 ---
 
-## Next Steps
+## 다음 단계
 
-### Beginner
-1. [First LINT Tutorial](first-lint.md) - Detailed LINT usage
-2. [First BUILD Tutorial](first-build.md) - Detailed BUILD usage
+### 입문
+1. [첫 LINT 튜토리얼](first-lint.md) - 상세 LINT 사용법
+2. [첫 BUILD 튜토리얼](first-build.md) - 상세 BUILD 사용법
 
-### Advanced
+### 심화
 - [7-Point Quality Check](../references/quality-checklist.md)
-- [Claude 4.x Best Practices](../references/claude-4x-best-practices.md)
-- [LINT Detailed Guide](../playbooks/lint/full-lint.md)
-- [BUILD Detailed Guide](../playbooks/build/build-mode.md)
+- [Claude 4.x 베스트 프랙티스](../references/claude-4x-best-practices.md)
+- [LINT 상세 가이드](../playbooks/lint/full-lint.md)
+- [BUILD 상세 가이드](../playbooks/build/build-mode.md)
 - [Intercept Pipeline](../playbooks/intercept/review-mode.md)
 
-### Team
-- [PR Rules](../playbooks/team/prompt-pr.md)
-- [Owner Guide](../playbooks/team/owner-guide.md)
-- [Regression Testing](../playbooks/team/regression-testing.md)
+### 팀
+- [PR 룰](../playbooks/team/prompt-pr.md)
+- [오너 가이드](../playbooks/team/owner-guide.md)
+- [회귀 테스트](../playbooks/team/regression-testing.md)
 
 ---
 
-## Help
+## 도움말
 
-If you have issues:
-- Type "help"
-- See FAQ in SKILL.md
+문제가 있으시면:
+- [SKILL.md](../SKILL.md)에서 상세 문서 확인
+- [안티패턴](../references/anti-patterns.md)에서 흔한 실수 확인
 
 ---
 
-*Prompt Smith v2.1.0*
+*Prompt Smith v2.3.0*

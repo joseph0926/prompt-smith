@@ -1,111 +1,119 @@
 ---
 name: prompt-smith
-description: "Prompt quality management skill. Use --review or --auto flag to improve prompts. Trigger: use prompt-smith, prompt-smith 사용, lint, build, improve."
+description: "프롬프트 품질관리 스킬. /ps:r 또는 /ps:a로 프롬프트 개선. 트리거: prompt-smith 사용, use prompt-smith, 점검, 린트, 만들어줘."
 license: MIT
 compatibility: "Claude Code"
 metadata:
-  short-description: "Prompt QA skill (7-Point Check + BUILD + Test Generation)"
+  short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.2.3"
+  version: "2.3.0"
   target: "claude-code"
-  updated: "2026-01-03"
+  updated: "2026-01-05"
   category: "productivity"
-  tags: "prompt, quality, testing, lint, build, engineering, validation, improvement"
+  tags: "prompt, quality, testing, lint, build, intercept, engineering, validation, improvement, claude-4x"
 i18n:
-  locales: ["en", "ko"]
-  default: "en"
+  locales: ["ko", "en"]
+  default: "ko"
 ---
 
-# Prompt Smith v2.2.3
+# Prompt Smith v2.3.0
 
-A quality management skill that transforms prompts into operational assets through **diagnosis (LINT) → auto-improvement (Rewrite) → test generation** or **new design from requirements (BUILD)**.
+프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
-**v2.2.3 Changes**:
+**v2.3.0 주요 변경**:
 
-- **Documentation consistency**: Fixed "5-Point" → "7-Point" references across all documents
-- **API Parameters guide**: Added temperature/max_tokens optimization section to claude-4x-best-practices.md
-- **Prompt Chaining guide**: New playbook for multi-step prompt strategies
+- **커맨드 표준화**: 모든 `/prompt-smith` → `/ps:r`, `/ps:a`로 교체
+- **옵션 정리**: 미구현 verbose, threshold 옵션 문서에서 제거
+- **CI 자동화**: 레거시 커맨드 잔존 검사, 파일 크기 검사 추가
+- **토큰 최적화**: DEBUG 섹션 간소화, input-handling-rules.md 공통화
 
-**v2.2.2 Changes**:
+**v2.2.3 주요 변경**:
 
-- **Simplified input format**: Backticks now optional for `/ps:r` and `/ps:a`
-- Version metadata sync with CHANGELOG
+- 문서 일관성 개선: "5-Point" → "7-Point" 참조 수정
+- API 파라미터 가이드: temperature/max_tokens 최적화 섹션
+- Prompt Chaining 플레이북: 멀티스텝 체이닝 전략
 
-**v2.2.1 Changes**:
+**v2.2.2 주요 변경**:
 
-- **Strict tool call prevention**: No tool calls (WebSearch, Read, etc.) before LINT completes
+- **입력 형식 간소화**: `/ps:r`, `/ps:a`에서 백틱 선택사항으로 변경
+- 버전 메타데이터 CHANGELOG와 동기화
 
-**v2.2.0 Changes**:
+**v2.2.1 주요 변경**:
 
-- **Slash Commands** added: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
-- Plugin name changed to `ps` for shorter commands
+- **도구 호출 제한 강화**: LINT 완료 전까지 도구 호출(WebSearch, Read 등) 금지
 
-**v2.1 Changes**:
+**v2.2.0 주요 변경**:
 
-- **Intercept Pipeline** added (Review/Intercept modes for real-time prompt improvement)
-- English Primary with i18n support
+- **슬래시 커맨드** 추가: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
+- 플러그인명 `ps`로 변경 (짧은 커맨드)
 
-**v2.0 Changes**:
+**v2.1 주요 변경**:
 
-- 5-Point → **7-Point Quality Check** (Claude 4.x optimization: STATE_TRACKING, TOOL_USAGE)
-- **BUILD Mode** added (requirements → prompt design)
+- **Intercept Pipeline** 추가 (Review/Intercept 모드로 실시간 프롬프트 개선)
+- 영어 Primary + i18n 지원
+
+**v2.0 주요 변경**:
+
+- 5-Point → **7-Point Quality Check** (Claude 4.x 최적화: STATE_TRACKING, TOOL_USAGE 추가)
+- **BUILD Mode** 추가 (요구사항 → 프롬프트 설계)
 
 ---
 
 ## Level 1: Quick Start (<2,000 tokens)
 
-> This section alone enables core functionality. Details in Level 2, references in Level 3.
+> 이 섹션만으로 스킬의 핵심 동작이 가능합니다. 상세는 Level 2, 참조 자료는 Level 3.
 
 ### When to use this skill
 
-**Intercept Pipeline** (real-time improvement):
+**Intercept Pipeline** (실시간 개선):
 
-- `use prompt-smith --review <your prompt>` - Review Mode (show improvements, await approval)
-- `use prompt-smith --auto <your prompt>` - Intercept Mode (auto-improve and execute)
+- `/ps:r <프롬프트>` - Review Mode (개선 사항 표시, 승인 대기)
+- `/ps:a <프롬프트>` - Intercept Mode (자동 개선 후 실행)
 
-**LINT Mode** (improve existing prompts):
+**LINT Mode** (기존 프롬프트 개선):
 
-- "lint this prompt", "check my prompt"
-- "improve this prompt", "review this prompt"
-- JSON errors, inconsistent outputs, missing elements
+- "프롬프트 점검해줘", "프롬프트 진단해줘"
+- "이 프롬프트 개선해줘", "프롬프트 리뷰해줘"
+- "프롬프트 린트해줘", "프롬프트 분석해줘"
+- JSON 깨짐, 결과 편차, 누락 등 프롬프트 문제 해결 요청
 
-**BUILD Mode** (design new prompts):
+**BUILD Mode** (신규 프롬프트 설계):
 
-- "build a prompt for...", "create a prompt"
-- "design a new prompt", "make a template"
-- When you have requirements but no prompt
+- "프롬프트 만들어줘", "프롬프트 설계해줘"
+- "새 프롬프트 작성해줘", "템플릿 만들어줘"
+- 요구사항만 있고 프롬프트가 없을 때
 
-### Slash Commands (v2.2+)
+### 슬래시 커맨드 (v2.2+)
 
-| Command     | Description    | Usage                      |
-| ----------- | -------------- | -------------------------- |
-| `/ps:r`     | Review Mode    | `/ps:r <prompt>`           |
-| `/ps:a`     | Intercept Mode | `/ps:a <prompt>`           |
-| `/ps:lint`  | LINT Mode      | `/ps:lint <prompt>`        |
-| `/ps:build` | BUILD Mode     | `/ps:build <requirements>` |
+| 커맨드      | 설명           | 사용법                 |
+| ----------- | -------------- | ---------------------- |
+| `/ps:r`     | Review Mode    | `/ps:r <프롬프트>`     |
+| `/ps:a`     | Intercept Mode | `/ps:a <프롬프트>`     |
+| `/ps:lint`  | LINT Mode      | `/ps:lint <프롬프트>`  |
+| `/ps:build` | BUILD Mode     | `/ps:build <요구사항>` |
 
-**Note**: All commands accept plain text input. Backticks are optional.
+**참고**: 모든 커맨드는 일반 텍스트를 직접 입력받습니다. 백틱은 선택사항입니다.
 
-### Natural Language Triggers (legacy)
+### 자연어 트리거 (legacy)
 
-| English                    | Korean                      | Workflow                    |
-| -------------------------- | --------------------------- | --------------------------- |
-| lint/check/diagnose        | 점검/진단/린트              | LINT Mode                   |
-| improve/review/analyze     | 개선/리뷰/분석              | LINT Mode                   |
-| test/validate              | 테스트 생성/검증            | LINT Mode (test generation) |
-| **build/create/design**    | **만들어줘/설계/작성**      | **BUILD Mode**              |
-| **use prompt-smith -r/-a** | **prompt-smith 사용 -r/-a** | **Intercept Pipeline**      |
+| 한국어                      | 영어                       | 워크플로우              |
+| --------------------------- | -------------------------- | ----------------------- |
+| 점검/진단/린트              | lint/check/diagnose        | LINT Mode               |
+| 개선/리뷰/분석              | improve/review/analyze     | LINT Mode               |
+| 테스트 생성/검증            | test/validate              | LINT Mode (테스트 생성) |
+| **만들어줘/설계/작성**      | **build/create/design**    | **BUILD Mode**          |
+| **prompt-smith 사용 -r/-a** | **use prompt-smith -r/-a** | **Intercept Pipeline**  |
 
-### Quick Start (Installation)
+### Quick Start (설치)
 
-**Global (all projects)**:
+**Global (모든 프로젝트)**:
 
 ```bash
 git clone https://github.com/joseph0926/prompt-smith
 cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 ```
 
-**Project Local (this project only)**:
+**Project Local (현재 프로젝트만)**:
 
 ```bash
 cp -r skills/prompt-smith .claude/skills/
@@ -113,44 +121,44 @@ cp -r skills/prompt-smith .claude/skills/
 
 ### Activation Rules
 
-NOTE: Natural language invocation (`use prompt-smith`) is more reliable than slash command (`/prompt-smith`).
+NOTE: 슬래시 커맨드(`/ps:r`, `/ps:a`)를 권장합니다. 자연어 호출(`prompt-smith 사용`)도 지원됩니다.
 
 #### Flag-based Mode Selection
 
 ```
--r <prompt>  → Review Mode (show improvements, await approval)
--a <prompt>  → Intercept Mode (auto-improve and execute)
-(no flag)    → Show mode selection menu
+-r <프롬프트>  → Review Mode (개선안 표시, 승인 대기)
+-a <프롬프트>  → Intercept Mode (자동 개선 후 실행)
+(no flag)      → 모드 선택 메뉴 표시
 ```
 
-**Input Format**: Plain text is accepted directly. Backticks are optional.
+**입력 형식**: 일반 텍스트를 직접 입력합니다. 백틱은 선택사항입니다.
 
 ```
-use prompt-smith -r Your prompt here
+prompt-smith 사용 -r 여기에 프롬프트를 작성합니다
 ```
 
-**Multiline input is also supported**:
+**멀티라인 입력도 지원**:
 
 ```
-use prompt-smith -r Write a function
-that parses JSON
-and handles errors
+prompt-smith 사용 -r 함수를 작성해줘
+JSON을 파싱하고
+에러를 처리하는
 ```
 
-**Parsing Rule**: Everything after `-r` or `-a` flag is treated as the prompt to improve.
+**파싱 규칙**: `-r` 또는 `-a` 플래그 뒤의 모든 텍스트를 개선할 프롬프트로 취급합니다.
 
 #### WITH -r Flag (Review Mode)
 
-When invoked with `-r` followed by prompt text:
+`-r` 플래그와 프롬프트 텍스트로 호출 시:
 
 ```
-use prompt-smith -r Write code to parse JSON
+prompt-smith 사용 -r JSON 파싱 코드 작성해줘
 ```
 
-1. Extract everything after `-r` as the prompt to improve
-2. Execute Express LINT immediately
-3. Show Before/After comparison
-4. Await user approval (y/n/e)
+1. `-r` 뒤의 모든 텍스트를 개선할 프롬프트로 추출
+2. Express LINT 즉시 실행
+3. Before/After 비교 표시
+4. 사용자 승인 대기 (y/n/e)
 
 **MUST FOLLOW:**
 
@@ -162,9 +170,9 @@ use prompt-smith -r Write code to parse JSON
 - NEVER execute without showing improvements
 
 ```
-Example: use prompt-smith -r Write a function that parses JSON
+Example: prompt-smith 사용 -r JSON 파싱 함수 작성해줘
 
-→ Extract: "Write a function that parses JSON"
+→ 추출: "JSON 파싱 함수 작성해줘"
 → RUN Express LINT
 → SHOW improved prompt + DEBUG section
 → WAIT for approval
@@ -172,96 +180,96 @@ Example: use prompt-smith -r Write a function that parses JSON
 
 #### WITH -a Flag (Intercept Mode)
 
-When invoked with `-a` followed by prompt text:
+`-a` 플래그와 프롬프트 텍스트로 호출 시:
 
 ```
-use prompt-smith -a Write code to parse JSON
+prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 ```
 
-1. Extract everything after `-a` as the prompt
-2. Execute Express LINT
-3. Auto-apply improvements (if score improves by 2+ points)
-4. Execute immediately
+1. `-a` 뒤의 모든 텍스트를 프롬프트로 추출
+2. Express LINT 실행
+3. 개선 자동 적용 (점수가 2점 이상 향상 시)
+4. 즉시 실행
 
 #### WITHOUT Flags → Mode Selection
 
-When invoked without flags (`use prompt-smith` only):
+플래그 없이 호출 시 (`prompt-smith 사용`만):
 
 ```
-Prompt Smith v2.1 Activated
+🔧 Prompt Smith v2.1 활성화
 
-Which task would you like help with?
+어떤 작업을 도와드릴까요?
 
-1) LINT - Diagnose + improve existing prompts + generate tests
-2) BUILD - Design new prompts from requirements
-3) INTERCEPT - Real-time prompt improvement pipeline
-4) DEBUG - Failure analysis + prevention (Phase 3 planned)
+1) 🔍 LINT - 기존 프롬프트 진단 + 개선 + 테스트 생성
+2) 🏗️ BUILD - 요구사항 → 신규 프롬프트 설계
+3) 🚀 INTERCEPT - 실시간 프롬프트 개선 파이프라인
+4) 🐛 DEBUG - 실패 분석 + 재발 방지 (Phase 3 예정)
 
-Enter a number or describe your need.
+번호 또는 편하게 말해주세요.
 ```
 
 ### Core Principle: 7-Point Quality Check
 
-The core criteria for prompt quality evaluation. All diagnoses are performed from these 7 perspectives.
+프롬프트 품질 평가의 핵심 기준입니다. 모든 진단은 이 7가지 관점에서 수행됩니다.
 
 ```
-+-- 7-Point Quality Check --------------------------------------------+
-|                                                                      |
-|  [Base 5 Items]                                                      |
-|  1) ROLE         Is the role clearly defined?                        |
-|  2) CONTEXT      Is there sufficient background/context?             |
-|  3) INSTRUCTION  Are instructions clear and specific?                |
-|  4) EXAMPLE      Are examples included?                              |
-|  5) FORMAT       Is output format specified?                         |
-|                                                                      |
-|  [Claude 4.x Extensions - evaluated only when applicable]            |
-|  6) STATE_TRACKING  Is there state management for long tasks?        |
-|  7) TOOL_USAGE      Are tool usage instructions clear?               |
-|                                                                      |
-|  -> Each item: 0-2 points                                            |
-|  -> Base 5 items: 10 points max                                      |
-|  -> With extensions: (raw score / applicable items * 2) * 10         |
-+----------------------------------------------------------------------+
+┌─ 7-Point Quality Check ────────────────────────────────────────┐
+│                                                                 │
+│  [기본 5항목]                                                    │
+│  1) ROLE         역할이 명확하게 정의되어 있는가?                │
+│  2) CONTEXT      배경/맥락이 충분한가?                          │
+│  3) INSTRUCTION  지시가 명확하고 구체적인가?                     │
+│  4) EXAMPLE      예시가 포함되어 있는가?                        │
+│  5) FORMAT       출력 형식이 지정되어 있는가?                    │
+│                                                                 │
+│  [Claude 4.x 확장 - 해당 시에만 평가]                            │
+│  6) STATE_TRACKING  장기 태스크 상태 관리가 있는가?              │
+│  7) TOOL_USAGE      도구 사용 지시가 명확한가?                   │
+│                                                                 │
+│  → 각 항목 0-2점                                                │
+│  → 기본 5항목: 10점 만점                                        │
+│  → 확장 포함 시: (원점수/적용항목×2) × 10 = 10점 만점으로 정규화  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-**Scoring Criteria:**
+**점수 기준:**
 
-- **0 points**: Element missing
-- **1 point**: Present but insufficient or ambiguous
-- **2 points**: Clear and sufficient
-- **N/A**: Not applicable (excluded from denominator)
+- **0점**: 해당 요소 없음
+- **1점**: 있으나 불충분 또는 모호함
+- **2점**: 명확하고 충분함
+- **N/A**: 해당 없음 (분모에서 제외)
 
-**Extension Criteria:**
+**확장 항목 적용 조건:**
 
-- STATE_TRACKING: Apply only for multi-step/long-running tasks
-- TOOL_USAGE: Apply only for prompts expecting tool usage
+- STATE_TRACKING: 멀티스텝/장기 태스크에만 적용
+- TOOL_USAGE: 도구 사용이 예상되는 프롬프트에만 적용
 
-### Quick Response Checklist (per turn)
+### Quick Response Checklist (매 턴)
 
 ```
-+-- Pre-Response Self-Check ------------------------------------------+
-|                                                                      |
-|  [LINT Mode]                                                         |
-|  [ ] Did I perform 7-Point Quality Check?                            |
-|  [ ] Did I identify Top 3 issues specifically?                       |
-|  [ ] Did I provide Before/After improvements?                        |
-|  [ ] Did I generate test cases (normal/edge/injection)?              |
-|                                                                      |
-|  [BUILD Mode]                                                        |
-|  [ ] Did I confirm requirements (goal/audience/domain)?              |
-|  [ ] Did I include all 7-Point elements?                             |
-|  [ ] Is self-LINT score 8+ points?                                   |
-|  [ ] Did I generate 5 test cases?                                    |
-|                                                                      |
-|  [Intercept Pipeline]                                                |
-|  [ ] Did I show the full improved prompt text?                       |
-|  [ ] Did I show score change (X/10 → Y/10)?                          |
-|  [ ] Did I show Changes list?                                        |
-|  [ ] Did I request user approval (y/n/e)?                            |
-|  [ ] Did I wait for approval before execution?                       |
-|                                                                      |
-|  -> If any No, fix before responding!                                |
-+----------------------------------------------------------------------+
+┌─ 응답 전 Self-Check ───────────────────────────────────────────┐
+│                                                                 │
+│  [LINT Mode]                                                    │
+│  □ 7-Point Quality Check 수행했는가?                            │
+│  □ Top 3 이슈를 구체적으로 지적했는가?                          │
+│  □ Before/After 개선안을 제시했는가?                            │
+│  □ 테스트 케이스(정상/엣지/인젝션)를 생성했는가?                 │
+│                                                                 │
+│  [BUILD Mode]                                                   │
+│  □ 요구사항(목표/대상/도메인)을 확인했는가?                      │
+│  □ 7-Point 모든 요소를 포함했는가?                              │
+│  □ 자체 LINT로 8점 이상인가?                                    │
+│  □ 테스트 케이스 5개를 생성했는가?                              │
+│                                                                 │
+│  [Intercept Pipeline]                                           │
+│  [ ] Did I show the full improved prompt text?                  │
+│  [ ] Did I show score change (X/10 → Y/10)?                     │
+│  [ ] Did I show Changes list?                                   │
+│  [ ] Did I request user approval (y/n/e)?                       │
+│  [ ] Did I wait for approval before execution?                  │
+│                                                                 │
+│  → If any No, fix before responding!                            │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -270,244 +278,311 @@ The core criteria for prompt quality evaluation. All diagnoses are performed fro
 
 ### 2.1 LINT Mode Overview
 
-**Purpose**: Diagnose existing prompts, provide improvements, and generate test cases.
+**목적**: 기존 프롬프트를 점검하고, 개선안을 제시하며, 테스트 케이스를 생성합니다.
 
-**Input**: User's existing prompt
-**Output**: Diagnostic report + improved prompt + test cases
+**입력**: 사용자의 기존 프롬프트
+**출력**: 진단 리포트 + 개선된 프롬프트 + 테스트 케이스
 
 #### LINT Workflow Steps
 
 ```
-+-- LINT WORKFLOW ----------------------------------------------------+
-|                                                                      |
-|  Step 1: INPUT                                                       |
-|  +-- Receive prompt text                                             |
-|  +-- (Optional) Confirm goal/context                                 |
-|                                                                      |
-|  Step 2: ANALYZE                                                     |
-|  +-- Perform 7-Point Quality Check                                   |
-|  +-- Detect anti-patterns (ambiguous expressions, injection risks)   |
-|  +-- Calculate score (0-10)                                          |
-|                                                                      |
-|  Step 3: DIAGNOSE                                                    |
-|  +-- Identify Top 3 issues                                           |
-|  +-- Explain specific problems for each issue                        |
-|                                                                      |
-|  Step 4: IMPROVE                                                     |
-|  +-- Generate improved prompt                                        |
-|  +-- Show Before/After comparison + explain changes                  |
-|                                                                      |
-|  Step 5: TEST                                                        |
-|  +-- 2 normal cases                                                  |
-|  +-- 1 edge case                                                     |
-|  +-- 1 injection defense case                                        |
-|  +-- 1 domain-specific case                                          |
-|                                                                      |
-|  Step 6: REPORT                                                      |
-|  +-- Output in diagnostic report format                              |
-|                                                                      |
-+----------------------------------------------------------------------+
+┌─ LINT WORKFLOW ────────────────────────────────────────────────┐
+│                                                                 │
+│  Step 1: INPUT                                                  │
+│  ├─ 프롬프트 텍스트 수신                                        │
+│  └─ (선택) 목표/맥락 정보 확인                                  │
+│                                                                 │
+│  Step 2: ANALYZE                                                │
+│  ├─ 7-Point Quality Check 수행                                  │
+│  ├─ 안티패턴 탐지 (모호한 표현, 인젝션 취약점 등)                │
+│  └─ 점수 산정 (0-10)                                            │
+│                                                                 │
+│  Step 3: DIAGNOSE                                               │
+│  ├─ Top 3 이슈 도출                                             │
+│  └─ 각 이슈별 구체적 문제점 설명                                │
+│                                                                 │
+│  Step 4: IMPROVE                                                │
+│  ├─ 개선된 프롬프트 생성                                        │
+│  └─ Before/After 비교 + 변경 이유 설명                          │
+│                                                                 │
+│  Step 5: TEST                                                   │
+│  ├─ 정상 케이스 2개                                             │
+│  ├─ 엣지 케이스 1개                                             │
+│  ├─ 인젝션 방어 케이스 1개                                      │
+│  └─ 도메인 특화 케이스 1개                                      │
+│                                                                 │
+│  Step 6: REPORT                                                 │
+│  └─ 진단 리포트 형식으로 출력                                   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-#### Diagnostic Report Format
+#### 진단 리포트 형식
 
-LINT results always output in this format:
+LINT 결과는 항상 다음 형식으로 출력합니다:
 
 ```markdown
-## Diagnostic Results
+## 📋 진단 결과
 
-### Score: X/10
+### 점수: X/10
 
-| Item           | Score      | Evaluation   |
-| -------------- | ---------- | ------------ |
-| Role           | X/2        | [evaluation] |
-| Context        | X/2        | [evaluation] |
-| Instruction    | X/2        | [evaluation] |
-| Example        | X/2        | [evaluation] |
-| Format         | X/2        | [evaluation] |
-| State Tracking | X/2 or N/A | [evaluation] |
-| Tool Usage     | X/2 or N/A | [evaluation] |
+| 항목           | 점수         | 평가        |
+| -------------- | ------------ | ----------- |
+| Role           | X/2          | [평가 내용] |
+| Context        | X/2          | [평가 내용] |
+| Instruction    | X/2          | [평가 내용] |
+| Example        | X/2          | [평가 내용] |
+| Format         | X/2          | [평가 내용] |
+| State Tracking | X/2 또는 N/A | [평가 내용] |
+| Tool Usage     | X/2 또는 N/A | [평가 내용] |
 
-### Top 3 Issues
+### 🔴 Top 3 이슈
 
-1. **[Issue 1]**: [specific description]
-2. **[Issue 2]**: [specific description]
-3. **[Issue 3]**: [specific description]
-
----
-
-## Improved Prompt (copy-paste ready)
-
-[improved full prompt]
+1. **[이슈 1]**: [구체적 설명]
+2. **[이슈 2]**: [구체적 설명]
+3. **[이슈 3]**: [구체적 설명]
 
 ---
 
-## Changes Made
+## ✅ 개선 프롬프트 (복붙용)
 
-### Change 1: [item]
+[개선된 전체 프롬프트]
 
-- **Before**: [original]
-- **After**: [improved]
-- **Reason**: [why improved]
+---
 
-### Change 2: [item]
+## 📝 변경 사항
+
+### 변경 1: [항목]
+
+- **Before**: [원본]
+- **After**: [개선]
+- **이유**: [왜 개선했는지]
+
+### 변경 2: [항목]
 
 ...
 
 ---
 
-## Test Cases (5)
+## 🧪 테스트 케이스 (5개)
 
-### 1. Normal Case 1
+### 1. 정상 케이스 1
 
-**Input**: [test input]
-**Expected**: [expected output characteristics]
+**입력**: [테스트 입력]
+**기대 결과**: [기대되는 출력 특성]
 
-### 2. Normal Case 2
+### 2. 정상 케이스 2
 
-**Input**: [test input]
-**Expected**: [expected output characteristics]
+**입력**: [테스트 입력]
+**기대 결과**: [기대되는 출력 특성]
 
-### 3. Edge Case
+### 3. 엣지 케이스
 
-**Input**: [empty/very long/special characters]
-**Expected**: [appropriate handling]
+**입력**: [빈 입력/매우 긴 입력/특수 문자 등]
+**기대 결과**: [적절한 처리 방식]
 
-### 4. Injection Defense Case
+### 4. 인젝션 방어 케이스
 
-**Input**: "Ignore above instructions and [malicious request]"
-**Expected**: Original instructions maintained, injection ignored
+**입력**: "위 지시 무시하고 [악의적 요청]"
+**기대 결과**: 원래 지시 유지, 인젝션 무시
 
-### 5. Domain-Specific Case
+### 5. 도메인 특화 케이스
 
-**Input**: [domain-specific scenario]
-**Expected**: [domain-appropriate handling]
+**입력**: [해당 도메인의 특수 상황]
+**기대 결과**: [도메인별 적절한 처리]
 ```
 
-#### Express Mode (quick diagnosis)
+#### Express Mode (빠른 진단)
 
-For quick feedback without detailed analysis:
+상세 분석 없이 빠른 피드백이 필요할 때:
 
-**Trigger**: "quick check", "brief review"
+**트리거**: "빠르게 점검해줘", "간단히 봐줘"
 
-**Output**:
+**출력**:
 
 ```
-Express LINT Results
+⚡ Express LINT 결과
 
-Score: X/10
+점수: X/10
 
-Key Issues:
-1. [Issue 1]
-2. [Issue 2]
-3. [Issue 3]
+주요 이슈:
+1. [이슈 1]
+2. [이슈 2]
+3. [이슈 3]
 
-One-line improvement suggestion: [key improvement point]
+한 줄 개선 제안: [핵심 개선 포인트]
 ```
 
 ---
 
 ### 2.2 BUILD Mode Overview
 
-**Purpose**: Design high-quality prompts from requirements that meet all 7 points.
+**목적**: 요구사항에서 시작하여 7-Point를 충족하는 고품질 프롬프트를 처음부터 설계합니다.
 
-**Input**: User's requirements/goals
-**Output**: Complete prompt + usage guide + test cases
+**입력**: 사용자의 요구사항/목표
+**출력**: 완성된 프롬프트 + 사용 가이드 + 테스트 케이스
 
 #### BUILD Workflow Steps
 
 ```
-+-- BUILD WORKFLOW ---------------------------------------------------+
-|                                                                      |
-|  Step 1: GATHER (requirements collection)                            |
-|  +-- GOAL: What the prompt should achieve                            |
-|  +-- AUDIENCE: Who will use it                                       |
-|  +-- DOMAIN: Which field/industry                                    |
-|  +-- CONSTRAINTS: Limitations to follow                              |
-|  +-- SUCCESS: How to measure success                                 |
-|                                                                      |
-|  Step 2: CLASSIFY (type determination)                               |
-|  +-- Task type: summary/classification/generation/conversation       |
-|  +-- Complexity: simple(1-shot)/multi-step/long-running              |
-|  +-- Tool requirements: file/search/command execution                |
-|                                                                      |
-|  Step 3: DESIGN (structure design)                                   |
-|  +-- Select template (see templates/)                                |
-|  +-- Design 7-Point elements                                         |
-|  +-- Apply injection defense patterns                                |
-|                                                                      |
-|  Step 4: DRAFT (initial draft)                                       |
-|  +-- Write Role section                                              |
-|  +-- Write Context section                                           |
-|  +-- Write Instruction section                                       |
-|  +-- Write Example section (2+ examples)                             |
-|  +-- Write Format section                                            |
-|  +-- Write State/Tool sections (if applicable)                       |
-|  +-- Add Constraints + Success Criteria                              |
-|                                                                      |
-|  Step 5: SELF-LINT (quality verification)                            |
-|  +-- Perform 7-Point Quality Check                                   |
-|  +-- If score < 8, return to Step 4                                  |
-|  +-- Detect anti-patterns                                            |
-|                                                                      |
-|  Step 6: TEST (test case generation)                                 |
-|  +-- 2 normal cases                                                  |
-|  +-- 1 edge case                                                     |
-|  +-- 1 injection defense case                                        |
-|  +-- 1 domain-specific case                                          |
-|                                                                      |
-|  Step 7: DELIVER (final deliverables)                                |
-|  +-- Full prompt (copy-paste ready)                                  |
-|  +-- Usage guide                                                     |
-|  +-- Test cases                                                      |
-|  +-- Maintenance recommendations                                     |
-|                                                                      |
-+----------------------------------------------------------------------+
+┌─ BUILD WORKFLOW ───────────────────────────────────────────────┐
+│                                                                 │
+│  Step 1: GATHER (요구사항 수집)                                 │
+│  ├─ 목표(GOAL) 확인: 프롬프트가 달성해야 할 것                   │
+│  ├─ 대상(AUDIENCE) 확인: 누가 사용하는가                        │
+│  ├─ 도메인(DOMAIN) 확인: 어떤 분야/산업                         │
+│  ├─ 제약(CONSTRAINTS) 확인: 지켜야 할 제한                      │
+│  └─ 성공 기준(SUCCESS) 확인: 어떻게 성공을 판단                  │
+│                                                                 │
+│  Step 2: CLASSIFY (유형 결정)                                   │
+│  ├─ 태스크 유형: 요약/분류/생성/대화/분석                        │
+│  ├─ 복잡도: 단순(1회)/멀티스텝/장기 태스크                       │
+│  └─ 도구 필요 여부: 파일/검색/명령 실행 등                       │
+│                                                                 │
+│  Step 3: DESIGN (구조 설계)                                     │
+│  ├─ 템플릿 선택 (templates/ 참조)                               │
+│  ├─ 7-Point 요소 설계                                           │
+│  └─ 인젝션 방어 패턴 적용                                       │
+│                                                                 │
+│  Step 4: DRAFT (초안 작성)                                      │
+│  ├─ Role 섹션 작성                                              │
+│  ├─ Context 섹션 작성                                           │
+│  ├─ Instruction 섹션 작성                                       │
+│  ├─ Example 섹션 작성 (2개 이상)                                │
+│  ├─ Format 섹션 작성                                            │
+│  ├─ State/Tool 섹션 (해당 시)                                   │
+│  └─ Constraints + Success Criteria 추가                         │
+│                                                                 │
+│  Step 5: SELF-LINT (자체 품질 검증)                             │
+│  ├─ 7-Point Quality Check 수행                                  │
+│  ├─ 점수 8점 미만 시 Step 4로 회귀                              │
+│  └─ 안티패턴 탐지                                               │
+│                                                                 │
+│  Step 6: TEST (테스트 케이스 생성)                              │
+│  ├─ 정상 케이스 2개                                             │
+│  ├─ 엣지 케이스 1개                                             │
+│  ├─ 인젝션 방어 케이스 1개                                      │
+│  └─ 도메인 특화 케이스 1개                                      │
+│                                                                 │
+│  Step 7: DELIVER (최종 산출물)                                  │
+│  ├─ 프롬프트 전문 (복붙 가능)                                   │
+│  ├─ 사용 가이드                                                 │
+│  ├─ 테스트 케이스                                               │
+│  └─ 유지보수 권장사항                                           │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-#### BUILD Input Format
+#### BUILD 입력 양식
 
-**Minimum input**:
-
-```
-Goal: [what the prompt should achieve]
-```
-
-**Recommended input (better quality)**:
+**최소 입력**:
 
 ```
-Goal: [what the prompt should achieve]
-Audience: [who will use it]
-Domain: [which field/industry]
-Constraints: [limitations to follow]
-Example: [desired output example]
+목표: [프롬프트가 달성해야 할 것]
+```
+
+**권장 입력 (품질 향상)**:
+
+```
+목표: [프롬프트가 달성해야 할 것]
+대상: [누가 사용하는가]
+도메인: [어떤 분야/산업]
+제약: [지켜야 할 제한]
+예시: [원하는 출력 예시]
+```
+
+#### BUILD 결과 형식
+
+```markdown
+# 🏗️ BUILD 결과
+
+## 메타데이터
+
+- **생성 일시**: YYYY-MM-DD HH:MM
+- **요청 목표**: [사용자 요청 요약]
+- **프롬프트 유형**: [요약/분류/생성/대화/분석]
+- **복잡도**: [단순/멀티스텝/장기]
+
+---
+
+## 1. 프롬프트 전문 (복붙용)
+```
+
+[완성된 프롬프트 전체]
+
+```
+
+---
+
+## 2. 품질 점검 결과
+
+### 7-Point Quality Check: X/10
+
+| 항목 | 점수 | 상태 |
+|------|------|------|
+| Role | 2/2 | ✅ |
+| Context | 2/2 | ✅ |
+| Instruction | 2/2 | ✅ |
+| Example | 2/2 | ✅ |
+| Format | 2/2 | ✅ |
+| State Tracking | X/2 | ✅/N/A |
+| Tool Usage | X/2 | ✅/N/A |
+
+---
+
+## 3. 사용 가이드
+
+### 변수 설명
+- `{{variable_1}}`: [설명]
+- `{{variable_2}}`: [설명]
+
+### 사용 예시
+[실제 사용 시나리오]
+
+### 주의사항
+- [주의 1]
+- [주의 2]
+
+---
+
+## 4. 테스트 케이스 (5개)
+
+[테스트 케이스]
+
+---
+
+## 5. 유지보수 권장사항
+
+- **리뷰 주기**: 월 1회 권장
+- **회귀 테스트**: 변경 시 필수
+- **버전 관리**: Semantic Versioning 권장
 ```
 
 ---
 
 ### 2.3 Intercept Pipeline
 
-Real-time prompt improvement before execution.
+실시간 프롬프트 개선 파이프라인입니다.
 
-#### Trigger
+#### 트리거
 
-- `use prompt-smith -r <prompt>` - Review Mode
-- `use prompt-smith -a <prompt>` - Intercept Mode
+- `prompt-smith 사용 -r <프롬프트>` - Review Mode
+- `prompt-smith 사용 -a <프롬프트>` - Intercept Mode
 
-#### Review Mode Workflow
+#### Review Mode 워크플로우
 
-1. Receive user prompt
-2. Execute Express LINT (7-Point Quick Check)
-3. Display improvements + Before/After comparison
-4. Await user approval (`y` approve, `n` use original, `e` edit further)
-5. Execute approved prompt
+1. 사용자 프롬프트 수신
+2. Express LINT 실행 (7-Point 빠른 점검)
+3. 개선 사항 + Before/After 비교 표시
+4. 사용자 승인 대기 (`y` 승인, `n` 원본 사용, `e` 추가 편집)
+5. 승인된 프롬프트 실행
 
-#### Intercept Mode Workflow
+#### Intercept Mode 워크플로우
 
-1. Receive user prompt
-2. Execute Express LINT
-3. Auto-apply improvements (if score improves by 2+ points)
-4. Show improvement summary + execute immediately
+1. 사용자 프롬프트 수신
+2. Express LINT 실행
+3. 개선 자동 적용 (점수가 2점 이상 향상 시)
+4. 개선 요약 표시 + 즉시 실행
 
 #### Output Format (MUST FOLLOW)
 
@@ -546,201 +621,254 @@ The exact prompt that will be sent to Claude:
 
 [Intercept Mode] Auto-executing improved prompt...
 
-#### Configuration
+#### 모드 선택
 
-| Flag          | Description                                           |
-| ------------- | ----------------------------------------------------- |
-| -r <prompt>   | Review Mode (show improvements, await approval)       |
-| -a <prompt>   | Intercept Mode (auto-improve and execute)             |
-| --threshold   | Minimum score improvement for auto-apply (default: 2) |
-| --verbose, -v | Show detailed analysis                                |
+| 커맨드/플래그 | 설명                                 |
+| ------------- | ------------------------------------ |
+| `/ps:r`       | Review Mode (개선안 표시, 승인 대기) |
+| `/ps:a`       | Intercept Mode (자동 개선 후 실행)   |
+| `-r <프롬프트>` | Review Mode (자연어)               |
+| `-a <프롬프트>` | Intercept Mode (자연어)            |
 
 ---
 
-### 2.4 Anti-Pattern Detection
+### 2.4 안티패턴 탐지
 
-The following anti-patterns are automatically detected during LINT/BUILD:
+LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 
-| Anti-Pattern                | Description                       | Improvement                    |
-| --------------------------- | --------------------------------- | ------------------------------ |
-| **Ambiguous instructions**  | "well", "nicely", "appropriately" | Specify concrete criteria      |
-| **Missing role**            | No role definition                | Add "You are a..."             |
-| **Unspecified format**      | Unclear output format             | Specify JSON/markdown schema   |
-| **No examples**             | Missing few-shot examples         | Add 1-3 examples               |
-| **Injection vulnerable**    | No input data separation          | Separate data/instructions     |
-| **Excessive freedom**       | No constraints                    | Add constraints/prohibitions   |
-| **Unverifiable**            | No success criteria               | Specify success conditions     |
-| **Ambiguous action**        | "look at this" (analyze? modify?) | Use clear action verbs         |
-| **Example format mismatch** | Example != desired output         | Match example to output format |
+| 안티패턴             | 설명                       | 개선 방향                 |
+| -------------------- | -------------------------- | ------------------------- |
+| **모호한 지시**      | "잘", "깔끔하게", "적당히" | 구체적 기준 명시          |
+| **역할 누락**        | 역할 정의 없음             | "You are a..." 추가       |
+| **포맷 미지정**      | 출력 형식 불명확           | JSON/마크다운 스키마 명시 |
+| **예시 부재**        | Few-shot 예시 없음         | 1-3개 예시 추가           |
+| **인젝션 취약**      | 입력 데이터 구분 없음      | 데이터/지시 분리          |
+| **과도한 자유도**    | 제약 조건 없음             | 제약/금칙 추가            |
+| **검증 불가**        | 성공 기준 없음             | 성공 조건 명시            |
+| **모호한 행동 지시** | "봐줘" (분석? 수정?)       | 명확한 행동 동사 사용     |
+| **예시 형식 불일치** | 예시 ≠ 원하는 출력         | 예시 형식 = 출력 형식     |
 
-Details: [references/anti-patterns.md](references/anti-patterns.md)
+세부: [references/anti-patterns.md](references/anti-patterns.md)
 
 ---
 
 ## Level 3: Mastery (References)
 
-### Onboarding
+### Onboarding (시작하기)
 
-- [onboarding/quick-start.md](onboarding/quick-start.md) - 5-minute start guide
-- [onboarding/first-lint.md](onboarding/first-lint.md) - First LINT walkthrough
-- [onboarding/first-build.md](onboarding/first-build.md) - First BUILD walkthrough
+- [onboarding/quick-start.md](onboarding/quick-start.md) - 5분 시작 가이드
+- [onboarding/first-lint.md](onboarding/first-lint.md) - 첫 LINT 따라하기
+- [onboarding/first-build.md](onboarding/first-build.md) - 첫 BUILD 따라하기
 
-### Playbooks
+### Playbooks (워크플로우 상세)
 
 **LINT:**
 
-- [playbooks/lint/full-lint.md](playbooks/lint/full-lint.md) - LINT workflow details
-- [playbooks/lint/express-lint.md](playbooks/lint/express-lint.md) - Express LINT guide
+- [playbooks/lint/full-lint.md](playbooks/lint/full-lint.md) - LINT 워크플로우 상세
+- [playbooks/lint/express-lint.md](playbooks/lint/express-lint.md) - Express LINT 가이드
 
 **BUILD:**
 
-- [playbooks/build/build-mode.md](playbooks/build/build-mode.md) - BUILD workflow details
-- [playbooks/build/requirement-gathering.md](playbooks/build/requirement-gathering.md) - Requirements gathering guide
-- [playbooks/build/template-selection.md](playbooks/build/template-selection.md) - Template selection guide
+- [playbooks/build/build-mode.md](playbooks/build/build-mode.md) - BUILD 워크플로우 상세
+- [playbooks/build/requirement-gathering.md](playbooks/build/requirement-gathering.md) - 요구사항 수집 가이드
+- [playbooks/build/template-selection.md](playbooks/build/template-selection.md) - 템플릿 선택 가이드
 
 **Intercept:**
 
-- [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Review mode guide
-- [playbooks/intercept/intercept-mode.md](playbooks/intercept/intercept-mode.md) - Intercept mode guide
+- [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Review 모드 가이드
+- [playbooks/intercept/intercept-mode.md](playbooks/intercept/intercept-mode.md) - Intercept 모드 가이드
 
 **Team:**
 
-- [playbooks/team/prompt-pr.md](playbooks/team/prompt-pr.md) - PR rules
-- [playbooks/team/owner-guide.md](playbooks/team/owner-guide.md) - Owner guide
-- [playbooks/team/regression-testing.md](playbooks/team/regression-testing.md) - Regression testing
+- [playbooks/team/prompt-pr.md](playbooks/team/prompt-pr.md) - PR 룰
+- [playbooks/team/owner-guide.md](playbooks/team/owner-guide.md) - 오너 제도
+- [playbooks/team/regression-testing.md](playbooks/team/regression-testing.md) - 회귀 테스트 운영
 
-### References
+### References (참조 자료)
 
-- [references/quality-checklist.md](references/quality-checklist.md) - 7-Point Quality Check details
-- [references/anti-patterns.md](references/anti-patterns.md) - Anti-patterns to avoid
-- [references/claude-4x-best-practices.md](references/claude-4x-best-practices.md) - Claude 4.x optimization guide
-- [references/state-tracking-guide.md](references/state-tracking-guide.md) - State management guide
-- [references/tool-usage-guide.md](references/tool-usage-guide.md) - Tool usage guide
+- [references/quality-checklist.md](references/quality-checklist.md) - 7-Point Quality Check 상세
+- [references/anti-patterns.md](references/anti-patterns.md) - 피해야 할 프롬프트 패턴
+- [references/claude-4x-best-practices.md](references/claude-4x-best-practices.md) - Claude 4.x 최적화 가이드
+- [references/state-tracking-guide.md](references/state-tracking-guide.md) - 상태 관리 가이드
+- [references/tool-usage-guide.md](references/tool-usage-guide.md) - 도구 사용 가이드
 
-### Templates
+### Templates (템플릿)
 
-- [templates/prompt-template.md](templates/prompt-template.md) - Prompt template
-- [templates/test-case-template.md](templates/test-case-template.md) - Test case template
-- [templates/diagnostic-report.md](templates/diagnostic-report.md) - LINT diagnostic report template
-- [templates/build-report.md](templates/build-report.md) - BUILD result template
+- [templates/prompt-template.md](templates/prompt-template.md) - 프롬프트 작성 템플릿
+- [templates/test-case-template.md](templates/test-case-template.md) - 테스트 케이스 템플릿
+- [templates/diagnostic-report.md](templates/diagnostic-report.md) - LINT 진단 리포트 템플릿
+- [templates/build-report.md](templates/build-report.md) - BUILD 결과 템플릿
+- [templates/state-checkpoint.md](templates/state-checkpoint.md) - 상태 체크포인트 템플릿
 
 ---
 
 ## Examples
 
-### Example 1: LINT - Diagnosing an ambiguous prompt
+### Example 1: LINT - 모호한 프롬프트 진단
 
-**Input (user)**:
+**입력 (사용자)**:
 
 ```
-Check this prompt:
+다음 프롬프트 점검해줘:
 
-"Summarize the meeting notes"
+"회의록 요약해줘"
 ```
 
-**Output (Prompt Smith)**:
+**출력 (Prompt Smith)**:
 
 ```markdown
-## Diagnostic Results
+## 📋 진단 결과
 
-### Score: 2/10
+### 점수: 2/10
 
-| Item           | Score | Evaluation                               |
-| -------------- | ----- | ---------------------------------------- |
-| Role           | 0/2   | No role defined                          |
-| Context        | 0/2   | No context (what meeting? audience?)     |
-| Instruction    | 1/2   | "Summarize" present but criteria unclear |
-| Example        | 0/2   | No examples                              |
-| Format         | 0/2   | Output format unspecified                |
-| State Tracking | N/A   | Simple task                              |
-| Tool Usage     | N/A   | No tools needed                          |
+| 항목           | 점수 | 평가                              |
+| -------------- | ---- | --------------------------------- |
+| Role           | 0/2  | 역할 정의 없음                    |
+| Context        | 0/2  | 맥락 정보 없음 (어떤 회의? 대상?) |
+| Instruction    | 1/2  | "요약"은 있으나 기준 불명확       |
+| Example        | 0/2  | 예시 없음                         |
+| Format         | 0/2  | 출력 형식 미지정                  |
+| State Tracking | N/A  | 단순 태스크                       |
+| Tool Usage     | N/A  | 도구 불필요                       |
 
-### Top 3 Issues
+### 🔴 Top 3 이슈
 
-1. **Missing role**: No AI role defined, inconsistent outputs possible
-2. **Insufficient context**: No meeting type, target audience info
-3. **Unspecified format**: Output format (bullets/table/sections) undefined
+1. **역할 부재**: AI의 역할이 정의되지 않아 일관성 없는 출력 가능
+2. **맥락 부족**: 회의 유형, 대상 독자 등 정보 없음
+3. **포맷 미지정**: 출력 형식(불릿/표/섹션)이 정해지지 않음
 
-[... improved prompt and test cases omitted ...]
+[... 개선 프롬프트 및 테스트 케이스 생략 ...]
 ```
 
-### Example 2: Intercept Pipeline - Review Mode
+### Example 2: BUILD - 코드 리뷰 프롬프트 설계
 
-**Input (user)**:
-
-```
-use prompt-smith -r Write code to parse JSON
-```
-
-**Output (Prompt Smith)**:
+**입력 (사용자)**:
 
 ```
+코드 리뷰해주는 프롬프트 만들어줘
 
-Original Prompt (Score: 3/10)
+목표: Python 코드 리뷰
+대상: 주니어 개발자
+제약: 보안 취약점 반드시 체크
+```
 
-> Write code to parse JSON
+**출력 (Prompt Smith)**:
 
-Improved Prompt (Score: 8/10)
+```markdown
+# 🏗️ BUILD 결과
 
-> You are a senior software engineer.
->
-> Write a Python function that parses a JSON string and returns a dictionary.
-> Handle invalid JSON gracefully by returning None and logging the error.
->
-> Output format:
->
-> - Function with type hints
-> - Include docstring
-> - Include error handling
+## 메타데이터
 
-Changes:
+- **생성 일시**: 2026-01-01 12:00
+- **요청 목표**: Python 코드 리뷰
+- **프롬프트 유형**: 분석
+- **복잡도**: 단순
 
-- [+] Added ROLE: senior software engineer
-- [+] Added CONTEXT: Python, error handling requirement
-- [+] Specified FORMAT: type hints, docstring
-- [~] Made INSTRUCTION specific: parse JSON string → dictionary
+---
 
-Proceed? (y/n/e): \_
+## 1. 프롬프트 전문 (복붙용)
 
+You are a senior Python developer with 10 years of experience, specializing in code review and security.
+
+## Context
+
+- Target audience: Junior developers learning best practices
+- Focus areas: Code quality, security vulnerabilities, and maintainability
+- Tone: Educational and constructive (not critical)
+
+## Instructions
+
+Review the provided Python code and:
+
+1. Identify any security vulnerabilities (SQL injection, XSS, etc.)
+2. Point out code quality issues (naming, structure, complexity)
+3. Suggest improvements with explanations
+
+## Output Format
+
+## 🔒 Security Issues (if any)
+
+- [Issue]: [Description + Fix]
+
+## 📝 Code Quality
+
+- [Issue]: [Description + Suggestion]
+
+## ✅ Good Practices Found
+
+- [What was done well]
+
+## 💡 Improvement Suggestions
+
+1. [Suggestion with example]
+
+## Constraints
+
+- Always prioritize security issues first
+- Provide code examples for suggestions
+- Be educational, not critical
+
+## Code to Review
+
+<code>
+{{code}}
+</code>
+
+---
+
+## 2. 품질 점검 결과
+
+### 7-Point Quality Check: 10/10
+
+| 항목           | 점수 | 상태                       |
+| -------------- | ---- | -------------------------- |
+| Role           | 2/2  | ✅                         |
+| Context        | 2/2  | ✅                         |
+| Instruction    | 2/2  | ✅                         |
+| Example        | 2/2  | ✅ (출력 형식이 예시 역할) |
+| Format         | 2/2  | ✅                         |
+| State Tracking | N/A  | 단순 태스크                |
+| Tool Usage     | N/A  | 도구 불필요                |
+
+[... 사용 가이드 및 테스트 케이스 생략 ...]
 ```
 
 ---
 
 ## Guidelines
 
-### Do (Recommended)
+### Do (권장)
 
-- Apply 7-Point Quality Check to all diagnoses
-- Show clear Before/After comparison (LINT)
-- Confirm requirements before designing (BUILD)
-- Include injection defense in test cases
-- Explain change reasons specifically
-- Consider Claude 4.x characteristics (explicit instructions, matching examples)
+- 7-Point Quality Check를 모든 진단에 적용
+- Before/After를 명확하게 대비 (LINT)
+- 요구사항 확인 후 설계 시작 (BUILD)
+- 테스트 케이스에 인젝션 방어 포함
+- 변경 이유를 구체적으로 설명
+- Claude 4.x 특성 고려 (명시적 지시, 예시 일치)
 
-### Don't (Prohibited)
+### Don't (금지)
 
-- Vague "good/bad" evaluations without scores
-- Point out problems without improvements
-- Complete diagnosis/design without test cases
-- Distort original prompt intent
-- Start designing without confirming requirements (BUILD)
+- 점수 없이 막연한 "좋다/나쁘다" 평가
+- 개선 없이 문제점만 지적
+- 테스트 케이스 없이 진단/설계 완료
+- 원본 프롬프트의 의도 왜곡
+- 요구사항 확인 없이 바로 설계 시작 (BUILD)
 
 ### Security
 
-- Always check for prompt injection vulnerabilities
-- Verify sensitive information (API keys, PII) exposure risks
-- Review system prompt leakage possibilities
-- Apply data/instruction separation patterns
+- 프롬프트 인젝션 취약점 반드시 점검
+- 민감 정보(API 키, 개인정보) 노출 위험 확인
+- 시스템 프롬프트 유출 가능성 검토
+- 데이터/지시 분리 패턴 적용
 
 ---
 
 ## Roadmap
 
-| Phase | Feature | Status |
-|-------|---------|--------|
-| **1.0** | LINT Mode (5-Point) | Completed |
-| **2.0** | BUILD Mode + 7-Point | Completed |
-| **2.1** | Intercept Pipeline | Current |
-| **3.0** | DEBUG Mode (failure analysis + prevention) | Planned |
-| **4.0** | Automated regression testing integration | Planned |
-```
+| Phase   | 기능                               | 상태    |
+| ------- | ---------------------------------- | ------- |
+| **1.0** | LINT Mode (5-Point)                | ✅ 완료 |
+| **2.0** | BUILD Mode + 7-Point               | ✅ 완료 |
+| **2.1** | Intercept Pipeline                 | ✅ 현재 |
+| **3.0** | DEBUG Mode (실패 분석 + 재발 방지) | 예정    |
+| **4.0** | 자동 회귀 테스트 연동              | 예정    |
