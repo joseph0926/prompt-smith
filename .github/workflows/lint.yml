@@ -46,21 +46,23 @@ jobs:
 
       - name: Check deprecated /prompt-smith references
         run: |
-          # Exclude CHANGELOG.md and review reports from check
-          # Use -h to suppress filename prefixes, avoiding false negatives from path filtering
-          FOUND=$(grep -rh "/prompt-smith" --include="*.md" \
+          # Check for deprecated slash command "/prompt-smith" (not folder paths)
+          # Pattern: backtick/prompt-smith (command in markdown) followed by space/backtick/end
+          # Excludes: github.com URLs, folder paths, changelog migration mentions (→)
+          FOUND=$(grep -rEh '`/prompt-smith' --include="*.md" \
             --exclude="CHANGELOG.md" \
             --exclude="*-review-report.md" \
             ${{ env.SKILL_PATH }}/ 2>/dev/null | \
-            grep -v "github.com/.*prompt-smith" | wc -l || echo "0")
+            grep -v "github.com/.*prompt-smith" | \
+            grep -v "→.*ps:" | wc -l || echo "0")
           if [ "$FOUND" -gt 0 ]; then
             echo "Found deprecated /prompt-smith command references:"
-            grep -r "/prompt-smith" --include="*.md" \
+            grep -rE '`/prompt-smith' --include="*.md" \
               --exclude="CHANGELOG.md" \
               --exclude="*-review-report.md" \
               ${{ env.SKILL_PATH }}/ | \
               grep -v "github.com/.*prompt-smith" | \
-              grep -v "skills/prompt-smith"
+              grep -v "→.*ps:"
             echo ""
             echo "Please use /ps:r or /ps:a instead."
             exit 1
