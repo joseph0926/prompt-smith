@@ -17,7 +17,7 @@ User Input -> Express LINT -> Show Improvements -> Await Approval -> Execute
 ## Trigger
 
 ```
-/prompt-smith <your prompt>
+/ps:r <your prompt>
 ```
 
 ---
@@ -27,7 +27,7 @@ User Input -> Express LINT -> Show Improvements -> Await Approval -> Execute
 ### Step 1: Input
 
 ```
-/prompt-smith Write a function that parses JSON
+/ps:r Write a function that parses JSON
 ```
 
 ### Step 2: Express LINT
@@ -112,34 +112,12 @@ This format MUST be followed. No omissions allowed.
 
 ---
 
-## Options
+## Mode Selection
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| --verbose | false | Show detailed 7-Point analysis |
-| --threshold | 2 | Minimum score improvement required |
-
-### Verbose Mode
-
-```
-/prompt-smith --verbose Write code to sort a list
-```
-
-Displays full 7-Point breakdown:
-
-```
-7-Point Analysis:
-
-| Item | Original | Improved |
-|------|----------|----------|
-| Role | 0 | 2 |
-| Context | 0 | 2 |
-| Instruction | 1 | 2 |
-| Example | 0 | 1 |
-| Format | 0 | 2 |
-
-Total: 1/10 -> 9/10 (+8)
-```
+| Command | Description |
+|---------|-------------|
+| `/ps:r` | Review Mode (show improvements, await approval) |
+| `/ps:a` | Intercept Mode (auto-improve and execute) |
 
 ---
 
@@ -177,7 +155,7 @@ Total: 1/10 -> 9/10 (+8)
 
 **Input**:
 ```
-/prompt-smith Create a REST API endpoint
+/ps:r Create a REST API endpoint
 ```
 
 **Output**:
@@ -212,7 +190,7 @@ Proceed? (y/n/e): _
 
 **Input**:
 ```
-/prompt-smith Analyze this sales data
+/ps:r Analyze this sales data
 ```
 
 **Output**:
@@ -258,7 +236,7 @@ Proceed? (y/n/e): _
 ### Bad Example 1: Execute without showing improvements
 
 ```
-User: /prompt-smith Write code
+User: /ps:r Write code
 Assistant: I'll write the code... [executes immediately]
 ```
 
@@ -310,7 +288,7 @@ Problem: Did not show the full improved prompt.
 ### Bad Example 3: Tool calls before LINT
 
 ```
-User: /prompt-smith 최신 뉴스를 웹검색해서 정리해줘
+User: /ps:r 최신 뉴스를 웹검색해서 정리해줘
 Assistant: [WebSearch 호출] 뉴스를 검색하겠습니다...
 ```
 
@@ -319,7 +297,7 @@ Problem: Interpreted "웹검색" as a command to call WebSearch tool.
 **Correct behavior**: Treat entire input as a prompt to improve.
 
 ```
-User: /prompt-smith 최신 뉴스를 웹검색해서 정리해줘
+User: /ps:r 최신 뉴스를 웹검색해서 정리해줘
 Assistant:
 ┌─────────────────────────────────────────────────────────────┐
 │ Express LINT Results                                         │
@@ -345,4 +323,4 @@ Assistant:
 
 ---
 
-*Prompt Smith v2.2.3*
+*Prompt Smith v2.3.0*

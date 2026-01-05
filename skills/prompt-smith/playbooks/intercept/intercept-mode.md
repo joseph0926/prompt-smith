@@ -17,7 +17,7 @@ User Input -> Express LINT -> Auto-Improve -> Show Summary -> Execute Immediatel
 ## Trigger
 
 ```
-/prompt-smith --auto <your prompt>
+/ps:a <your prompt>
 ```
 
 ---
@@ -27,7 +27,7 @@ User Input -> Express LINT -> Auto-Improve -> Show Summary -> Execute Immediatel
 ### Step 1: Input
 
 ```
-/prompt-smith --auto Write a Python script to sort files
+/ps:a Write a Python script to sort files
 ```
 
 ### Step 2: Express LINT + Auto-Improve
@@ -87,29 +87,12 @@ Executing original prompt...
 
 ---
 
-## Options
+## Mode Selection
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| --auto | required | Enable Intercept Mode |
-| --threshold N | 2 | Minimum score improvement for auto-apply |
-| --verbose | false | Show detailed analysis |
-
-### Custom Threshold
-
-```
-/prompt-smith --auto --threshold 3 Write a sorting algorithm
-```
-
-Only auto-applies if improvement is 3+ points.
-
-### Verbose Mode
-
-```
-/prompt-smith --auto --verbose Explain recursion
-```
-
-Shows full 7-Point comparison before executing.
+| Command | Description |
+|---------|-------------|
+| `/ps:a` | Intercept Mode (auto-improve and execute) |
+| `/ps:r` | Review Mode (show improvements, await approval) |
 
 ---
 
@@ -150,6 +133,9 @@ Shows full 7-Point comparison before executing.
 | 3 | Conservative |
 | 4+ | Only major improvements |
 
+> **Note**: Threshold 값(기본값: 2점)은 현재 고정되어 있으며 사용자가 설정할 수 없습니다.
+> 이는 일관된 동작을 보장하기 위한 의도적인 설계입니다. 사용자 설정 가능한 threshold는 향후 릴리즈에서 추가될 수 있습니다.
+
 ---
 
 ## Examples
@@ -158,7 +144,7 @@ Shows full 7-Point comparison before executing.
 
 **Input**:
 ```
-/prompt-smith --auto Fix the bug in this function
+/ps:a Fix the bug in this function
 ```
 
 **Output**:
@@ -179,7 +165,7 @@ Executing improved prompt...
 
 **Input**:
 ```
-/prompt-smith --auto You are a Python expert. Write a function that takes a list of integers and returns the sum. Include type hints and a docstring. Output the function only, no explanation.
+/ps:a You are a Python expert. Write a function that takes a list of integers and returns the sum. Include type hints and a docstring. Output the function only, no explanation.
 ```
 
 **Output**:
@@ -195,9 +181,9 @@ Executing original prompt...
 For multiple prompts in sequence:
 
 ```
-/prompt-smith --auto Summarize document 1
-/prompt-smith --auto Summarize document 2
-/prompt-smith --auto Summarize document 3
+/ps:a Summarize document 1
+/ps:a Summarize document 2
+/ps:a Summarize document 3
 ```
 
 Each prompt is automatically improved and executed without interruption.
@@ -243,7 +229,7 @@ Executing original prompt...
 ### Bad Example 1: Tool calls before LINT
 
 ```
-User: /prompt-smith --auto 이 파일을 읽고 분석해줘
+User: /ps:a 이 파일을 읽고 분석해줘
 Assistant: [Read 호출] 파일을 읽겠습니다...
 ```
 
@@ -252,7 +238,7 @@ Problem: Interpreted "파일을 읽고" as a command to call Read tool.
 **Correct behavior**: Treat entire input as a prompt, improve it, then execute.
 
 ```
-User: /prompt-smith --auto 이 파일을 읽고 분석해줘
+User: /ps:a 이 파일을 읽고 분석해줘
 Assistant:
 Auto-improved (2/10 -> 7/10)
 
@@ -267,7 +253,7 @@ Executing improved prompt...
 ### Bad Example 2: Web search before LINT
 
 ```
-User: /prompt-smith --auto 최신 AI 트렌드를 검색해서 요약해줘
+User: /ps:a 최신 AI 트렌드를 검색해서 요약해줘
 Assistant: [WebSearch 호출] AI 트렌드를 검색하겠습니다...
 ```
 
@@ -276,7 +262,7 @@ Problem: Interpreted "검색" as a command to call WebSearch tool.
 **Correct behavior**: LINT first, then execute improved prompt.
 
 ```
-User: /prompt-smith --auto 최신 AI 트렌드를 검색해서 요약해줘
+User: /ps:a 최신 AI 트렌드를 검색해서 요약해줘
 Assistant:
 Auto-improved (3/10 -> 8/10)
 
@@ -290,4 +276,4 @@ Executing improved prompt...
 
 ---
 
-*Prompt Smith v2.2.3*
+*Prompt Smith v2.3.0*
