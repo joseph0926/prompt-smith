@@ -24,7 +24,7 @@ Parse the input argument to determine which help topic to show:
 
 ```
 +----------------------------------------------------------+
-| Prompt Smith v2.3.0                                       |
+| Prompt Smith v2.4.0                                       |
 +----------------------------------------------------------+
 
 COMMANDS
@@ -42,6 +42,12 @@ QUICK START
 RECOMMENDED FLOW
   New prompts:     /ps:build → /ps:lint → iterate
   Existing prompts: /ps:lint → /ps:r → approve
+
+OUTPUT LEVELS
+  Default: score + top issues + improved prompt
+  Triggers for different detail levels:
+  - "간단히" / "quick"   → Express (score + top3 only)
+  - "자세히" / "detail"  → Full analysis with all sections
 
 MORE INFO
   /ps:help commands   - All command details

@@ -2,8 +2,6 @@
 
 A template for standardizing LINT results output.
 
-> **v2.0.0**: 7-Point Quality Check applied (STATE_TRACKING, TOOL_USAGE added)
-
 ---
 
 ## Diagnostic Report Format

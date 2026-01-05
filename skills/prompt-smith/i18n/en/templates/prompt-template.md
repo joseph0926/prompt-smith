@@ -2,8 +2,6 @@
 
 A template for creating high-quality prompts that satisfy the 7-Point Quality Check.
 
-> **v2.0.0**: Added Claude 4.x extension items (STATE_TRACKING, TOOL_USAGE)
-
 ---
 
 ## Base Template

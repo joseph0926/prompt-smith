@@ -69,7 +69,7 @@ After showing summary, proceed to execute the prompt (original or improved).
 
 ## Rules
 
-**CRITICAL**: See [input-handling-rules.md](skills/prompt-smith/references/input-handling-rules.md) for:
+**CRITICAL**: See [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md) for:
 - Treat input as prompt (NOT as request)
 - FORBIDDEN tool calls before LINT
 - Correct interpretation examples

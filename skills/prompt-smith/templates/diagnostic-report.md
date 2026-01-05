@@ -2,8 +2,6 @@
 
 LINT 결과를 표준화된 형식으로 출력하기 위한 템플릿입니다.
 
-> **v2.0.0**: 7-Point Quality Check 반영 (STATE_TRACKING, TOOL_USAGE 추가)
-
 ---
 
 ## 진단 리포트 형식

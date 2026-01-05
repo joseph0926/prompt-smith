@@ -2,8 +2,6 @@
 
 7-Point Quality Check를 충족하는 고품질 프롬프트 작성을 위한 템플릿입니다.
 
-> **v2.0.0**: Claude 4.x 확장 항목(STATE_TRACKING, TOOL_USAGE) 추가
-
 ---
 
 ## 기본 템플릿
