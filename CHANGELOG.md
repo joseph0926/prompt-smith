@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.3.0] - 2026-01-05
+
+### Summary
+Prompt Smith v2.3.0 is a major documentation cleanup release. All `/prompt-smith` command references are replaced with `/ps:r` and `/ps:a`. Removed undocumented options (`--verbose`, `--threshold`), added CI checks, and created shared input handling rules.
+
+### Changed
+
+#### Command Standardization
+- **Replaced** all `/prompt-smith` → `/ps:r`, `/ps:a` across documentation
+- **Updated** natural language trigger notes: Slash commands now recommended
+- **Removed** undocumented options `--verbose`, `--threshold` from all files
+
+#### Token Optimization
+- **Simplified** DEBUG section in r.md: No longer duplicates improved prompt
+- **Created** `references/input-handling-rules.md`: Shared rules for r.md and a.md
+
+#### CI Automation
+- **Added** `/prompt-smith` remnant check to `.github/workflows/lint.yml`
+- **Added** SKILL.md size limit check (30KB max)
+
+### Added
+
+#### i18n English Documentation
+- **New directory**: `i18n/en/` with full English translations
+- Complete playbooks, references, templates mirrored from Korean primary
+- Enables English-first users to access all documentation natively
+
+### Fixed
+- `quick-start.md`: Version v2.1.0 → v2.3.0
+- Playbook examples now use `/ps:r` and `/ps:a` consistently
+
+---
+
 ## [2.2.3] - 2026-01-03
 
 ### Summary
