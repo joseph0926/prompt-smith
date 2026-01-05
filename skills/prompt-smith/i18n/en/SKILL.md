@@ -20,42 +20,9 @@ i18n:
 
 A prompt quality management skill that turns prompts into operational assets by running **Diagnostics (LINT) → Auto Improvement (Rewrite) → Test Generation**, or by designing from requirements via **BUILD (Requirements → New Prompt Design)**.
 
-**What’s new in v2.3.0**:
+**v2.3.0**: Command standardization (`/ps:r`, `/ps:a`), CI automation, token optimization, i18n/en docs added
 
-- **Command standardization**: Replace all `/prompt-smith` → `/ps:r`, `/ps:a`
-- **Option cleanup**: Remove undocumented/unimplemented `verbose`, `threshold` options from docs
-- **CI automation**: Add legacy-command residue checks, file size checks
-- **Token optimization**: Simplify DEBUG sections, commonize `input-handling-rules.md`
-
-**What’s new in v2.2.3**:
-
-- Improved doc consistency: Fix references from "5-Point" → "7-Point"
-- API parameter guide: temperature/max_tokens optimization section
-- Prompt Chaining playbook: multi-step chaining strategy
-
-**What’s new in v2.2.2**:
-
-- **Simplified input format**: Make backticks optional in `/ps:r`, `/ps:a`
-- Sync version metadata with CHANGELOG
-
-**What’s new in v2.2.1**:
-
-- **Stricter tool-call limitations**: Disallow tool usage (WebSearch, Read, etc.) until LINT is complete
-
-**What’s new in v2.2.0**:
-
-- Add **slash commands**: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
-- Rename plugin to `ps` (short commands)
-
-**What’s new in v2.1**:
-
-- Add **Intercept Pipeline** (real-time prompt improvement via Review/Intercept modes)
-- English primary + i18n support
-
-**What’s new in v2.0**:
-
-- 5-Point → **7-Point Quality Check** (Claude 4.x optimized: STATE_TRACKING, TOOL_USAGE added)
-- Add **BUILD Mode** (Requirements → Prompt design)
+**Previous versions**: See [CHANGELOG.md](../../../../CHANGELOG.md)
 
 ---
 
@@ -707,134 +674,10 @@ Details: [references/anti-patterns.md](references/anti-patterns.md)
 
 ## Examples
 
-### Example 1: LINT - Diagnosing a vague prompt
-
-**Input (User)**:
-
-```
-Check the following prompt:
-
-"Summarize the meeting minutes."
-```
-
-**Output (Prompt Smith)**:
-
-```markdown
-## 📋 Diagnostic Results
-
-### Score: 2/10
-
-| Item           | Score | Notes                                    |
-| -------------- | ----- | ---------------------------------------- |
-| Role           | 0/2   | No role defined                          |
-| Context        | 0/2   | No context provided (what meeting? who?) |
-| Instruction    | 1/2   | "Summarize" exists but criteria unclear  |
-| Example        | 0/2   | No examples                              |
-| Format         | 0/2   | Output format unspecified                |
-| State Tracking | N/A   | Simple task                              |
-| Tool Usage     | N/A   | No tools needed                          |
-
-### 🔴 Top 3 Issues
-
-1. **Missing role**: Without a defined role, outputs may be inconsistent
-2. **Insufficient context**: No meeting type, target reader, etc.
-3. **No output format**: No defined output structure (bullets/table/sections)
-
-[... improved prompt and test cases omitted ...]
-```
-
-### Example 2: BUILD - Designing a code review prompt
-
-**Input (User)**:
-
-```
-Create a prompt that does code review
-
-Goal: Python code review
-Audience: Junior developers
-Constraints: Must check security vulnerabilities
-```
-
-**Output (Prompt Smith)**:
-
-```markdown
-# 🏗️ BUILD Result
-
-## Metadata
-
-- **Created at**: 2026-01-01 12:00
-- **Request goal**: Python code review
-- **Prompt type**: Analysis
-- **Complexity**: Simple
-
----
-
-## 1. Full Prompt (copy-paste)
-
-You are a senior Python developer with 10 years of experience, specializing in code review and security.
-
-## Context
-
-- Target audience: Junior developers learning best practices
-- Focus areas: Code quality, security vulnerabilities, and maintainability
-- Tone: Educational and constructive (not critical)
-
-## Instructions
-
-Review the provided Python code and:
-
-1. Identify any security vulnerabilities (SQL injection, XSS, etc.)
-2. Point out code quality issues (naming, structure, complexity)
-3. Suggest improvements with explanations
-
-## Output Format
-
-## 🔒 Security Issues (if any)
-
-- [Issue]: [Description + Fix]
-
-## 📝 Code Quality
-
-- [Issue]: [Description + Suggestion]
-
-## ✅ Good Practices Found
-
-- [What was done well]
-
-## 💡 Improvement Suggestions
-
-1. [Suggestion with example]
-
-## Constraints
-
-- Always prioritize security issues first
-- Provide code examples for suggestions
-- Be educational, not critical
-
-## Code to Review
-
-<code>
-{{code}}
-</code>
-
----
-
-## 2. Quality Check Result
-
-### 7-Point Quality Check: 10/10
-
-| Item           | Score | Status                             |
-| -------------- | ----- | ---------------------------------- |
-| Role           | 2/2   | ✅                                 |
-| Context        | 2/2   | ✅                                 |
-| Instruction    | 2/2   | ✅                                 |
-| Example        | 2/2   | ✅ (Output format acts as example) |
-| Format         | 2/2   | ✅                                 |
-| State Tracking | N/A   | Simple task                        |
-| Tool Usage     | N/A   | No tools needed                    |
-
-[... usage guide and test cases omitted ...]
-```
+For detailed examples, see:
+- [onboarding/first-lint.md](onboarding/first-lint.md) - LINT example
+- [onboarding/first-build.md](onboarding/first-build.md) - BUILD example
+- [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Intercept example
 
 ---
 

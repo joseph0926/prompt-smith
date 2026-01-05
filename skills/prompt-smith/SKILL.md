@@ -20,42 +20,9 @@ i18n:
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
-**v2.3.0 주요 변경**:
+**v2.3.0**: 커맨드 표준화 (`/ps:r`, `/ps:a`), CI 자동화, 토큰 최적화, i18n/en 문서 추가
 
-- **커맨드 표준화**: 모든 `/prompt-smith` → `/ps:r`, `/ps:a`로 교체
-- **옵션 정리**: 미구현 verbose, threshold 옵션 문서에서 제거
-- **CI 자동화**: 레거시 커맨드 잔존 검사, 파일 크기 검사 추가
-- **토큰 최적화**: DEBUG 섹션 간소화, input-handling-rules.md 공통화
-
-**v2.2.3 주요 변경**:
-
-- 문서 일관성 개선: "5-Point" → "7-Point" 참조 수정
-- API 파라미터 가이드: temperature/max_tokens 최적화 섹션
-- Prompt Chaining 플레이북: 멀티스텝 체이닝 전략
-
-**v2.2.2 주요 변경**:
-
-- **입력 형식 간소화**: `/ps:r`, `/ps:a`에서 백틱 선택사항으로 변경
-- 버전 메타데이터 CHANGELOG와 동기화
-
-**v2.2.1 주요 변경**:
-
-- **도구 호출 제한 강화**: LINT 완료 전까지 도구 호출(WebSearch, Read 등) 금지
-
-**v2.2.0 주요 변경**:
-
-- **슬래시 커맨드** 추가: `/ps:r`, `/ps:a`, `/ps:lint`, `/ps:build`
-- 플러그인명 `ps`로 변경 (짧은 커맨드)
-
-**v2.1 주요 변경**:
-
-- **Intercept Pipeline** 추가 (Review/Intercept 모드로 실시간 프롬프트 개선)
-- 영어 Primary + i18n 지원
-
-**v2.0 주요 변경**:
-
-- 5-Point → **7-Point Quality Check** (Claude 4.x 최적화: STATE_TRACKING, TOOL_USAGE 추가)
-- **BUILD Mode** 추가 (요구사항 → 프롬프트 설계)
+**이전 버전**: [CHANGELOG.md](../../CHANGELOG.md) 참조
 
 ---
 
@@ -704,134 +671,10 @@ LINT/BUILD 시 다음 안티패턴을 자동으로 탐지합니다:
 
 ## Examples
 
-### Example 1: LINT - 모호한 프롬프트 진단
-
-**입력 (사용자)**:
-
-```
-다음 프롬프트 점검해줘:
-
-"회의록 요약해줘"
-```
-
-**출력 (Prompt Smith)**:
-
-```markdown
-## 📋 진단 결과
-
-### 점수: 2/10
-
-| 항목           | 점수 | 평가                              |
-| -------------- | ---- | --------------------------------- |
-| Role           | 0/2  | 역할 정의 없음                    |
-| Context        | 0/2  | 맥락 정보 없음 (어떤 회의? 대상?) |
-| Instruction    | 1/2  | "요약"은 있으나 기준 불명확       |
-| Example        | 0/2  | 예시 없음                         |
-| Format         | 0/2  | 출력 형식 미지정                  |
-| State Tracking | N/A  | 단순 태스크                       |
-| Tool Usage     | N/A  | 도구 불필요                       |
-
-### 🔴 Top 3 이슈
-
-1. **역할 부재**: AI의 역할이 정의되지 않아 일관성 없는 출력 가능
-2. **맥락 부족**: 회의 유형, 대상 독자 등 정보 없음
-3. **포맷 미지정**: 출력 형식(불릿/표/섹션)이 정해지지 않음
-
-[... 개선 프롬프트 및 테스트 케이스 생략 ...]
-```
-
-### Example 2: BUILD - 코드 리뷰 프롬프트 설계
-
-**입력 (사용자)**:
-
-```
-코드 리뷰해주는 프롬프트 만들어줘
-
-목표: Python 코드 리뷰
-대상: 주니어 개발자
-제약: 보안 취약점 반드시 체크
-```
-
-**출력 (Prompt Smith)**:
-
-```markdown
-# 🏗️ BUILD 결과
-
-## 메타데이터
-
-- **생성 일시**: 2026-01-01 12:00
-- **요청 목표**: Python 코드 리뷰
-- **프롬프트 유형**: 분석
-- **복잡도**: 단순
-
----
-
-## 1. 프롬프트 전문 (복붙용)
-
-You are a senior Python developer with 10 years of experience, specializing in code review and security.
-
-## Context
-
-- Target audience: Junior developers learning best practices
-- Focus areas: Code quality, security vulnerabilities, and maintainability
-- Tone: Educational and constructive (not critical)
-
-## Instructions
-
-Review the provided Python code and:
-
-1. Identify any security vulnerabilities (SQL injection, XSS, etc.)
-2. Point out code quality issues (naming, structure, complexity)
-3. Suggest improvements with explanations
-
-## Output Format
-
-## 🔒 Security Issues (if any)
-
-- [Issue]: [Description + Fix]
-
-## 📝 Code Quality
-
-- [Issue]: [Description + Suggestion]
-
-## ✅ Good Practices Found
-
-- [What was done well]
-
-## 💡 Improvement Suggestions
-
-1. [Suggestion with example]
-
-## Constraints
-
-- Always prioritize security issues first
-- Provide code examples for suggestions
-- Be educational, not critical
-
-## Code to Review
-
-<code>
-{{code}}
-</code>
-
----
-
-## 2. 품질 점검 결과
-
-### 7-Point Quality Check: 10/10
-
-| 항목           | 점수 | 상태                       |
-| -------------- | ---- | -------------------------- |
-| Role           | 2/2  | ✅                         |
-| Context        | 2/2  | ✅                         |
-| Instruction    | 2/2  | ✅                         |
-| Example        | 2/2  | ✅ (출력 형식이 예시 역할) |
-| Format         | 2/2  | ✅                         |
-| State Tracking | N/A  | 단순 태스크                |
-| Tool Usage     | N/A  | 도구 불필요                |
-
-[... 사용 가이드 및 테스트 케이스 생략 ...]
-```
+상세 예시는 다음 문서를 참조하세요:
+- [onboarding/first-lint.md](onboarding/first-lint.md) - LINT 예시
+- [onboarding/first-build.md](onboarding/first-build.md) - BUILD 예시
+- [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) - Intercept 예시
 
 ---
 
