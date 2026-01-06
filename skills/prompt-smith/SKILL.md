@@ -75,18 +75,33 @@ i18n:
 
 ### Quick Start (설치)
 
-**Global (모든 프로젝트)**:
+**방법 1: 플러그인 설치 (슬래시 커맨드 활성화, 권장)**
+
+1. VS Code에서 `/plugin` 입력하여 플러그인 터미널 열기
+2. `Tab` 키로 "Add Marketplace" 이동
+3. `joseph0926/prompt-smith` 입력
+4. `Tab` 키로 "Install Plugin" 이동
+5. `ps@prompt-smith` 선택
+
+**방법 2: 로컬 플러그인 (개발용)**
 
 ```bash
 git clone https://github.com/joseph0926/prompt-smith
-cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+claude --plugin-dir ./prompt-smith
 ```
 
-**Project Local (현재 프로젝트만)**:
+**방법 3: 스킬만 설치 (자연어 트리거)**
 
 ```bash
+# Global (모든 프로젝트)
+git clone https://github.com/joseph0926/prompt-smith
+cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+
+# Project Local (현재 프로젝트만)
 cp -r skills/prompt-smith .claude/skills/
 ```
+
+> **참고**: 방법 3은 자연어 트리거(`prompt-smith 사용 -r`)만 활성화됩니다. 슬래시 커맨드는 방법 1 필요.
 
 ### Activation Rules
 

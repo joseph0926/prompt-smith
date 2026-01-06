@@ -73,18 +73,33 @@ A prompt quality management skill that turns prompts into operational assets by 
 
 ### Quick Start (Installation)
 
-**Global (all projects)**:
+**Option 1: Plugin Install (enables slash commands, recommended)**
+
+1. In VS Code, type `/plugin` to open plugin terminal
+2. Press `Tab` to navigate to "Add Marketplace"
+3. Enter: `joseph0926/prompt-smith`
+4. Press `Tab` to navigate to "Install Plugin"
+5. Select `ps@prompt-smith`
+
+**Option 2: Local Plugin (development)**
 
 ```bash
 git clone https://github.com/joseph0926/prompt-smith
-cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+claude --plugin-dir ./prompt-smith
 ```
 
-**Project Local (current project only)**:
+**Option 3: Skill Only (natural language triggers)**
 
 ```bash
+# Global (all projects)
+git clone https://github.com/joseph0926/prompt-smith
+cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+
+# Project Local (current project only)
 cp -r skills/prompt-smith .claude/skills/
 ```
+
+> **Note**: Option 3 only enables natural language triggers (`use prompt-smith -r`). Slash commands require Option 1.
 
 ### Activation Rules
 
