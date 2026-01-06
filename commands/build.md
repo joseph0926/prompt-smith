@@ -9,6 +9,23 @@ argument-hint: <requirements or goal>
 
 ## Workflow
 
+### Step 0: Empty Input Handling
+
+If `$ARGUMENTS` is empty or contains only whitespace:
+
+**Response:**
+I'd be happy to help you build a new prompt! To get started, please tell me:
+
+1. **What should this prompt achieve?** (e.g., "summarize documents", "generate code reviews")
+2. **Who will use the output?** (e.g., developers, customers, internal team)
+3. **Any specific format or constraints?** (e.g., JSON output, max 500 words)
+
+**Examples:**
+- `/ps:build code review feedback for PRs`
+- `/ps:build customer support response generator with empathetic tone`
+
+---
+
 ### Step 1: GATHER - Requirements Collection
 
 From $ARGUMENTS, identify:

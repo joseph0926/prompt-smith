@@ -231,7 +231,3 @@ O 5개 테스트 케이스로 먼저 검증
 - [첫 BUILD 튜토리얼](first-build.md) - 새 프롬프트 생성
 - [7-Point 상세](../references/quality-checklist.md) - 깊이 있는 이해
 - [안티패턴](../references/anti-patterns.md) - 피해야 할 패턴
-
----
-
-*Prompt Smith v2.3.0*

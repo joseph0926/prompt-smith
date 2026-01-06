@@ -289,7 +289,3 @@ Requires file read/write"
 - [BUILD detailed guide](../playbooks/build/build-mode.md)
 - [Requirements gathering](../playbooks/build/requirement-gathering.md)
 - [Template selection](../playbooks/build/template-selection.md)
-
----
-
-*Prompt Smith v2.3.0*

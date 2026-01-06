@@ -320,7 +320,3 @@ Assistant:
 > - Brief summary per article
 > - Source attribution
 ```
-
----
-
-*Prompt Smith v2.3.0*

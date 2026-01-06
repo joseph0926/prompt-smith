@@ -102,7 +102,7 @@
 
 프롬프트에 State Tracking을 추가할 때 사용:
 
-```markdown
+````markdown
 ## State Tracking
 
 ### 상태 파일
@@ -135,7 +135,7 @@
    - `in_progress` / `paused` → 계속 진행
 3. `progress.completed` 다음 항목부터 처리
 4. 완료 시 `status = "completed"` 설정
-```
+````
 
 ---
 

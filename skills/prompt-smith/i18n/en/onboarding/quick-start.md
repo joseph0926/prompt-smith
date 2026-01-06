@@ -158,7 +158,3 @@ A prompt that classifies customer inquiries and assigns priority
 If you run into issues:
 - Check the detailed docs in [SKILL.md](../SKILL.md)
 - Review common mistakes in [Anti-Patterns](../references/anti-patterns.md)
-
----
-
-*Prompt Smith v2.3.0*

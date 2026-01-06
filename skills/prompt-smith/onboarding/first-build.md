@@ -289,7 +289,3 @@ O 8점 미만이면 약한 항목 보강 요청
 - [BUILD 상세 가이드](../playbooks/build/build-mode.md)
 - [요구사항 수집](../playbooks/build/requirement-gathering.md)
 - [템플릿 선택](../playbooks/build/template-selection.md)
-
----
-
-*Prompt Smith v2.3.0*

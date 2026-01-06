@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.1] - 2026-01-06
+
+### Summary
+Prompt Smith v2.4.1 is a documentation quality patch. Fixes template code fence nesting for better copy-paste UX, removes inconsistent version footers, and adds `/ps:help` to README command table.
+
+### Fixed
+
+#### Template Code Fence Nesting
+- **Changed** outer wrapper code fences from 3 backticks to 4 backticks in all template files
+- **Affected files** (KO + EN):
+  - `templates/diagnostic-report.md`
+  - `templates/build-report.md`
+  - `templates/prompt-template.md`
+  - `templates/state-checkpoint.md`
+  - `templates/test-case-template.md`
+- **Benefit**: Templates now render correctly and can be copy-pasted as single blocks
+
+#### Version Footer Inconsistency
+- **Removed** `*Prompt Smith vX.X.X*` footers from 12 files (were showing v2.3.0/v2.0.0)
+- **Reasoning**: Footers caused version drift; SKILL.md frontmatter is now the single source of truth
+
+### Added
+
+#### README.md `/ps:help` Entry
+- **Added** `/ps:help [topic]` row to "Commands at a Glance" table
+- **Improves** discoverability for new users
+
+#### BUILD Mode Empty Input Handling
+- **Added** Step 0 to `commands/build.md` for empty input case
+- **Provides** guided questions and examples when user runs `/ps:build` without arguments
+
+---
+
 ## [2.4.0] - 2026-01-05
 
 ### Summary

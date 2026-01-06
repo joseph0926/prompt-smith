@@ -102,7 +102,7 @@ A template for saving state in long-running or multi-step tasks.
 
 Use when adding State Tracking to prompts:
 
-```markdown
+````markdown
 ## State Tracking
 
 ### State File
@@ -135,7 +135,7 @@ Use when adding State Tracking to prompts:
    - `in_progress` / `paused` → Continue
 3. Process from item after `progress.completed`
 4. Set `status = "completed"` on completion
-```
+````
 
 ---
 

@@ -231,7 +231,3 @@ O Validate with 5 test cases first
 - [First BUILD tutorial](first-build.md) - Create a new prompt
 - [7-Point Details](../references/quality-checklist.md) - Deeper understanding
 - [Anti-Patterns](../references/anti-patterns.md) - Patterns to avoid
-
----
-
-*Prompt Smith v2.3.0*

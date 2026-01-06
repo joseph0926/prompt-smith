@@ -24,7 +24,3 @@ Input → Analysis → Diagnosis → Improvement → Test Generation → Report 
 - [Diagnostic report template](../templates/diagnostic-report.md)
 - [Quality checklist](../references/quality-checklist.md)
 - [Anti-Patterns](../references/anti-patterns.md)
-
----
-
-*Prompt Smith v2.3.0*

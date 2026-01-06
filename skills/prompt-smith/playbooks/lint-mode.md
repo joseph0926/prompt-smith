@@ -24,7 +24,3 @@ LINT 모드는 기존 프롬프트를 분석하고 개선하는 워크플로우�
 - [진단 리포트 템플릿](../templates/diagnostic-report.md)
 - [품질 체크리스트](../references/quality-checklist.md)
 - [안티패턴](../references/anti-patterns.md)
-
----
-
-*Prompt Smith v2.3.0*

@@ -273,7 +273,3 @@ Changes:
 
 Executing improved prompt...
 ```
-
----
-
-*Prompt Smith v2.3.0*

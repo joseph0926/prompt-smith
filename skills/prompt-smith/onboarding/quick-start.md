@@ -184,7 +184,3 @@ Top 3 이슈:
 - [SKILL.md](../SKILL.md)에서 상세 문서 확인
 - [안티패턴](../references/anti-patterns.md)에서 흔한 실수 확인
 - `/ps:help`로 명령어 목록 확인
-
----
-
-*Prompt Smith v2.4.0*
