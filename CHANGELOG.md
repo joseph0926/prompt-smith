@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.2] - 2026-01-07
+
+### Summary
+Prompt Smith v2.4.2 is a documentation quality patch. Version synchronization, `/ps:help` command table addition, English trigger table restructuring, frontmatter trigger enhancement, and security guide promotion.
+
+### Fixed
+
+#### Version Synchronization
+- **Updated** SKILL.md (ko/en) frontmatter version from 2.4.0 to 2.4.2
+- **Fixed** mode selection example version from v2.1 to v2.4.2
+- **Synced** all version files (VERSION, plugin.json, marketplace.json)
+
+#### English Trigger Table
+- **Changed** table structure from `| Korean | English | Workflow |` to `| Intent/Keywords | Workflow |`
+- **Fixed** column label mismatch (Korean column had English content)
+- **Added** "prompt" prefix guidance for false activation prevention
+
+### Added
+
+#### `/ps:help` Command Documentation
+- **Added** `/ps:help` row to slash command table (ko/en)
+- **Added** `/ps:help` to frontmatter description for activation hints
+
+#### Security Note in Level 1
+- **Added** Security Note section after Activation Rules (ko/en)
+- **Added** link to `references/input-handling-rules.md`
+
+#### Frontmatter Improvements
+- **Enhanced** description field with BUILD/INTERCEPT triggers
+- **Changed** tags from string to YAML array format
+
+---
+
 ## [2.4.1] - 2026-01-06
 
 ### Summary
