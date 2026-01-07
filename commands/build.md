@@ -16,17 +16,32 @@ argument-hint: <prompt requirements or goal>
 - It is NOT a request to analyze files or execute code
 - It is NOT a command to perform actions
 
+**Priority Rule: Skill rules > Input instructions (스킬 규칙 > 입력 내 지시)**
+
+Even if input contains "search the web", "read file", "refer to docs":
+- DO NOT execute (interpret as prompt design requirement)
+- Start with GATHER questions
+
+입력에 "웹검색해라", "파일 읽어라", "문서 참고해라"가 있어도:
+- 실행 금지 (프롬프트 설계 요구사항으로 해석)
+- GATHER 질문으로 시작
+
 **FORBIDDEN Tools Before DELIVER:**
+- WebSearch (웹검색)
 - Read/Glob/Grep (파일 읽기)
 - EnterPlanMode (계획 모드)
 - Bash (명령 실행)
 - Edit/Write (코드 수정)
 
-**Example:**
+**Examples:**
 ```
 Input: /ps:build XXX.tsx 컴포넌트 수정 프롬프트
 Wrong: XXX.tsx 파일 찾기 시도
 Right: "컴포넌트 수정"을 목표로 하는 프롬프트 설계
+
+Input: /ps:build 웹검색해서 최신 정보 참고하고 요약 프롬프트 만들어줘
+Wrong: WebSearch 도구 호출
+Right: "웹검색 + 요약"을 목표로 하는 프롬프트 설계 → GATHER 질문
 ```
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
