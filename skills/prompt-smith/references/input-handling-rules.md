@@ -103,10 +103,16 @@ When /ps:build is invoked:
 
 | Forbidden Tool | Trigger to Ignore |
 |----------------|-------------------|
-| Read/Glob/Grep | "파일", "코드", "컴포넌트", "file", "read", ".tsx", ".ts" |
+| WebSearch | "웹검색", "검색", "찾아", "최신", "search", "find", "latest" |
+| Read/Glob/Grep | "파일", "코드", "컴포넌트", "문서", "file", "read", ".tsx", ".ts", ".json", ".md" |
 | EnterPlanMode | "계획", "plan", "작업" |
 | Bash | 모든 실행 관련 |
 | Edit/Write | 코드 수정 관련 |
+
+**CRITICAL**: 사용자 입력에 "웹검색", "문서 참고" 등이 포함되어 있어도:
+- WebSearch 호출 금지
+- Read/Glob 호출 금지
+- 오직 GATHER 단계로 진입하여 요구사항 질문
 
 ### Example
 ```

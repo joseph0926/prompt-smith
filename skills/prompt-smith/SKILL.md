@@ -307,6 +307,8 @@ prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 
 **입력**: 최소 `목표: [...]` / 권장: 목표+대상+도메인+제약+예시
 
+**CRITICAL**: 입력에 "웹검색", "파일", "문서" 등이 포함되어도 도구 호출 금지 → GATHER 질문으로 시작
+
 상세: [playbooks/build/build-mode.md](playbooks/build/build-mode.md) | 결과 템플릿: [templates/build-report.md](templates/build-report.md)
 
 ---
