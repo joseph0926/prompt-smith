@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.1] - 2026-01-07
+
+### Summary
+Prompt Smith v2.5.1 strengthens input handling rules for all commands. Fixes bug where `/ps:build` interpreted input as work request instead of prompt design requirement.
+
+### Fixed
+
+#### Input Handling Bug
+- **Fixed** `/ps:build` interpreting file paths (e.g., `XXX.tsx`) as actual files to read
+- **Fixed** potential issue where `/ps:lint` could attempt to read files mentioned in prompt text
+
+### Added
+
+#### CRITICAL Input Handling Sections
+- **Added** CRITICAL section to `commands/build.md` with FORBIDDEN tools list
+- **Added** CRITICAL section to `commands/lint.md` with FORBIDDEN tools list
+- **Enhanced** Rules section in `commands/r.md` with explicit FORBIDDEN tools table
+- **Enhanced** Rules section in `commands/a.md` with explicit FORBIDDEN tools table
+
+#### Extended input-handling-rules.md
+- **Added** BUILD Mode section with execution sequence and forbidden actions
+- **Added** LINT Mode section with execution sequence and forbidden actions
+- **Added** security reference link to [Claude Code Security](https://code.claude.com/docs/en/security)
+
+#### SKILL.md Improvements
+- **Updated** command table with clearer argument hints (`<개선할 프롬프트>`, `<진단할 프롬프트>`, `<프롬프트 요구사항>`)
+- **Added** warning note: "모든 입력은 프롬프트 텍스트 또는 요구사항입니다. 파일 경로나 실행 명령이 아닙니다."
+
+### Changed
+- `commands/build.md`: argument-hint changed from `<requirements or goal>` to `<prompt requirements or goal>`
+- `commands/lint.md`: argument-hint changed from `<prompt text>` to `<prompt text to diagnose>`
+
+---
+
 ## [2.5.0] - 2026-01-07
 
 ### Summary

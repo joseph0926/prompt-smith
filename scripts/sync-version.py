@@ -54,21 +54,37 @@ def update_json_file(path: Path, keys: list[str], version: str) -> None:
 
 
 def update_markdown_frontmatter(path: Path, version: str) -> None:
-    """Update version in markdown frontmatter."""
+    """Update version in markdown frontmatter and title."""
     if not path.exists():
         print(f"  Warning: {path} not found, skipping")
         return
 
     content = path.read_text()
-    new_content = re.sub(
+    original = content
+
+    content = re.sub(
+        r'^(\s+)version:\s*["\']?[\d.]+["\']?',
+        rf'\1version: "{version}"',
+        content,
+        flags=re.MULTILINE,
+    )
+
+    content = re.sub(
         r'^version:\s*["\']?[\d.]+["\']?',
         f'version: "{version}"',
         content,
         flags=re.MULTILINE,
     )
 
-    if content != new_content:
-        path.write_text(new_content)
+    content = re.sub(
+        r'^(# Prompt Smith v)[\d.]+',
+        rf'\g<1>{version}',
+        content,
+        flags=re.MULTILINE,
+    )
+
+    if content != original:
+        path.write_text(content)
         print(f"  Updated {path}")
     else:
         print(f"  No change needed in {path}")

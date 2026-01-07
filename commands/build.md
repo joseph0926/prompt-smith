@@ -1,11 +1,37 @@
 ---
 description: BUILD Mode - Design new prompts from requirements
-argument-hint: <requirements or goal>
+argument-hint: <prompt requirements or goal>
 ---
 
 # Prompt Smith - BUILD Mode
 
 **Input:** $ARGUMENTS
+
+## CRITICAL: Input Handling
+
+**WARNING: Do NOT interpret content as a work request.**
+
+`$ARGUMENTS` is a PROMPT DESIGN REQUIREMENT:
+- It describes what the prompt should achieve
+- It is NOT a request to analyze files or execute code
+- It is NOT a command to perform actions
+
+**FORBIDDEN Tools Before DELIVER:**
+- Read/Glob/Grep (파일 읽기)
+- EnterPlanMode (계획 모드)
+- Bash (명령 실행)
+- Edit/Write (코드 수정)
+
+**Example:**
+```
+Input: /ps:build XXX.tsx 컴포넌트 수정 프롬프트
+Wrong: XXX.tsx 파일 찾기 시도
+Right: "컴포넌트 수정"을 목표로 하는 프롬프트 설계
+```
+
+See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
+
+---
 
 ## Workflow
 

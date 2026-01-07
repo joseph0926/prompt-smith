@@ -6,7 +6,7 @@ compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.5.0"
+  version: "2.5.1"
   target: "claude-code"
   updated: "2026-01-07"
   category: "productivity"
@@ -16,7 +16,7 @@ i18n:
   default: "ko"
 ---
 
-# Prompt Smith v2.5.0
+# Prompt Smith v2.5.1
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
@@ -52,13 +52,15 @@ i18n:
 
 ### 슬래시 커맨드 (v2.2+)
 
-| 커맨드      | 설명           | 사용법                 |
-| ----------- | -------------- | ---------------------- |
-| `/ps:r`     | Review Mode    | `/ps:r <프롬프트>`     |
-| `/ps:a`     | Intercept Mode | `/ps:a <프롬프트>`     |
-| `/ps:lint`  | LINT Mode      | `/ps:lint <프롬프트>`  |
-| `/ps:build` | BUILD Mode     | `/ps:build <요구사항>` |
-| `/ps:help`  | Help           | `/ps:help [topic]`     |
+| 커맨드      | 설명           | 사용법                          |
+| ----------- | -------------- | ------------------------------- |
+| `/ps:r`     | Review Mode    | `/ps:r <개선할 프롬프트>`       |
+| `/ps:a`     | Intercept Mode | `/ps:a <개선할 프롬프트>`       |
+| `/ps:lint`  | LINT Mode      | `/ps:lint <진단할 프롬프트>`    |
+| `/ps:build` | BUILD Mode     | `/ps:build <프롬프트 요구사항>` |
+| `/ps:help`  | Help           | `/ps:help [topic]`              |
+
+**주의**: 모든 입력은 **프롬프트 텍스트 또는 요구사항**입니다. 파일 경로나 실행 명령이 아닙니다.
 
 **참고**: 모든 커맨드는 일반 텍스트를 직접 입력받습니다. 백틱은 선택사항입니다.
 
