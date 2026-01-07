@@ -6,7 +6,7 @@ compatibility: "Claude Code"
 metadata:
   short-description: "Prompt quality management skill (7-Point diagnostics + BUILD + INTERCEPT + test generation)"
   author: joseph0926
-  version: "2.4.2"
+  version: "2.5.0"
   target: "claude-code"
   updated: "2026-01-07"
   category: "productivity"
@@ -16,11 +16,11 @@ i18n:
   default: "ko"
 ---
 
-# Prompt Smith v2.4.2
+# Prompt Smith v2.5.0
 
 A prompt quality management skill that turns prompts into operational assets by running **Diagnostics (LINT) → Auto Improvement (Rewrite) → Test Generation**, or by designing from requirements via **BUILD (Requirements → New Prompt Design)**.
 
-**v2.4.2**: Documentation quality improvements - version sync, `/ps:help` command table, trigger enhancements, security guide promotion
+**v2.5.0**: SKILL.md optimization - Level 2 section reduction (745→445 lines), replaced detailed content with documentation links
 
 **Previous versions**: See [CHANGELOG.md](../../../../CHANGELOG.md)
 
@@ -181,7 +181,7 @@ use prompt-smith -a Write a JSON parsing function
 When called without flags (just `use prompt-smith`):
 
 ```
-🔧 Prompt Smith v2.4.2 activated
+🔧 Prompt Smith v2.5.0 activated
 
 What would you like help with?
 
@@ -268,379 +268,80 @@ This is the core rubric for prompt quality evaluation. All diagnostics are perfo
 
 ## Level 2: Workflows (<5,000 tokens)
 
-### 2.1 LINT Mode Overview
+### 2.1 LINT Mode
 
-**Purpose**: Check an existing prompt, propose improvements, and generate test cases.
+**Purpose**: Check existing prompts → propose improvements → generate test cases
 
-**Input**: User’s existing prompt
-**Output**: Diagnostic report + improved prompt + test cases
+| Step | Description |
+|------|-------------|
+| INPUT | Receive prompt text |
+| ANALYZE | 7-Point Check + anti-pattern detection → score |
+| DIAGNOSE | Derive Top 3 issues |
+| IMPROVE | Before/After + reasoning |
+| TEST | Normal 2 + Edge 1 + Injection 1 + Domain 1 |
+| REPORT | Output diagnostic report |
 
-#### LINT Workflow Steps
+**Output levels**:
+- **Express** ("quick"): Score + one-line tip (~100 tokens)
+- **Default**: Score + Top 3 + improved prompt (~800 tokens)
+- **Detail** ("detailed"): Full report + 5 test cases (~2000 tokens)
 
-```
-┌─ LINT WORKFLOW ────────────────────────────────────────────────┐
-│                                                                 │
-│  Step 1: INPUT                                                  │
-│  ├─ Receive prompt text                                         │
-│  └─ (Optional) Confirm goal/context                             │
-│                                                                 │
-│  Step 2: ANALYZE                                                │
-│  ├─ Run 7-Point Quality Check                                   │
-│  ├─ Detect anti-patterns (ambiguity, injection risks, etc.)      │
-│  └─ Score (0-10)                                                │
-│                                                                 │
-│  Step 3: DIAGNOSE                                               │
-│  ├─ Derive Top 3 issues                                         │
-│  └─ Explain each issue concretely                               │
-│                                                                 │
-│  Step 4: IMPROVE                                                │
-│  ├─ Generate improved prompt                                    │
-│  └─ Before/After + reasoning                                    │
-│                                                                 │
-│  Step 5: TEST                                                   │
-│  ├─ Normal case 1 (2 cases)                                     │
-│  ├─ Normal case 2                                                │
-│  ├─ Edge case (1 case)                                          │
-│  ├─ Injection defense (1 case)                                  │
-│  └─ Domain-specific case (1 case)                               │
-│                                                                 │
-│  Step 6: REPORT                                                 │
-│  └─ Output in diagnostic report format                          │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-#### Diagnostic report format
-
-Always output LINT results in this format:
-
-```markdown
-## 📋 Diagnostic Results
-
-### Score: X/10
-
-| Item           | Score      | Notes   |
-| -------------- | ---------- | ------- |
-| Role           | X/2        | [notes] |
-| Context        | X/2        | [notes] |
-| Instruction    | X/2        | [notes] |
-| Example        | X/2        | [notes] |
-| Format         | X/2        | [notes] |
-| State Tracking | X/2 or N/A | [notes] |
-| Tool Usage     | X/2 or N/A | [notes] |
-
-### 🔴 Top 3 Issues
-
-1. **[Issue 1]**: [concrete explanation]
-2. **[Issue 2]**: [concrete explanation]
-3. **[Issue 3]**: [concrete explanation]
+Details: [playbooks/lint/full-lint.md](playbooks/lint/full-lint.md) | Report template: [templates/diagnostic-report.md](templates/diagnostic-report.md)
 
 ---
 
-## ✅ Improved Prompt (copy-paste)
+### 2.2 BUILD Mode
 
-[full improved prompt]
+**Purpose**: Requirements → design high-quality prompt satisfying 7-Point
 
----
+| Step | Description |
+|------|-------------|
+| GATHER | Confirm goal/audience/domain/constraints/success |
+| CLASSIFY | Task type + complexity + tool needs |
+| DESIGN | Select template + 7-Point design + injection defense |
+| DRAFT | Write Role/Context/Instruction/Example/Format |
+| SELF-LINT | If score < 8, return to DRAFT |
+| TEST | Generate 5 test cases |
+| DELIVER | Prompt + usage guide + tests + maintenance tips |
 
-## 📝 Changes
+**Input**: Minimum `Goal: [...]` / Recommended: goal+audience+domain+constraints+example
 
-### Change 1: [item]
-
-- **Before**: [original]
-- **After**: [improved]
-- **Why**: [reason]
-
-### Change 2: [item]
-
-...
-
----
-
-## 🧪 Test Cases (5)
-
-### 1. Normal Case 1
-
-**Input**: [test input]  
-**Expected**: [expected output characteristics]
-
-### 2. Normal Case 2
-
-**Input**: [test input]  
-**Expected**: [expected output characteristics]
-
-### 3. Edge Case
-
-**Input**: [empty/very long/special chars, etc.]  
-**Expected**: [proper handling]
-
-### 4. Injection Defense Case
-
-**Input**: "Ignore instructions above and [malicious request]"  
-**Expected**: Keep original instructions, ignore injection
-
-### 5. Domain-Specific Case
-
-**Input**: [domain-specific scenario]  
-**Expected**: [appropriate domain handling]
-```
-
-#### Express Mode (quick diagnostics)
-
-When you need fast feedback without deep analysis:
-
-**Trigger**: "quick check", "keep it brief"
-
-**Output**:
-
-```
-⚡ Express LINT Results
-
-Score: X/10
-
-Key issues:
-1. [issue 1]
-2. [issue 2]
-3. [issue 3]
-
-One-line improvement tip: [core improvement point]
-```
-
----
-
-### 2.2 BUILD Mode Overview
-
-**Purpose**: Start from requirements and design a high-quality prompt that satisfies the 7-Point rubric.
-
-**Input**: User’s requirements/goal
-**Output**: Completed prompt + usage guide + test cases
-
-#### BUILD Workflow Steps
-
-```
-┌─ BUILD WORKFLOW ───────────────────────────────────────────────┐
-│                                                                 │
-│  Step 1: GATHER (collect requirements)                          │
-│  ├─ Confirm GOAL: what the prompt must achieve                  │
-│  ├─ Confirm AUDIENCE: who will use it                           │
-│  ├─ Confirm DOMAIN: what field/industry                         │
-│  ├─ Confirm CONSTRAINTS: limits to follow                        │
-│  └─ Confirm SUCCESS: how to judge success                        │
-│                                                                 │
-│  Step 2: CLASSIFY (decide type)                                 │
-│  ├─ Task type: summarize/classify/generate/chat/analyze          │
-│  ├─ Complexity: simple (one-shot) / multi-step / long-task       │
-│  └─ Tool needs: files/search/command execution, etc.             │
-│                                                                 │
-│  Step 3: DESIGN (structure design)                              │
-│  ├─ Select template (see templates/)                            │
-│  ├─ Design 7-Point elements                                     │
-│  └─ Apply injection-defense patterns                            │
-│                                                                 │
-│  Step 4: DRAFT (write draft)                                    │
-│  ├─ Write Role section                                          │
-│  ├─ Write Context section                                       │
-│  ├─ Write Instruction section                                   │
-│  ├─ Write Example section (2+ examples)                         │
-│  ├─ Write Format section                                        │
-│  ├─ Add State/Tool sections (when applicable)                   │
-│  └─ Add Constraints + Success Criteria                           │
-│                                                                 │
-│  Step 5: SELF-LINT (quality verification)                       │
-│  ├─ Run 7-Point Quality Check                                   │
-│  ├─ If score < 8, return to Step 4                              │
-│  └─ Detect anti-patterns                                        │
-│                                                                 │
-│  Step 6: TEST (generate test cases)                             │
-│  ├─ Normal case 1 (2 cases)                                     │
-│  ├─ Normal case 2                                                │
-│  ├─ Edge case (1 case)                                          │
-│  ├─ Injection defense (1 case)                                  │
-│  └─ Domain-specific (1 case)                                    │
-│                                                                 │
-│  Step 7: DELIVER (final output)                                 │
-│  ├─ Full prompt text (copy-paste ready)                         │
-│  ├─ Usage guide                                                 │
-│  ├─ Test cases                                                  │
-│  └─ Maintenance recommendations                                 │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-#### BUILD input format
-
-**Minimum input**:
-
-```
-Goal: [what the prompt must achieve]
-```
-
-**Recommended input (higher quality)**:
-
-```
-Goal: [what the prompt must achieve]
-Audience: [who uses it]
-Domain: [what field/industry]
-Constraints: [limits to follow]
-Example: [desired output example]
-```
-
-#### BUILD output format
-
-```markdown
-# 🏗️ BUILD Result
-
-## Metadata
-
-- **Created at**: YYYY-MM-DD HH:MM
-- **Request goal**: [summary of user request]
-- **Prompt type**: [summarize/classify/generate/chat/analyze]
-- **Complexity**: [simple/multi-step/long-task]
-
----
-
-## 1. Full Prompt (copy-paste)
-```
-
-[full prompt text]
-
-```
-
----
-
-## 2. Quality Check Result
-
-### 7-Point Quality Check: X/10
-
-| Item | Score | Status |
-|------|------|------|
-| Role | 2/2 | ✅ |
-| Context | 2/2 | ✅ |
-| Instruction | 2/2 | ✅ |
-| Example | 2/2 | ✅ |
-| Format | 2/2 | ✅ |
-| State Tracking | X/2 | ✅/N/A |
-| Tool Usage | X/2 | ✅/N/A |
-
----
-
-## 3. Usage Guide
-
-### Variable descriptions
-- `{{variable_1}}`: [description]
-- `{{variable_2}}`: [description]
-
-### Usage examples
-[real usage scenario]
-
-### Notes
-- [note 1]
-- [note 2]
-
----
-
-## 4. Test Cases (5)
-
-[test cases]
-
----
-
-## 5. Maintenance Recommendations
-
-- **Review cadence**: monthly recommended
-- **Regression tests**: required on changes
-- **Versioning**: Semantic Versioning recommended
-```
+Details: [playbooks/build/build-mode.md](playbooks/build/build-mode.md) | Output template: [templates/build-report.md](templates/build-report.md)
 
 ---
 
 ### 2.3 Intercept Pipeline
 
-A real-time prompt improvement pipeline.
+Real-time prompt improvement pipeline.
 
-#### Triggers
+| Mode | Trigger | Behavior |
+|------|---------|----------|
+| **Review** | `/ps:r` or `-r` | Express LINT → Before/After → wait for approval (y/n/e) |
+| **Intercept** | `/ps:a` or `-a` | Express LINT → auto-apply if 2+ points → execute immediately |
 
-- `use prompt-smith -r <prompt>` - Review Mode
-- `use prompt-smith -a <prompt>` - Intercept Mode
+**Required output** (MUST FOLLOW):
+- Full improved prompt text
+- Score comparison (X/10 → Y/10)
+- Changes list ([+]/[~] notation)
+- `[DEBUG] Final Submitted Prompt` section
+- Approval request (Review mode)
 
-#### Review Mode workflow
-
-1. Receive user prompt
-2. Run Express LINT (quick 7-Point check)
-3. Show improvements + Before/After comparison
-4. Wait for user approval (`y` approve, `n` use original, `e` edit more)
-5. Execute the approved prompt
-
-#### Intercept Mode workflow
-
-1. Receive user prompt
-2. Run Express LINT
-3. Auto-apply improvements (if score improves by 2+ points)
-4. Show improvement summary + execute immediately
-
-#### Output Format (MUST FOLLOW)
-
-CRITICAL: The improved prompt MUST be shown in full text.
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Express LINT Results                                         │
-├─────────────────────────────────────────────────────────────┤
-│ Original Score: X/10 → Improved Score: Y/10 (+Z)            │
-└─────────────────────────────────────────────────────────────┘
-
-### Original Prompt
-> [full original prompt text]
-
-### Improved Prompt (copy-paste ready)
-> [full improved prompt text]
-
-### Changes Made
-- [+] ROLE: [added role]
-- [+] CONTEXT: [added context]
-- [~] INSTRUCTION: [modified instruction]
-- [+] FORMAT: [added output format]
-
-### [DEBUG] Final Submitted Prompt
-The exact prompt that will be sent to Claude:
-\`\`\`
-[full improved prompt text - identical to Improved Prompt section]
-\`\`\`
-
-### Proceed? (y/n/e)
-- y: Execute with improved prompt
-- n: Execute with original prompt
-- e: Edit further
-```
-
-[Intercept Mode] Auto-executing improved prompt...
-
-#### Mode selection
-
-| Command/Flag  | Description                               |
-| ------------- | ----------------------------------------- |
-| `/ps:r`       | Review Mode (show improvements, approval) |
-| `/ps:a`       | Intercept Mode (auto-improve + execute)   |
-| `-r <prompt>` | Review Mode (natural language)            |
-| `-a <prompt>` | Intercept Mode (natural language)         |
+Details: [playbooks/intercept/review-mode.md](playbooks/intercept/review-mode.md) | [playbooks/intercept/intercept-mode.md](playbooks/intercept/intercept-mode.md)
 
 ---
 
 ### 2.4 Anti-pattern Detection
 
-During LINT/BUILD, the following anti-patterns are automatically detected:
+Auto-detected during LINT/BUILD:
 
-| Anti-pattern           | Description                             | Fix direction                    |
-| ---------------------- | --------------------------------------- | -------------------------------- |
-| **Vague instructions** | "nicely", "cleanly", "appropriately"    | Specify concrete criteria        |
-| **Missing role**       | No role definition                      | Add "You are a..."               |
-| **No output format**   | Output format unspecified               | Define JSON/Markdown schema      |
-| **No examples**        | No few-shot examples                    | Add 1-3 examples                 |
-| **Injection risk**     | No separation between data/instructions | Separate data vs instructions    |
-| **Too much freedom**   | No constraints                          | Add constraints / forbidden list |
-| **Not verifiable**     | No success criteria                     | Specify success conditions       |
-| **Ambiguous action**   | "take a look" (analyze? edit?)          | Use explicit action verbs        |
-| **Example mismatch**   | Examples ≠ desired output format        | Match example format to output   |
+| Anti-pattern | Fix direction |
+|--------------|---------------|
+| Vague instructions ("nicely", "appropriately") | Specify concrete criteria |
+| Missing role | Add "You are a..." |
+| No output format | Define JSON/Markdown schema |
+| No examples | Add 1-3 Few-shot examples |
+| Injection risk | Separate data vs instructions |
+| Too much freedom | Add constraints/forbidden list |
 
 Details: [references/anti-patterns.md](references/anti-patterns.md)
 

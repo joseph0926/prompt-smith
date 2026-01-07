@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.0] - 2026-01-07
+
+### Summary
+Prompt Smith v2.5.0 optimizes SKILL.md file size from 700+ lines to under 500 lines to meet Claude Code Skill recommended limit. Level 2 detailed content replaced with documentation links.
+
+### Changed
+
+#### SKILL.md Size Optimization
+- **Reduced** ko SKILL.md from 748 to 444 lines (-304 lines, -41%)
+- **Reduced** en SKILL.md from 745 to 445 lines (-300 lines, -40%)
+- **Target achieved**: Both files now under 500 lines (Claude Code Skill recommended limit)
+
+#### Level 2 Section Summarization
+- **LINT Workflow**: 30-line diagram → 6-line table + link to `playbooks/lint/full-lint.md`
+- **Diagnostic Report**: 70-line template → link to `templates/diagnostic-report.md`
+- **BUILD Workflow**: 50-line diagram → 7-line table + link to `playbooks/build/build-mode.md`
+- **BUILD Output**: 65-line template → link to `templates/build-report.md`
+- **Intercept Pipeline**: 50-line detail → 15-line summary + links to `playbooks/intercept/`
+- **Anti-patterns**: 9 items → 6 core items + link to `references/anti-patterns.md`
+
+### Preserved
+- **Level 1**: All trigger keywords and quick start content unchanged (~265 lines)
+- **Level 3**: Reference links unchanged
+- **Functionality**: All workflows accessible via documentation links
+- **i18n parity**: ko/en files maintain structural consistency
+
+### Validation
+- All 7 documentation links verified to exist
+- Trigger activation preserved in Level 1
+- Rollback available via git
+
+---
+
 ## [2.4.2] - 2026-01-07
 
 ### Summary
