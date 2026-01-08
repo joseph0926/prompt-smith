@@ -188,6 +188,55 @@ jobs:
           fi
           echo "✅ All internal links are valid"
 
+      - name: Check commands/ directory
+        run: |
+          echo "Checking commands/ directory..."
+          ERRORS=0
+
+          # Check required commands exist
+          for cmd in help.md lint.md build.md r.md a.md; do
+            if [ ! -f "commands/$cmd" ]; then
+              echo "❌ Missing required command: commands/$cmd"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          # Check internal links in commands/
+          for file in $(find commands -name "*.md" 2>/dev/null); do
+            links=$(grep -oE '\[([^\]]+)\]\(([^)]+)\)' "$file" 2>/dev/null | \
+              grep -oE '\]\([^)]+\)' | sed 's/\](//' | sed 's/)$//' || true)
+
+            dir=$(dirname "$file")
+            for link in $links; do
+              if [[ "$link" == http* ]] || [[ "$link" == "#"* ]] || [[ "$link" == "mailto:"* ]]; then
+                continue
+              fi
+
+              link_path="${link%%#*}"
+              if [ -z "$link_path" ]; then
+                continue
+              fi
+
+              if [[ "$link_path" == /* ]]; then
+                target="$link_path"
+              else
+                target="$dir/$link_path"
+              fi
+
+              if [ ! -f "$target" ] && [ ! -d "$target" ]; then
+                echo "❌ Broken link in $file: $link"
+                ERRORS=$((ERRORS + 1))
+              fi
+            done
+          done
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "Found $ERRORS issues in commands/. Please fix them."
+            exit 1
+          fi
+          echo "✅ commands/ directory check passed"
+
       - name: Check extended version consistency
         run: |
           VERSION_FILE=$(cat VERSION 2>/dev/null || echo "")

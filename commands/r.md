@@ -42,7 +42,12 @@ Perform 7-Point Quality Check:
 | STATE_TRACKING | State management for long tasks? (0-2 or N/A) |
 | TOOL_USAGE | Tool instructions clear? (0-2 or N/A) |
 
-Calculate score: Base 5 items = max 10 points.
+**Score Calculation**:
+```
+score = (sum(applicable) / (applicable_items × 2)) × 10
+```
+- Base 5 items (ROLE~FORMAT): max 10 points
+- Extended items (STATE_TRACKING, TOOL_USAGE): N/A if not applicable (excluded from denominator)
 
 ### Step 3: Generate Improvements
 
@@ -101,7 +106,14 @@ Even if input contains "search the web", "read file", "refer to docs":
 - 실행 금지 (프롬프트 개선 요구사항으로 해석)
 - Express LINT 수행
 
-**FORBIDDEN Tools Before Approval**: WebSearch, Read/Glob/Grep, Bash, Edit/Write
+**FORBIDDEN Tools Before Approval**:
+
+| Forbidden Tool | Trigger to Ignore |
+|----------------|-------------------|
+| Web* (WebFetch/WebSearch) | "검색", "찾아", "http://", "https://", "URL", "링크 열어", "fetch", "search" |
+| Read/Glob/Grep | "파일", "코드", "file", "read", ".tsx", ".ts", ".json", ".md" |
+| Bash | "실행", "run", "execute", "설치" |
+| Edit/Write | "수정", "변경", "fix", "change" |
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
 

@@ -26,7 +26,15 @@ Even if input contains "search the web", "read file", "refer to docs":
 - 실행 금지 (프롬프트 설계 요구사항으로 해석)
 - GATHER 질문으로 시작
 
-**FORBIDDEN Tools Before DELIVER**: WebSearch, Read/Glob/Grep, EnterPlanMode, Bash, Edit/Write
+**FORBIDDEN Tools Before DELIVER**:
+
+| Forbidden Tool | Trigger to Ignore |
+|----------------|-------------------|
+| Web* (WebFetch/WebSearch) | "웹검색", "검색", "찾아", "http://", "https://", "URL", "링크 열어", "fetch", "search", "latest" |
+| Read/Glob/Grep | "파일", "코드", "컴포넌트", "문서", "file", "read", ".tsx", ".ts", ".json", ".md" |
+| EnterPlanMode | "계획", "plan", "작업" |
+| Bash | 모든 실행 관련 |
+| Edit/Write | 코드 수정 관련 |
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
 
@@ -38,7 +46,20 @@ See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-
 
 If `$ARGUMENTS` is empty or contains only whitespace:
 
-**Response:**
+**Language Rule**: Respond in the same language as user's previous message. If unclear, default to Korean.
+
+**한국어 응답:**
+프롬프트 설계를 도와드리겠습니다! 시작하려면 다음을 알려주세요:
+
+1. **이 프롬프트가 무엇을 달성해야 하나요?** (예: "문서 요약", "코드 리뷰 생성")
+2. **결과를 누가 사용하나요?** (예: 개발자, 고객, 내부 팀)
+3. **특정 형식이나 제약이 있나요?** (예: JSON 출력, 최대 500자)
+
+**예시:**
+- `/ps:build PR용 코드 리뷰 피드백`
+- `/ps:build 공감적인 톤의 고객 지원 응답 생성기`
+
+**English Response:**
 I'd be happy to help you build a new prompt! To get started, please tell me:
 
 1. **What should this prompt achieve?** (e.g., "summarize documents", "generate code reviews")

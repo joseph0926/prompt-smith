@@ -16,7 +16,7 @@
 |---------|-------------|----------|
 | `/ps:r <prompt>` | **Review Mode** - Show improvements, await approval | Daily use (safe) |
 | `/ps:lint <prompt>` | **LINT Mode** - Full diagnosis with test cases | Debugging prompts |
-| `/ps:a <prompt>` | **Auto Mode** - Improve and execute immediately | Quick tasks |
+| `/ps:a <prompt>` | **Intercept Mode** - Auto-improve and execute immediately | Quick tasks |
 | `/ps:build <goal>` | **BUILD Mode** - Design from requirements | New prompts |
 | `/ps:help [topic]` | **Help** - Show usage guide and command reference | Getting started |
 

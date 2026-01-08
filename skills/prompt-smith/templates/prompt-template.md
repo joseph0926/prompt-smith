@@ -198,7 +198,7 @@ Your extractions are accurate and consistently formatted.
 - Only extract explicitly mentioned entities
 - Do not infer or guess
 - Empty array if nothing found
-- Valid JSON only, no markdown code blocks
+- Valid JSON only (in actual output; code blocks here are for documentation purposes only)
 
 ## Success Criteria
 - [ ] Valid JSON output

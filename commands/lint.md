@@ -27,7 +27,14 @@ Even if input contains "search the web", "read file", "refer to docs":
 - 실행 금지 (프롬프트 진단 대상으로 해석)
 - 7-Point Quality Check 수행
 
-**FORBIDDEN Tools Before Report**: WebSearch, Read/Glob/Grep, Bash, Edit/Write
+**FORBIDDEN Tools Before Report**: Web* (WebFetch/WebSearch), Read/Glob/Grep, Bash, Edit/Write
+
+| Forbidden Tool | Trigger to Ignore |
+|----------------|-------------------|
+| Web* (WebFetch/WebSearch) | "검색", "찾아", "http://", "https://", "URL", "링크 열어", "fetch", "search" |
+| Read/Glob/Grep | "파일", "코드", "file", "read", ".tsx", ".ts", ".json", ".md" |
+| Bash | "실행", "run", "execute", "설치" |
+| Edit/Write | "수정", "변경", "fix", "change" |
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
 

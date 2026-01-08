@@ -1,275 +1,275 @@
-# Intercept Mode Guide
+# 인터셉트 모드 가이드
 
-Automatic prompt improvement and immediate execution without user approval.
-
----
-
-## Overview
-
-Intercept Mode automatically improves your prompt and executes it immediately when the improvement is significant (default: +2 points).
-
-```
-User Input -> Express LINT -> Auto-Improve -> Show Summary -> Execute Immediately
-```
+사용자 승인 없이 자동으로 프롬프트를 개선하고 즉시 실행하는 모드입니다.
 
 ---
 
-## Trigger
+## 개요
+
+인터셉트 모드는 개선 폭이 유의미할 때(기본값: +2점) 자동으로 프롬프트를 개선하고 즉시 실행합니다.
 
 ```
-/ps:a <your prompt>
+사용자 입력 -> Express LINT -> 자동 개선 -> 요약 표시 -> 즉시 실행
 ```
 
 ---
 
-## Workflow
-
-### Step 1: Input
+## 트리거
 
 ```
-/ps:a Write a Python script to sort files
-```
-
-### Step 2: Express LINT + Auto-Improve
-
-The skill automatically:
-1. Analyzes the original prompt (7-Point Check)
-2. Generates improvements
-3. Calculates score difference
-
-### Step 3: Decision
-
-If improvement >= threshold (default 2 points):
-- Auto-apply improvements
-- Show summary
-- Execute immediately
-
-If improvement < threshold:
-- Use original prompt
-- Show notice
-- Execute immediately
-
-### Step 4: Execute
-
-```
-Auto-improved (3/10 -> 8/10)
-
-Changes:
-- [+] Added ROLE: Python developer
-- [+] Specified sorting criteria
-- [+] Defined output format
-
-Executing improved prompt...
+/ps:a <프롬프트>
 ```
 
 ---
 
-## Output Format
+## 워크플로우
 
-### When Improved
-
-```
-Auto-improved (X/10 -> Y/10)
-
-Changes:
-- [+] [addition]
-- [~] [modification]
-
-Executing improved prompt...
-```
-
-### When Not Improved
+### 단계 1: 입력
 
 ```
-No significant improvement possible (X/10)
-Executing original prompt...
+/ps:a 파일을 정렬하는 Python 스크립트를 작성해줘
 ```
 
----
+### 단계 2: Express LINT + 자동 개선
 
-## Mode Selection
+스킬이 자동으로:
+1. 원본 프롬프트 분석 (7-Point 체크)
+2. 개선사항 생성
+3. 점수 차이 계산
 
-| Command | Description |
-|---------|-------------|
-| `/ps:a` | Intercept Mode (auto-improve and execute) |
-| `/ps:r` | Review Mode (show improvements, await approval) |
+### 단계 3: 결정
 
----
+개선 폭 >= 임계값(기본값 2점)인 경우:
+- 자동으로 개선사항 적용
+- 요약 표시
+- 즉시 실행
 
-## Behavior Matrix
+개선 폭 < 임계값인 경우:
+- 원본 프롬프트 사용
+- 알림 표시
+- 즉시 실행
 
-| Original Score | Improved Score | Difference | Action |
-|----------------|----------------|------------|--------|
-| 3 | 8 | +5 | Auto-improve |
-| 5 | 7 | +2 | Auto-improve |
-| 6 | 7 | +1 | Use original |
-| 8 | 9 | +1 | Use original |
-| 9 | 10 | +1 | Use original |
-
----
-
-## Best Practices
-
-### When to Use Intercept Mode
-
-- Repetitive tasks with similar prompts
-- Quick iterations where speed matters
-- When you trust the improvement logic
-- Batch processing scenarios
-
-### When NOT to Use Intercept Mode
-
-- Critical or irreversible tasks
-- When original phrasing is important
-- First time using a new type of prompt
-- When you need to verify improvements
-
-### Threshold Guidelines
-
-| Threshold | Use Case |
-|-----------|----------|
-| 1 | Accept any improvement |
-| 2 | Standard (default) |
-| 3 | Conservative |
-| 4+ | Only major improvements |
-
-> **Note**: Threshold 값(기본값: 2점)은 현재 고정되어 있으며 사용자가 설정할 수 없습니다.
-> 이는 일관된 동작을 보장하기 위한 의도적인 설계입니다. 사용자 설정 가능한 threshold는 향후 릴리즈에서 추가될 수 있습니다.
-
----
-
-## Examples
-
-### Example 1: Quick Coding Task
-
-**Input**:
-```
-/ps:a Fix the bug in this function
-```
-
-**Output**:
-```
-Auto-improved (2/10 -> 7/10)
-
-Changes:
-- [+] Added ROLE: senior debugger
-- [+] Specified debugging approach
-- [+] Defined output format
-
-Executing improved prompt...
-
-[AI response follows with improved context]
-```
-
-### Example 2: No Improvement Needed
-
-**Input**:
-```
-/ps:a You are a Python expert. Write a function that takes a list of integers and returns the sum. Include type hints and a docstring. Output the function only, no explanation.
-```
-
-**Output**:
-```
-No significant improvement possible (9/10)
-Executing original prompt...
-
-[AI response follows with original prompt]
-```
-
-### Example 3: Batch Processing
-
-For multiple prompts in sequence:
+### 단계 4: 실행
 
 ```
-/ps:a Summarize document 1
-/ps:a Summarize document 2
-/ps:a Summarize document 3
-```
+자동 개선됨 (3/10 -> 8/10)
 
-Each prompt is automatically improved and executed without interruption.
+변경사항:
+- [+] ROLE 추가: Python 개발자
+- [+] 정렬 기준 지정
+- [+] 출력 형식 정의
 
----
-
-## Comparison: Review vs Intercept
-
-| Aspect | Review Mode | Intercept Mode |
-|--------|-------------|----------------|
-| Approval | Required | Automatic |
-| Speed | Slower | Faster |
-| Control | Full | Limited |
-| Visibility | Full details | Summary only |
-| Best for | Critical tasks | Quick iterations |
-
----
-
-## Fallback Behavior
-
-If Express LINT fails or times out:
-- Original prompt is used
-- Warning is displayed
-- Execution continues
-
-```
-[Warning] Express LINT unavailable, using original prompt
-Executing original prompt...
+개선된 프롬프트 실행 중...
 ```
 
 ---
 
-## Next Steps
+## 출력 형식
 
-- [Review Mode](review-mode.md) - Manual approval workflow
-- [Express LINT](../lint/express-lint.md) - Quick diagnosis details
-- [7-Point Quality Check](../../references/quality-checklist.md)
+### 개선된 경우
+
+```
+자동 개선됨 (X/10 -> Y/10)
+
+변경사항:
+- [+] [추가]
+- [~] [수정]
+
+개선된 프롬프트 실행 중...
+```
+
+### 개선하지 않은 경우
+
+```
+유의미한 개선 불가 (X/10)
+원본 프롬프트 실행 중...
+```
 
 ---
 
-## Anti-Patterns
+## 모드 선택
 
-### Bad Example 1: Tool calls before LINT
+| 명령어 | 설명 |
+|--------|------|
+| `/ps:a` | 인터셉트 모드 (자동 개선 후 즉시 실행) |
+| `/ps:r` | 리뷰 모드 (개선사항 표시, 승인 대기) |
+
+---
+
+## 동작 매트릭스
+
+| 원본 점수 | 개선 점수 | 차이 | 동작 |
+|----------|----------|------|------|
+| 3 | 8 | +5 | 자동 개선 |
+| 5 | 7 | +2 | 자동 개선 |
+| 6 | 7 | +1 | 원본 사용 |
+| 8 | 9 | +1 | 원본 사용 |
+| 9 | 10 | +1 | 원본 사용 |
+
+---
+
+## 모범 사례
+
+### 인터셉트 모드 사용 시기
+
+- 유사한 프롬프트를 반복 사용할 때
+- 속도가 중요한 빠른 반복 작업
+- 개선 로직을 신뢰할 때
+- 배치 처리 시나리오
+
+### 인터셉트 모드 사용하지 말아야 할 때
+
+- 중요하거나 되돌릴 수 없는 작업
+- 원본 표현이 중요할 때
+- 새로운 유형의 프롬프트를 처음 사용할 때
+- 개선사항을 확인해야 할 때
+
+### 임계값 가이드라인
+
+| 임계값 | 사용 사례 |
+|-------|----------|
+| 1 | 어떤 개선이든 수용 |
+| 2 | 표준 (기본값) |
+| 3 | 보수적 |
+| 4+ | 주요 개선만 |
+
+> **참고**: 임계값(기본값: 2점)은 현재 고정되어 있으며 사용자가 설정할 수 없습니다.
+> 이는 일관된 동작을 보장하기 위한 의도적인 설계입니다. 사용자 설정 가능한 임계값은 향후 릴리즈에서 추가될 수 있습니다.
+
+---
+
+## 예제
+
+### 예제 1: 빠른 코딩 작업
+
+**입력**:
+```
+/ps:a 이 함수의 버그를 고쳐줘
+```
+
+**출력**:
+```
+자동 개선됨 (2/10 -> 7/10)
+
+변경사항:
+- [+] ROLE 추가: 시니어 디버거
+- [+] 디버깅 접근법 지정
+- [+] 출력 형식 정의
+
+개선된 프롬프트 실행 중...
+
+[개선된 맥락으로 AI 응답이 이어짐]
+```
+
+### 예제 2: 개선 불필요
+
+**입력**:
+```
+/ps:a 당신은 Python 전문가입니다. 정수 리스트를 받아 합계를 반환하는 함수를 작성하세요. 타입 힌트와 docstring을 포함하세요. 함수만 출력하고 설명은 제외하세요.
+```
+
+**출력**:
+```
+유의미한 개선 불가 (9/10)
+원본 프롬프트 실행 중...
+
+[원본 프롬프트로 AI 응답이 이어짐]
+```
+
+### 예제 3: 배치 처리
+
+연속된 여러 프롬프트:
 
 ```
-User: /ps:a 이 파일을 읽고 분석해줘
-Assistant: [Read 호출] 파일을 읽겠습니다...
+/ps:a 문서 1 요약
+/ps:a 문서 2 요약
+/ps:a 문서 3 요약
 ```
 
-Problem: Interpreted "파일을 읽고" as a command to call Read tool.
+각 프롬프트가 자동으로 개선되고 중단 없이 실행됩니다.
 
-**Correct behavior**: Treat entire input as a prompt, improve it, then execute.
+---
 
-```
-User: /ps:a 이 파일을 읽고 분석해줘
-Assistant:
-Auto-improved (2/10 -> 7/10)
+## 비교: 리뷰 vs 인터셉트
 
-Changes:
-- [+] Added ROLE: code analyst
-- [+] Specified analysis criteria
-- [+] Defined output format
+| 측면 | 리뷰 모드 | 인터셉트 모드 |
+|-----|----------|-------------|
+| 승인 | 필수 | 자동 |
+| 속도 | 느림 | 빠름 |
+| 제어 | 완전 | 제한적 |
+| 가시성 | 전체 상세 | 요약만 |
+| 적합한 상황 | 중요한 작업 | 빠른 반복 |
 
-Executing improved prompt...
-```
+---
 
-### Bad Example 2: Web search before LINT
+## 폴백 동작
 
-```
-User: /ps:a 최신 AI 트렌드를 검색해서 요약해줘
-Assistant: [WebSearch 호출] AI 트렌드를 검색하겠습니다...
-```
-
-Problem: Interpreted "검색" as a command to call WebSearch tool.
-
-**Correct behavior**: LINT first, then execute improved prompt.
+Express LINT가 실패하거나 시간 초과된 경우:
+- 원본 프롬프트 사용
+- 경고 표시
+- 실행 계속
 
 ```
-User: /ps:a 최신 AI 트렌드를 검색해서 요약해줘
-Assistant:
-Auto-improved (3/10 -> 8/10)
+[경고] Express LINT 사용 불가, 원본 프롬프트 사용
+원본 프롬프트 실행 중...
+```
 
-Changes:
-- [+] Added ROLE: AI researcher
-- [+] Specified search scope and criteria
-- [+] Defined summary format
+---
 
-Executing improved prompt...
+## 다음 단계
+
+- [리뷰 모드](review-mode.md) - 수동 승인 워크플로우
+- [Express LINT](../lint/express-lint.md) - 빠른 진단 상세
+- [7-Point 품질 체크리스트](../../references/quality-checklist.md)
+
+---
+
+## 안티패턴
+
+### 나쁜 예제 1: LINT 전 도구 호출
+
+```
+사용자: /ps:a 이 파일을 읽고 분석해줘
+어시스턴트: [Read 호출] 파일을 읽겠습니다...
+```
+
+문제: "파일을 읽고"를 Read 도구 호출 명령으로 해석함.
+
+**올바른 동작**: 전체 입력을 프롬프트로 취급하고, 개선한 후 실행.
+
+```
+사용자: /ps:a 이 파일을 읽고 분석해줘
+어시스턴트:
+자동 개선됨 (2/10 -> 7/10)
+
+변경사항:
+- [+] ROLE 추가: 코드 분석가
+- [+] 분석 기준 지정
+- [+] 출력 형식 정의
+
+개선된 프롬프트 실행 중...
+```
+
+### 나쁜 예제 2: LINT 전 웹 검색
+
+```
+사용자: /ps:a 최신 AI 트렌드를 검색해서 요약해줘
+어시스턴트: [WebSearch 호출] AI 트렌드를 검색하겠습니다...
+```
+
+문제: "검색"을 WebSearch 도구 호출 명령으로 해석함.
+
+**올바른 동작**: 먼저 LINT, 그 다음 개선된 프롬프트 실행.
+
+```
+사용자: /ps:a 최신 AI 트렌드를 검색해서 요약해줘
+어시스턴트:
+자동 개선됨 (3/10 -> 8/10)
+
+변경사항:
+- [+] ROLE 추가: AI 연구원
+- [+] 검색 범위와 기준 지정
+- [+] 요약 형식 정의
+
+개선된 프롬프트 실행 중...
 ```

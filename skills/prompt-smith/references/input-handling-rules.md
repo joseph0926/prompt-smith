@@ -38,7 +38,7 @@ Common rules for all Prompt Smith commands.
 
 | Forbidden Tool | Trigger to Ignore |
 |----------------|-------------------|
-| WebSearch | "검색", "찾아", "최신", "search", "find" |
+| Web* (WebFetch/WebSearch) | "검색", "찾아", "최신", "search", "find", "http://", "https://", "URL", "링크 열어", "fetch" |
 | Read/Glob/Grep | "파일", "코드", "읽어", "file", "read" |
 | Bash | "실행", "run", "execute", "설치" |
 | Edit/Write | "수정", "변경", "fix", "change", "update" |
@@ -116,7 +116,7 @@ When /ps:build is invoked:
 
 | Forbidden Tool | Trigger to Ignore |
 |----------------|-------------------|
-| WebSearch | "웹검색", "검색", "찾아", "최신", "search", "find", "latest" |
+| Web* (WebFetch/WebSearch) | "웹검색", "검색", "찾아", "최신", "search", "find", "latest", "http://", "https://", "URL", "링크 열어", "fetch" |
 | Read/Glob/Grep | "파일", "코드", "컴포넌트", "문서", "file", "read", ".tsx", ".ts", ".json", ".md" |
 | EnterPlanMode | "계획", "plan", "작업" |
 | Bash | 모든 실행 관련 |

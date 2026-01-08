@@ -215,6 +215,87 @@ WHEN TO USE
   - Creating prompt templates for teams
 ```
 
+### Topic: review
+
+```
++----------------------------------------------------------+
+| Review Mode Guide                                         |
++----------------------------------------------------------+
+
+USAGE
+  /ps:r <your prompt here>
+  /ps:r Write a function to parse JSON
+
+WORKFLOW
+  1. Parse input as literal prompt text
+  2. Run Express LINT (7-Point Quality Check)
+  3. Generate improved version
+  4. Show before/after comparison with score
+  5. Await user approval (y/n/e)
+  6. Execute approved prompt
+
+OUTPUT FORMAT
+  - Original Score → Improved Score (+delta)
+  - Original Prompt (quoted)
+  - Improved Prompt (copy-paste ready)
+  - Changes Made (additions/modifications)
+  - [DEBUG] Final Submitted Prompt
+  - Approval prompt (y/n/e)
+
+APPROVAL OPTIONS
+  y: Execute with improved prompt
+  n: Execute with original prompt
+  e: Edit the prompt further
+
+WHEN TO USE
+  - Testing prompt improvements safely
+  - Production prompt modifications
+  - When you want control over changes
+```
+
+### Topic: intercept
+
+```
++----------------------------------------------------------+
+| Intercept Mode Guide                                      |
++----------------------------------------------------------+
+
+USAGE
+  /ps:a <your prompt here>
+  /ps:a Write a function to parse JSON
+
+WORKFLOW
+  1. Parse input as literal prompt text
+  2. Run Express LINT (7-Point Quality Check)
+  3. Calculate potential improvement
+  4. Auto-decision:
+     - If improvement >= 2 points: Apply and execute
+     - If improvement < 2 points: Execute original
+  5. Show summary and execute immediately
+
+OUTPUT FORMAT
+  If improved:
+  +----------------------------------------------------------+
+  | Auto-improved: X/10 -> Y/10 (+Z)                         |
+  +----------------------------------------------------------+
+  Changes:
+  - [+] [additions]
+  - [~] [modifications]
+  Executing improved prompt...
+
+  If not improved:
+  +----------------------------------------------------------+
+  | No significant improvement possible: X/10                 |
+  +----------------------------------------------------------+
+  Executing original prompt...
+
+WHEN TO USE
+  - Quick, low-stakes tasks
+  - Rapid iteration
+  - When you trust auto-improvements
+  - Casual exploration prompts
+```
+
 ## Rules
 
 - Always show the appropriate section based on topic

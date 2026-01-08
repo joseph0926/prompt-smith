@@ -6,7 +6,7 @@ compatibility: "Claude Code"
 metadata:
   short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
   author: joseph0926
-  version: "2.5.2"
+  version: "2.5.3"
   target: "claude-code"
   updated: "2026-01-08"
   category: "productivity"
@@ -16,7 +16,7 @@ i18n:
   default: "ko"
 ---
 
-# Prompt Smith v2.5.2
+# Prompt Smith v2.5.3
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
@@ -183,7 +183,7 @@ prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 플래그 없이 호출 시 (`prompt-smith 사용`만):
 
 ```
-🔧 Prompt Smith v2.5.0 활성화
+🔧 Prompt Smith v2.5.2 활성화
 
 어떤 작업을 도와드릴까요?
 
@@ -444,7 +444,7 @@ LINT/BUILD 시 자동 탐지:
 
 | Phase   | 기능                               | 상태    |
 | ------- | ---------------------------------- | ------- |
-| **1.0** | LINT Mode (5-Point)                | ✅ 완료 |
+| **1.0** | LINT Mode (기본 5항목)             | ✅ 완료 |
 | **2.0** | BUILD Mode + 7-Point               | ✅ 완료 |
 | **2.1** | Intercept Pipeline                 | ✅ 현재 |
 | **3.0** | DEBUG Mode (실패 분석 + 재발 방지) | 예정    |

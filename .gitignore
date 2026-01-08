@@ -1,1 +1,30 @@
+# macOS
 .DS_Store
+__MACOSX/
+
+# Build outputs
+dist/
+build/
+*.zip
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+.temp*/
+*.tmp

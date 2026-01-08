@@ -1,322 +1,326 @@
-# Review Mode Guide
+# 리뷰 모드 가이드
 
-Real-time prompt improvement with user approval before execution.
-
----
-
-## Overview
-
-Review Mode intercepts your prompt, improves it using Express LINT, and awaits your approval before executing with the improved version.
-
-```
-User Input -> Express LINT -> Show Improvements -> Await Approval -> Execute
-```
+실행 전 사용자 승인을 받는 실시간 프롬프트 개선 모드입니다.
 
 ---
 
-## Trigger
+## 개요
+
+리뷰 모드는 프롬프트를 가로채어 Express LINT로 개선한 후, 개선된 버전으로 실행하기 전에 사용자 승인을 기다립니다.
 
 ```
-/ps:r <your prompt>
+사용자 입력 -> Express LINT -> 개선사항 표시 -> 승인 대기 -> 실행
 ```
 
 ---
 
-## Workflow
-
-### Step 1: Input
+## 트리거
 
 ```
-/ps:r Write a function that parses JSON
+/ps:r <프롬프트>
 ```
 
-### Step 2: Express LINT
+---
 
-The skill automatically runs a quick 7-Point analysis:
+## 워크플로우
 
-- ROLE: Is role defined?
-- CONTEXT: Is context sufficient?
-- INSTRUCTION: Are instructions specific?
-- EXAMPLE: Are examples included?
-- FORMAT: Is output format specified?
-
-### Step 3: Display Improvements
+### 단계 1: 입력
 
 ```
-Original Prompt (Score: 3/10)
-> Write a function that parses JSON
+/ps:r JSON을 파싱하는 함수를 작성해줘
+```
 
-Improved Prompt (Score: 8/10)
-> You are a senior software engineer.
+### 단계 2: Express LINT
+
+스킬이 자동으로 7-Point 분석을 실행합니다:
+
+- ROLE: 역할이 정의되었는가?
+- CONTEXT: 맥락이 충분한가?
+- INSTRUCTION: 지시사항이 구체적인가?
+- EXAMPLE: 예시가 포함되었는가?
+- FORMAT: 출력 형식이 지정되었는가?
+
+### 단계 3: 개선사항 표시
+
+```
+원본 프롬프트 (점수: 3/10)
+> JSON을 파싱하는 함수를 작성해줘
+
+개선된 프롬프트 (점수: 8/10)
+> 당신은 시니어 소프트웨어 엔지니어입니다.
 >
-> Write a Python function that parses a JSON string and returns a dictionary.
-> Handle invalid JSON gracefully by returning None and logging the error.
+> JSON 문자열을 파싱하여 딕셔너리로 반환하는 Python 함수를 작성하세요.
+> 잘못된 JSON은 None을 반환하고 에러를 로깅하여 우아하게 처리하세요.
 >
-> Output format:
-> - Function with type hints
-> - Include docstring
-> - Include error handling
+> 출력 형식:
+> - 타입 힌트가 포함된 함수
+> - docstring 포함
+> - 에러 처리 포함
 
-Changes:
-- [+] Added ROLE: senior software engineer
-- [+] Added CONTEXT: Python, error handling requirement
-- [+] Specified FORMAT: type hints, docstring
-- [~] Made INSTRUCTION specific: parse JSON string -> dictionary
+변경사항:
+- [+] ROLE 추가: 시니어 소프트웨어 엔지니어
+- [+] CONTEXT 추가: Python, 에러 처리 요구사항
+- [+] FORMAT 지정: 타입 힌트, docstring
+- [~] INSTRUCTION 구체화: JSON 문자열 파싱 -> 딕셔너리
 ```
 
-### Step 4: Await Approval
+### 단계 4: 승인 대기
 
 ```
-Proceed? (y/n/e): _
+진행하시겠습니까? (y/n/e): _
 ```
 
-Options:
-- `y` or `yes`: Execute with improved prompt
-- `n` or `no`: Execute with original prompt
-- `e` or `edit`: Modify the improved prompt further
+옵션:
+- `y` 또는 `yes`: 개선된 프롬프트로 실행
+- `n` 또는 `no`: 원본 프롬프트로 실행
+- `e` 또는 `edit`: 개선된 프롬프트를 추가로 수정
 
-### Step 5: Execute
+### 단계 5: 실행
 
-Based on your choice, the prompt is executed.
+선택에 따라 프롬프트가 실행됩니다.
 
 ---
 
-## Output Format (MANDATORY)
+## 출력 형식 (필수)
 
-This format MUST be followed. No omissions allowed.
+이 형식은 반드시 따라야 합니다. 생략 불가.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Express LINT Results                                         │
+│ Express LINT 결과                                            │
 ├─────────────────────────────────────────────────────────────┤
-│ Original Score: X/10 → Improved Score: Y/10 (+Z)            │
+│ 원본 점수: X/10 → 개선 점수: Y/10 (+Z)                        │
 └─────────────────────────────────────────────────────────────┘
 
-### Original Prompt
-> [full original prompt text]
+### 원본 프롬프트
+> [전체 원본 프롬프트 텍스트]
 
-### Improved Prompt (copy-paste ready)
-> [full improved prompt text]
+### 개선된 프롬프트 (복사-붙여넣기 가능)
+> [전체 개선된 프롬프트 텍스트]
 
-### Changes Made
-- [+] ROLE: [added role]
-- [+] CONTEXT: [added context]
-- [~] INSTRUCTION: [modified instruction]
-- [+] FORMAT: [added output format]
+### 변경사항
+- [+] ROLE: [추가된 역할]
+- [+] CONTEXT: [추가된 맥락]
+- [~] INSTRUCTION: [수정된 지시사항]
+- [+] FORMAT: [추가된 출력 형식]
 
-### Proceed? (y/n/e)
-- y: Execute with improved prompt
-- n: Execute with original prompt
-- e: Edit further
+### [DEBUG] 최종 제출 프롬프트
+*위의 "개선된 프롬프트" 섹션과 동일*
+(검증: 길이와 처음/마지막 20자가 일치해야 함)
+
+### 진행하시겠습니까? (y/n/e)
+- y: 개선된 프롬프트로 실행
+- n: 원본 프롬프트로 실행
+- e: 추가 수정
 ```
 
 ---
 
-## Mode Selection
+## 모드 선택
 
-| Command | Description |
-|---------|-------------|
-| `/ps:r` | Review Mode (show improvements, await approval) |
-| `/ps:a` | Intercept Mode (auto-improve and execute) |
-
----
-
-## Best Practices
-
-### When to Use Review Mode
-
-- First time using a prompt
-- Complex or important tasks
-- When you want to learn from improvements
-- When original intent must be preserved
-
-### Approval Guidelines
-
-**Approve (y)** when:
-- Improvements align with your intent
-- Score improvement is significant (+2 or more)
-- Changes make sense for your use case
-
-**Reject (n)** when:
-- Improvements change your intent
-- Original prompt is already specific enough
-- You prefer your phrasing
-
-**Edit (e)** when:
-- Improvements are good but need tweaks
-- You want to add specific constraints
-- Some changes should be reverted
+| 명령어 | 설명 |
+|--------|------|
+| `/ps:r` | 리뷰 모드 (개선사항 표시, 승인 대기) |
+| `/ps:a` | 인터셉트 모드 (자동 개선 후 즉시 실행) |
 
 ---
 
-## Examples
+## 모범 사례
 
-### Example 1: Code Generation
+### 리뷰 모드 사용 시기
 
-**Input**:
+- 프롬프트를 처음 사용할 때
+- 복잡하거나 중요한 작업
+- 개선사항을 학습하고 싶을 때
+- 원래 의도가 보존되어야 할 때
+
+### 승인 가이드라인
+
+**승인 (y)** 시점:
+- 개선사항이 의도와 일치할 때
+- 점수 개선이 유의미할 때 (+2 이상)
+- 변경사항이 사용 사례에 적합할 때
+
+**거부 (n)** 시점:
+- 개선사항이 의도를 바꿀 때
+- 원본 프롬프트가 이미 충분히 구체적일 때
+- 본인의 표현 방식을 선호할 때
+
+**수정 (e)** 시점:
+- 개선사항은 좋지만 조정이 필요할 때
+- 특정 제약조건을 추가하고 싶을 때
+- 일부 변경사항을 되돌리고 싶을 때
+
+---
+
+## 예제
+
+### 예제 1: 코드 생성
+
+**입력**:
 ```
-/ps:r Create a REST API endpoint
+/ps:r REST API 엔드포인트를 만들어줘
 ```
 
-**Output**:
+**출력**:
 ```
-Original Prompt (Score: 2/10)
-> Create a REST API endpoint
+원본 프롬프트 (점수: 2/10)
+> REST API 엔드포인트를 만들어줘
 
-Improved Prompt (Score: 9/10)
-> You are a backend developer experienced with RESTful API design.
+개선된 프롬프트 (점수: 9/10)
+> 당신은 RESTful API 설계에 능숙한 백엔드 개발자입니다.
 >
-> Create a REST API endpoint with the following requirements:
-> - Use appropriate HTTP method (GET/POST/PUT/DELETE)
-> - Include proper error handling
-> - Return appropriate status codes
-> - Include request/response examples
+> 다음 요구사항을 충족하는 REST API 엔드포인트를 생성하세요:
+> - 적절한 HTTP 메서드 사용 (GET/POST/PUT/DELETE)
+> - 적절한 에러 처리 포함
+> - 적절한 상태 코드 반환
+> - 요청/응답 예시 포함
 >
-> Output format:
-> - Code with inline comments
-> - Example curl commands for testing
-> - Brief explanation of design choices
+> 출력 형식:
+> - 인라인 주석이 포함된 코드
+> - 테스트용 예시 curl 명령어
+> - 설계 선택에 대한 간단한 설명
 
-Changes:
-- [+] Added ROLE: backend developer
-- [+] Added CONTEXT: RESTful design principles
-- [+] Specified FORMAT: code, curl examples, explanation
-- [~] Made INSTRUCTION specific with requirements list
+변경사항:
+- [+] ROLE 추가: 백엔드 개발자
+- [+] CONTEXT 추가: RESTful 설계 원칙
+- [+] FORMAT 지정: 코드, curl 예시, 설명
+- [~] INSTRUCTION 구체화: 요구사항 목록으로 변경
 
-Proceed? (y/n/e): _
+진행하시겠습니까? (y/n/e): _
 ```
 
-### Example 2: Data Analysis
+### 예제 2: 데이터 분석
 
-**Input**:
+**입력**:
 ```
-/ps:r Analyze this sales data
+/ps:r 이 판매 데이터를 분석해줘
 ```
 
-**Output**:
+**출력**:
 ```
-Original Prompt (Score: 1/10)
-> Analyze this sales data
+원본 프롬프트 (점수: 1/10)
+> 이 판매 데이터를 분석해줘
 
-Improved Prompt (Score: 8/10)
-> You are a data analyst specializing in sales performance.
+개선된 프롬프트 (점수: 8/10)
+> 당신은 판매 성과 전문 데이터 분석가입니다.
 >
-> Analyze the provided sales data and:
-> 1. Identify top-performing products/regions
-> 2. Detect trends and patterns
-> 3. Highlight anomalies or concerns
-> 4. Provide actionable recommendations
+> 제공된 판매 데이터를 분석하여:
+> 1. 최고 성과 제품/지역 식별
+> 2. 트렌드와 패턴 감지
+> 3. 이상치나 우려사항 강조
+> 4. 실행 가능한 권장사항 제공
 >
-> Output format:
-> - Executive summary (2-3 sentences)
-> - Key metrics table
-> - Trend analysis
-> - Recommendations list
+> 출력 형식:
+> - 경영진 요약 (2-3문장)
+> - 주요 지표 테이블
+> - 트렌드 분석
+> - 권장사항 목록
 
-Changes:
-- [+] Added ROLE: data analyst
-- [+] Specified INSTRUCTION with 4 analysis areas
-- [+] Defined FORMAT with structure
+변경사항:
+- [+] ROLE 추가: 데이터 분석가
+- [+] INSTRUCTION 지정: 4가지 분석 영역
+- [+] FORMAT 정의: 구조화된 형식
 
-Proceed? (y/n/e): _
+진행하시겠습니까? (y/n/e): _
 ```
 
 ---
 
-## Next Steps
+## 다음 단계
 
-- [Intercept Mode](intercept-mode.md) - Auto-improvement without approval
-- [Express LINT](../lint/express-lint.md) - Quick diagnosis details
-- [7-Point Quality Check](../../references/quality-checklist.md)
+- [인터셉트 모드](intercept-mode.md) - 승인 없는 자동 개선
+- [Express LINT](../lint/express-lint.md) - 빠른 진단 상세
+- [7-Point 품질 체크리스트](../../references/quality-checklist.md)
 
 ---
 
-## Anti-Patterns
+## 안티패턴
 
-### Bad Example 1: Execute without showing improvements
-
-```
-User: /ps:r Write code
-Assistant: I'll write the code... [executes immediately]
-```
-
-Problem: Did not show improvement process.
-
-### Bad Example 2: Show only changes without full prompt
+### 나쁜 예제 1: 개선사항 표시 없이 실행
 
 ```
-Changes:
-- [+] Added ROLE
-- [+] Added FORMAT
+사용자: /ps:r 코드 작성해줘
+어시스턴트: 코드를 작성하겠습니다... [즉시 실행]
 ```
 
-Problem: Did not show the full improved prompt.
+문제: 개선 과정을 표시하지 않음.
 
-### Good Example
+### 나쁜 예제 2: 전체 프롬프트 없이 변경사항만 표시
+
+```
+변경사항:
+- [+] ROLE 추가
+- [+] FORMAT 추가
+```
+
+문제: 전체 개선된 프롬프트를 표시하지 않음.
+
+### 좋은 예제
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Express LINT Results                                         │
+│ Express LINT 결과                                            │
 ├─────────────────────────────────────────────────────────────┤
-│ Original Score: 2/10 → Improved Score: 8/10 (+6)            │
+│ 원본 점수: 2/10 → 개선 점수: 8/10 (+6)                        │
 └─────────────────────────────────────────────────────────────┘
 
-### Original Prompt
-> Write code
+### 원본 프롬프트
+> 코드 작성해줘
 
-### Improved Prompt (copy-paste ready)
-> You are a senior software engineer.
+### 개선된 프롬프트 (복사-붙여넣기 가능)
+> 당신은 시니어 소프트웨어 엔지니어입니다.
 >
-> Write code that [specific task].
+> [특정 작업]을 수행하는 코드를 작성하세요.
 >
-> Requirements:
-> - Include error handling
-> - Add comments
+> 요구사항:
+> - 에러 처리 포함
+> - 주석 추가
 >
-> Output format:
-> - Code with inline comments
-> - Brief explanation
+> 출력 형식:
+> - 인라인 주석이 포함된 코드
+> - 간단한 설명
 
-### Changes Made
-- [+] ROLE: senior software engineer
-- [+] INSTRUCTION: specific requirements
-- [+] FORMAT: code + explanation
+### 변경사항
+- [+] ROLE: 시니어 소프트웨어 엔지니어
+- [+] INSTRUCTION: 구체적인 요구사항
+- [+] FORMAT: 코드 + 설명
 
-### Proceed? (y/n/e)
+### 진행하시겠습니까? (y/n/e)
 ```
 
-### Bad Example 3: Tool calls before LINT
+### 나쁜 예제 3: LINT 전 도구 호출
 
 ```
-User: /ps:r 최신 뉴스를 웹검색해서 정리해줘
-Assistant: [WebSearch 호출] 뉴스를 검색하겠습니다...
+사용자: /ps:r 최신 뉴스를 웹검색해서 정리해줘
+어시스턴트: [WebSearch 호출] 뉴스를 검색하겠습니다...
 ```
 
-Problem: Interpreted "웹검색" as a command to call WebSearch tool.
+문제: "웹검색"을 WebSearch 도구 호출 명령으로 해석함.
 
-**Correct behavior**: Treat entire input as a prompt to improve.
+**올바른 동작**: 전체 입력을 개선할 프롬프트로 취급.
 
 ```
-User: /ps:r 최신 뉴스를 웹검색해서 정리해줘
-Assistant:
+사용자: /ps:r 최신 뉴스를 웹검색해서 정리해줘
+어시스턴트:
 ┌─────────────────────────────────────────────────────────────┐
-│ Express LINT Results                                         │
+│ Express LINT 결과                                            │
 ├─────────────────────────────────────────────────────────────┤
-│ Original Score: 3/10 → Improved Score: 8/10 (+5)            │
+│ 원본 점수: 3/10 → 개선 점수: 8/10 (+5)                        │
 └─────────────────────────────────────────────────────────────┘
 
-### Original Prompt
+### 원본 프롬프트
 > 최신 뉴스를 웹검색해서 정리해줘
 
-### Improved Prompt (copy-paste ready)
-> You are a news researcher with expertise in current events.
+### 개선된 프롬프트 (복사-붙여넣기 가능)
+> 당신은 시사 전문 뉴스 연구원입니다.
 >
-> Search for the latest news and organize them by:
-> - Topic category
-> - Importance level
-> - Date
+> 최신 뉴스를 검색하여 다음 기준으로 정리하세요:
+> - 주제 카테고리
+> - 중요도 수준
+> - 날짜
 >
-> Output format:
-> - Brief summary per article
-> - Source attribution
+> 출력 형식:
+> - 기사별 간단한 요약
+> - 출처 명시
 ```

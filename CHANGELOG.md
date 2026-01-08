@@ -7,6 +7,80 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.3] - 2026-01-08
+
+### Summary
+Prompt Smith v2.5.3 addresses 16 improvement items from code review. Adds WebFetch to forbidden tools, localizes Intercept playbooks to Korean, unifies terminology, and strengthens CI validation.
+
+### Added
+
+#### WebFetch Forbidden Tool
+- **Added** `Web* (WebFetch/WebSearch)` to FORBIDDEN tools in all commands
+- **Added** URL triggers (`http://`, `https://`, `URL`, `링크 열어`, `fetch`) to ignore list
+- **Files**: `input-handling-rules.md`, `lint.md`, `a.md`, `build.md`, `r.md`
+
+#### /ps:help Topic Sections
+- **Added** `Topic: review` section with workflow, output format, approval options
+- **Added** `Topic: intercept` section with workflow, output format, usage guidance
+
+#### CI commands/ Validation
+- **Added** `Check commands/ directory` step to `.github/workflows/lint.yml`
+- **Validates** required commands exist (help.md, lint.md, build.md, r.md, a.md)
+- **Validates** internal links in commands/ directory
+
+#### Score Calculation Formula
+- **Added** explicit formula to `r.md` and `a.md`:
+  ```
+  score = (sum(applicable) / (applicable_items × 2)) × 10
+  ```
+- **Added** N/A handling rule for extended items
+
+#### Phase-based Behavior (/ps:a)
+- **Added** explicit phase separation in `a.md`:
+  - LINT/Improve Phase (Steps 1-3): DO NOT call tools
+  - Execute Phase (Step 4): Execute normally
+
+#### Language Policy (build.md)
+- **Added** "Respond in same language as user" rule
+- **Added** bilingual empty input response templates (Korean/English)
+
+### Changed
+
+#### Intercept Playbook Localization
+- **Translated** `review-mode.md` to Korean (루트 레벨)
+- **Translated** `intercept-mode.md` to Korean (루트 레벨)
+- **Preserved** English originals in `i18n/en/`
+- **Added** `[DEBUG] 최종 제출 프롬프트` section to review-mode.md
+
+#### Terminology Unification
+- **Changed** "Auto Mode" → "Intercept Mode" in README.md
+- **Consistent** naming across all documentation
+
+#### 5-Point Expression Cleanup
+- **Changed** "5-Point" → "기본 5항목" or "Base 5 dimensions" in:
+  - `build-mode.md`
+  - `build-report.md`
+  - `SKILL.md` Roadmap
+
+#### Version String Fix
+- **Fixed** "v2.5.0 활성화" → "v2.5.2 활성화" in SKILL.md mode selection
+
+#### Template Improvements
+- **Simplified** "진단자: Prompt Smith v1.0.0" → "진단자: Prompt Smith" in `diagnostic-report.md`
+- **Clarified** JSON constraint in `prompt-template.md`: "(in actual output; code blocks here are for documentation purposes only)"
+
+### Removed
+
+#### Deprecated Script
+- **Deleted** `scripts/sync-version.sh` (Python script provides cross-platform compatibility)
+
+### Fixed
+
+#### .gitignore Extension
+- **Added** `dist/`, `node_modules/`, `.env*`, `__MACOSX/`, `*.log`, `.temp*/` entries
+
+---
+
 ## [2.5.2] - 2026-01-08
 
 ### Summary
