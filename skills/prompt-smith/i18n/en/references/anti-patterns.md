@@ -429,5 +429,5 @@ create 3 related questions, and optimize for SEO.
 ## Related References
 
 - [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check
-- [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT workflow
+- [../playbooks/lint/full-lint.md](../playbooks/lint/full-lint.md) - LINT workflow
 - [../templates/prompt-template.md](../templates/prompt-template.md) - Correct prompt template

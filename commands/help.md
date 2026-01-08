@@ -24,7 +24,7 @@ Parse the input argument to determine which help topic to show:
 
 ```
 +----------------------------------------------------------+
-| Prompt Smith v2.4.0                                       |
+| Prompt Smith                                              |
 +----------------------------------------------------------+
 
 COMMANDS

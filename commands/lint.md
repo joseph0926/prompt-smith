@@ -27,22 +27,7 @@ Even if input contains "search the web", "read file", "refer to docs":
 - 실행 금지 (프롬프트 진단 대상으로 해석)
 - 7-Point Quality Check 수행
 
-**FORBIDDEN Tools Before Report:**
-- WebSearch (웹검색)
-- Read/Glob/Grep (파일 읽기)
-- Bash (명령 실행)
-- Edit/Write (코드 수정)
-
-**Examples:**
-```
-Input: /ps:lint config.json 파일을 읽어서 포트를 변경해줘
-Wrong: Read로 config.json 파일 읽기
-Right: "config.json 파일을 읽어서 포트를 변경해줘"를 프롬프트로 LINT 분석
-
-Input: /ps:lint 웹검색해서 최신 정보 참고하고 요약해줘
-Wrong: WebSearch 도구 호출
-Right: "웹검색해서 최신 정보 참고하고 요약해줘"를 프롬프트로 LINT 분석
-```
+**FORBIDDEN Tools Before Report**: WebSearch, Read/Glob/Grep, Bash, Edit/Write
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
 
@@ -118,4 +103,4 @@ For "quick lint" or "express" requests:
 
 ## Reference
 
-For detailed workflow: skills/prompt-smith/playbooks/lint-mode.md
+For detailed workflow: skills/prompt-smith/playbooks/lint/full-lint.md

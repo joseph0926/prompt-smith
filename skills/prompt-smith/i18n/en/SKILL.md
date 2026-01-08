@@ -6,9 +6,9 @@ compatibility: "Claude Code"
 metadata:
   short-description: "Prompt quality management skill (7-Point diagnostics + BUILD + INTERCEPT + test generation)"
   author: joseph0926
-  version: "2.5.1"
+  version: "2.5.2"
   target: "claude-code"
-  updated: "2026-01-07"
+  updated: "2026-01-08"
   category: "productivity"
   tags: ["prompt", "quality", "testing", "lint", "build", "intercept", "engineering", "validation", "improvement", "claude-4x"]
 i18n:
@@ -16,7 +16,7 @@ i18n:
   default: "ko"
 ---
 
-# Prompt Smith v2.5.1
+# Prompt Smith v2.5.2
 
 A prompt quality management skill that turns prompts into operational assets by running **Diagnostics (LINT) → Auto Improvement (Rewrite) → Test Generation**, or by designing from requirements via **BUILD (Requirements → New Prompt Design)**.
 

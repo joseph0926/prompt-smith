@@ -272,6 +272,6 @@
 
 ## 관련 참조
 
-- [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT 워크플로우
+- [../playbooks/lint/full-lint.md](../playbooks/lint/full-lint.md) - LINT 워크플로우
 - [../templates/test-case-template.md](../templates/test-case-template.md) - 테스트 케이스 템플릿
 - [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check

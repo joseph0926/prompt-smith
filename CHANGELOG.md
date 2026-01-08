@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.2] - 2026-01-08
+
+### Summary
+Prompt Smith v2.5.2 is a documentation cleanup patch. Removes duplicate lint-mode.md, updates broken links, simplifies FORBIDDEN Tools sections, and removes hardcoded version strings.
+
+### Removed
+
+#### Duplicate File Cleanup
+- **Deleted** `playbooks/lint-mode.md` (99% duplicate of `playbooks/lint/full-lint.md`)
+- **Deleted** `i18n/en/playbooks/lint-mode.md` (i18n sync)
+
+#### Version Hardcoding
+- **Removed** version string from `commands/help.md` header (was `v2.4.0`)
+- **Removed** version footer from `templates/diagnostic-report.md` (ko/en)
+
+### Changed
+
+#### Link Updates (10 files)
+- **Updated** `lint-mode.md` → `lint/full-lint.md` references in:
+  - `references/team-workflow.md` (ko/en)
+  - `references/quality-checklist.md` (ko/en)
+  - `references/anti-patterns.md` (ko/en)
+  - `templates/diagnostic-report.md` (ko/en)
+  - `templates/test-case-template.md`
+  - `commands/lint.md`
+
+#### Commands Simplification
+- **Simplified** FORBIDDEN Tools sections in `r.md`, `a.md`, `lint.md`, `build.md`
+- **Changed** from detailed tables to single-line reference + link to `input-handling-rules.md`
+
+---
+
 ## [2.5.1] - 2026-01-07
 
 ### Summary

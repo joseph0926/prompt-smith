@@ -665,5 +665,5 @@ Find deprecated APIs and replace them
 ## Related References
 
 - [anti-patterns.md](anti-patterns.md) - Patterns to avoid
-- [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT workflow
+- [../playbooks/lint/full-lint.md](../playbooks/lint/full-lint.md) - LINT workflow
 - [../templates/prompt-template.md](../templates/prompt-template.md) - Prompt template

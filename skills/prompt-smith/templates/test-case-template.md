@@ -300,4 +300,4 @@
 
 - [diagnostic-report.md](diagnostic-report.md) - 진단 리포트 템플릿
 - [../references/team-workflow.md](../references/team-workflow.md) - 팀 운영 가이드
-- [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT 워크플로우
+- [../playbooks/lint/full-lint.md](../playbooks/lint/full-lint.md) - LINT 워크플로우

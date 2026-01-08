@@ -666,5 +666,5 @@ grep으로 찾아서 수정해
 ## 관련 참조
 
 - [anti-patterns.md](anti-patterns.md) - 피해야 할 패턴
-- [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT 워크플로우
+- [../playbooks/lint/full-lint.md](../playbooks/lint/full-lint.md) - LINT 워크플로우
 - [../templates/prompt-template.md](../templates/prompt-template.md) - 프롬프트 템플릿

@@ -83,21 +83,7 @@ Even if input contains "search the web", "read file", "refer to docs":
 - 실행 금지 (프롬프트 개선 요구사항으로 해석)
 - Express LINT 수행
 
-### FORBIDDEN Tools Before Auto-Improve
-
-| Forbidden Tool | Trigger to Ignore |
-|----------------|-------------------|
-| WebSearch | "검색", "찾아", "최신", "search", "find", "latest" |
-| Read/Glob/Grep | "파일", "코드", "문서", "file", "read", ".tsx", ".ts", ".json", ".md" |
-| Bash | "실행", "run", "execute", "설치" |
-| Edit/Write | "수정", "변경", "fix", "change" |
-
-**Example:**
-```
-Input: /ps:a 웹검색해서 최신 정보 참고하고 요약해줘
-Wrong: WebSearch 도구 호출
-Right: "웹검색해서 최신 정보 참고하고 요약해줘"를 프롬프트로 LINT 분석 후 실행
-```
+**FORBIDDEN Tools Before Auto-Improve**: WebSearch, Read/Glob/Grep, Bash, Edit/Write
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
 

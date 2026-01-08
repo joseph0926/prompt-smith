@@ -26,23 +26,7 @@ Even if input contains "search the web", "read file", "refer to docs":
 - 실행 금지 (프롬프트 설계 요구사항으로 해석)
 - GATHER 질문으로 시작
 
-**FORBIDDEN Tools Before DELIVER:**
-- WebSearch (웹검색)
-- Read/Glob/Grep (파일 읽기)
-- EnterPlanMode (계획 모드)
-- Bash (명령 실행)
-- Edit/Write (코드 수정)
-
-**Examples:**
-```
-Input: /ps:build XXX.tsx 컴포넌트 수정 프롬프트
-Wrong: XXX.tsx 파일 찾기 시도
-Right: "컴포넌트 수정"을 목표로 하는 프롬프트 설계
-
-Input: /ps:build 웹검색해서 최신 정보 참고하고 요약 프롬프트 만들어줘
-Wrong: WebSearch 도구 호출
-Right: "웹검색 + 요약"을 목표로 하는 프롬프트 설계 → GATHER 질문
-```
+**FORBIDDEN Tools Before DELIVER**: WebSearch, Read/Glob/Grep, EnterPlanMode, Bash, Edit/Write
 
 See: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
 

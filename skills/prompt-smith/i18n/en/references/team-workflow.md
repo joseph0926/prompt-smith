@@ -272,6 +272,6 @@ To start prompt quality management for a team:
 
 ## Related References
 
-- [../playbooks/lint-mode.md](../playbooks/lint-mode.md) - LINT workflow
+- [../playbooks/lint/full-lint.md](../playbooks/lint/full-lint.md) - LINT workflow
 - [../templates/test-case-template.md](../templates/test-case-template.md) - Test case template
 - [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check
