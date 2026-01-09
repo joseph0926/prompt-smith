@@ -1,22 +1,9 @@
 ---
 name: prompt-smith
 description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:build, /ps:help로 프롬프트 개선. 트리거: 프롬프트 점검/린트, 프롬프트 설계/만들기, prompt-smith -r/-a"
-license: MIT
-compatibility: "Claude Code"
-metadata:
-  short-description: "프롬프트 품질관리 스킬 (7-Point 진단 + BUILD + INTERCEPT + 테스트 생성)"
-  author: joseph0926
-  version: "2.5.3"
-  target: "claude-code"
-  updated: "2026-01-08"
-  category: "productivity"
-  tags: ["prompt", "quality", "testing", "lint", "build", "intercept", "engineering", "validation", "improvement", "claude-4x"]
-i18n:
-  locales: ["ko", "en"]
-  default: "ko"
 ---
 
-# Prompt Smith v2.5.3
+# Prompt Smith v2.5.4
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 

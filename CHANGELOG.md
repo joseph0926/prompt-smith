@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.4] - 2026-01-09
+
+### Summary
+Prompt Smith v2.5.4 normalizes plugin structure to Claude Code official spec. Adds component paths to plugin.json, simplifies SKILL.md frontmatter, and removes i18n directory.
+
+### Changed
+
+#### plugin.json Normalization
+- **Added** `homepage` field
+- **Added** `keywords` array (migrated from SKILL.md metadata.tags)
+- **Added** `commands` path (`./commands/`)
+- **Added** `skills` path (`./skills/`)
+
+#### SKILL.md Frontmatter Simplification
+- **Removed** `license`, `compatibility`, `metadata`, `i18n` non-standard fields
+- **Kept** only spec-required fields: `name`, `description`
+
+### Removed
+
+#### i18n Directory
+- **Deleted** `skills/prompt-smith/i18n/` directory
+- **Reason**: No i18n spec in Claude Code plugin system, management complexity
+
+---
+
 ## [2.5.3] - 2026-01-08
 
 ### Summary
