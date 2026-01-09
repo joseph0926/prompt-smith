@@ -111,6 +111,9 @@ use prompt-smith -r Your prompt here
 - [Intercept Pipeline](skills/prompt-smith/playbooks/intercept/review-mode.md)
 - [Prompt Chaining](skills/prompt-smith/playbooks/prompt-chaining.md)
 - [Quality Checklist](skills/prompt-smith/references/quality-checklist.md)
+- [Technique Priority](skills/prompt-smith/references/technique-priority.md) (Anthropic recommended)
+- [Hallucination Reduction](skills/prompt-smith/references/hallucination-reduction.md)
+- [Latency Optimization](skills/prompt-smith/references/latency-optimization.md)
 
 ## License
 

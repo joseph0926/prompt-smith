@@ -201,6 +201,27 @@ AI가 수행해야 할 구체적이고 명확한 동작을 정의합니다.
 요약해. 짧게.
 ```
 
+### Chain of Thought (CoT) 적용 단계 (Anthropic 권장)
+
+복잡한 분석, 수학, 의사결정 태스크에는 CoT를 적용하세요. 단, 출력 길이 증가로 지연시간이 늘어날 수 있습니다.
+
+| 단계 | 방식 | 예시 | 장점 | 단점 |
+|------|------|------|------|------|
+| **Basic** | "Think step-by-step" 한 줄 | 가이드 없음, Claude에게 위임 | 간단 | 사고 방향 불명확 |
+| **Guided** | 단계별 사고 프로세스 명시 | "First, identify... Then, analyze... Finally, recommend..." | 구조화된 사고 | 사고/답변 분리 어려움 |
+| **Structured** | XML 태그로 사고/답변 분리 | `<thinking>` + `<answer>` 태그 사용 | 디버깅 용이, 후처리 가능 | 토큰 증가 |
+
+```markdown
+## Structured CoT 예시
+
+Think before you write the email in <thinking> tags.
+First, think through what messaging might appeal to this donor.
+Then, think through what aspects of the program would resonate.
+Finally, write the personalized email in <email> tags.
+```
+
+> **Tip**: Structured CoT는 사고 부분만 추출하여 디버깅하거나, 후처리로 사고 부분을 제거하고 답변만 사용할 수 있습니다.
+
 ---
 
 ## 4. EXAMPLE (예시)
@@ -213,15 +234,35 @@ AI가 수행해야 할 구체적이고 명확한 동작을 정의합니다.
 | 점수 | 기준 | 예시 |
 |------|------|------|
 | **0점** | 예시 없음 | 지시만 있음 |
-| **1점** | 1개 예시 또는 불완전한 예시 | 입력만 있고 출력 없음 |
-| **2점** | 2개 이상의 완전한 예시 | 입력-출력 쌍 2-3개 |
+| **1점** | 1-2개 예시 또는 불완전한 예시 | 입력만 있고 출력 없음, 또는 단일 예시 |
+| **2점** | 3-5개의 다양하고 명확한 예시 | 입력-출력 쌍 3-5개, Relevant/Diverse/Clear 기준 충족 |
+
+### 좋은 예시의 3가지 기준 (Anthropic 권장)
+
+1. **Relevant**: 실제 사용 케이스와 일치하는 예시
+2. **Diverse**: 엣지 케이스 포함, 의도치 않은 패턴 학습 방지
+3. **Clear**: `<example>` 태그로 구조화 (다수면 `<examples>` 내 중첩)
+
+```markdown
+<examples>
+<example>
+<input>Apple announced new iPhone</input>
+<output>{"category": "technology", "entities": ["Apple", "iPhone"]}</output>
+</example>
+<example>
+<input>Stock market crashed today</input>
+<output>{"category": "finance", "entities": ["stock market"]}</output>
+</example>
+</examples>
+```
 
 ### 체크리스트
 
 - [ ] 입력-출력 쌍으로 구성
-- [ ] 다양한 케이스 커버
+- [ ] 3-5개 다양한 케이스 커버
 - [ ] 원하는 스타일/형식 반영
 - [ ] 엣지 케이스 포함 (필요시)
+- [ ] `<example>` 태그로 구조화 (권장)
 
 ### Few-shot 예시 패턴
 
@@ -632,8 +673,8 @@ grep으로 찾아서 수정해
 │                                                             │
 │  EXAMPLE (0-2)                                              │
 │  ✓ 입력-출력 쌍                                             │
-│  ✓ 2개 이상                                                 │
-│  ✓ 다양한 케이스                                            │
+│  ✓ 3-5개 (Relevant/Diverse/Clear)                          │
+│  ✓ <example> 태그로 구조화                                  │
 │                                                             │
 │  FORMAT (0-2)                                               │
 │  ✓ 형식 명시 (JSON/MD/표)                                   │

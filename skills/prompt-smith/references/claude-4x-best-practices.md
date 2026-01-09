@@ -363,30 +363,48 @@ Optional: analysis.metrics, recommendations, estimated_effort
 
 ---
 
-## 7. Extended Thinking 활용
+## 7. Extended Thinking 활용 (Anthropic 권장)
 
 ### Claude 4.x 특성
-복잡한 작업에서 Claude 4.x는 내부적으로 깊이 생각합니다. 명시적으로 요청하면 더 나은 결과를 얻을 수 있습니다.
+Claude 4.x는 복잡한 작업에서 "확장 사고(Extended Thinking)" 모드로 더 깊이 생각할 수 있습니다.
 
-### 적용 상황
-- 여러 접근법 중 선택이 필요할 때
-- 트레이드오프 분석이 필요할 때
-- 도구 결과를 평가해야 할 때
+### 기술적 고려사항 (Anthropic 공식 가이드)
 
-### 패턴
+| 항목 | 권장값 | 설명 |
+|------|--------|------|
+| **최소 예산** | 1024 토큰 | 시작점으로 권장 |
+| **대규모 작업** | 32K+ 토큰 | 배치 처리 권장 (네트워크 타임아웃 방지) |
+| **언어** | 영어 | 사고 과정은 영어에서 최적 (다국어 출력은 가능) |
+
+### 효과적인 프롬프팅
 
 ```markdown
-## Decision Process
+# ❌ 과도한 단계 지시 (권장하지 않음)
+Think through this math problem step by step:
+1. First, identify the variables
+2. Then, set up the equation
+3. Next, solve for x
+→ Claude의 사고 방식을 과도하게 제약
 
-다음 결정이 필요할 때 각 옵션을 분석해주세요:
-1. [옵션 A의 장단점]
-2. [옵션 B의 장단점]
-3. [선택 이유]
-
-선택 기준:
-- [기준 1] 우선
-- [기준 2] 다음
+# ✅ 고수준 지시 (권장)
+Please think about this math problem thoroughly and in great detail.
+Consider multiple approaches and show your complete reasoning.
+Try different methods if your first approach doesn't work.
+→ Claude에게 사고 방식의 자유도 부여
 ```
+
+### 핵심 원칙
+
+1. **고수준 지시 우선**: Claude가 스스로 최적의 사고 방식 선택하도록 허용
+2. **사고 출력 재사용 금지**: 이전 사고를 user 블록에 전달하면 성능 저하
+3. **프리필 금지**: Extended Thinking + Prefill 조합 불가
+
+### 최적 사용 사례
+
+- **Complex STEM**: 수학, 물리, 복잡한 알고리즘
+- **Constraint Optimization**: 다중 제약 최적화 문제
+- **Strategic Analysis**: Blue Ocean, Porter's Five Forces 등 프레임워크 적용
+- **Multi-step Reasoning**: 여러 단계의 논리적 추론
 
 ### 예시
 
@@ -406,12 +424,91 @@ Optional: analysis.metrics, recommendations, estimated_effort
 3. 롤백 용이성 (위험 관리)
 4. 구현 복잡도 (리소스)
 
-각 옵션을 기준에 따라 평가하고 최선의 선택을 제안해주세요.
+Think deeply about each option. Consider edge cases and potential failures.
+Recommend the best approach with detailed reasoning.
 ```
 
 ---
 
-## 8. API 파라미터 최적화 (API_PARAMETERS)
+## 8. Prefill (응답 사전 입력) - Anthropic 권장
+
+### 개념
+Assistant 턴에 초기 텍스트를 입력하여 응답 시작점을 강제합니다. Claude가 특정 형식이나 역할로 응답을 시작하도록 유도할 수 있습니다.
+
+### 핵심 규칙
+
+| 규칙 | 설명 | 예시 |
+|------|------|------|
+| **후행 공백 금지** | 프리필 끝에 공백 불가 | `"As an AI assistant, I "` → ❌ 에러 |
+| **Extended Thinking 비호환** | 확장 사고 모드에서 프리필 불가 | Extended Thinking + Prefill → ❌ |
+| **JSON 강제** | `{`로 시작하면 JSON 출력 강제 | 프리앰블 없이 바로 JSON |
+
+### 패턴
+
+| 용도 | Prefill 예시 | 효과 |
+|------|-------------|------|
+| JSON 강제 | `{` | 프리앰블 생략, 직접 JSON 시작 |
+| 역할 유지 | `[Sherlock Holmes]` | 캐릭터 일탈 방지 |
+| 리스트 시작 | `1.` | 번호 목록 강제 |
+| XML 구조 | `<analysis>` | 특정 태그로 시작 강제 |
+| 긍정 응답 | `Yes,` | 거부 방지 (주의 필요) |
+
+### 예시: JSON 강제
+
+```python
+response = client.messages.create(
+    model="claude-sonnet-4-5-20250514",
+    messages=[
+        {"role": "user", "content": "Extract product info as JSON: {{description}}"},
+        {"role": "assistant", "content": "{"}  # Prefill
+    ]
+)
+# 결과: Claude가 `{`부터 이어서 JSON 출력
+# {"name": "iPhone 15", "price": 999, ...}
+```
+
+### 예시: 역할 유지
+
+```python
+# 역할극에서 캐릭터 일탈 방지
+messages = [
+    {"role": "user", "content": "You are Sherlock Holmes. What do you think of this case?"},
+    {"role": "assistant", "content": "[Sherlock Holmes]"}  # Prefill
+]
+# Claude가 항상 셜록 홈즈로 응답 시작
+```
+
+### 예시: XML 구조 강제
+
+```python
+messages = [
+    {"role": "user", "content": "Analyze this code and provide recommendations."},
+    {"role": "assistant", "content": "<analysis>"}  # Prefill
+]
+# Claude가 <analysis> 태그 내에서 분석 시작
+```
+
+### 주의사항
+
+```markdown
+# ❌ Anti-Pattern: 후행 공백
+{"role": "assistant", "content": "Here is my response: "}
+→ 끝에 공백 있으면 API 에러
+
+# ❌ Anti-Pattern: Extended Thinking과 조합
+thinking={"type": "enabled", ...}
++ assistant prefill
+→ 호환 불가
+
+# ✅ Correct: 공백 없이 종료
+{"role": "assistant", "content": "Here is my response:"}
+{"role": "assistant", "content": "{"}
+{"role": "assistant", "content": "[Character]"}
+```
+
+---
+
+## 9. API 파라미터 최적화 (API_PARAMETERS)
 
 ### Claude 4.x 특성
 Claude API 호출 시 적절한 파라미터 설정이 품질과 일관성에 영향을 줍니다.

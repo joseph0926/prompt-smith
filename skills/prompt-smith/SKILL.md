@@ -3,7 +3,7 @@ name: prompt-smith
 description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:build, /ps:help로 프롬프트 개선. 트리거: 프롬프트 점검/린트, 프롬프트 설계/만들기, prompt-smith -r/-a"
 ---
 
-# Prompt Smith v2.5.4
+# Prompt Smith v2.6.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
@@ -375,8 +375,11 @@ LINT/BUILD 시 자동 탐지:
 ### References (참조 자료)
 
 - [references/quality-checklist.md](references/quality-checklist.md) - 7-Point Quality Check 상세
-- [references/anti-patterns.md](references/anti-patterns.md) - 피해야 할 프롬프트 패턴
+- [references/anti-patterns.md](references/anti-patterns.md) - 피해야 할 프롬프트 패턴 (11개)
 - [references/claude-4x-best-practices.md](references/claude-4x-best-practices.md) - Claude 4.x 최적화 가이드
+- [references/technique-priority.md](references/technique-priority.md) - 프롬프트 기법 우선순위 (Anthropic 권장)
+- [references/hallucination-reduction.md](references/hallucination-reduction.md) - 할루시네이션 감소 전략
+- [references/latency-optimization.md](references/latency-optimization.md) - 지연시간 최적화 가이드
 - [references/state-tracking-guide.md](references/state-tracking-guide.md) - 상태 관리 가이드
 - [references/tool-usage-guide.md](references/tool-usage-guide.md) - 도구 사용 가이드
 

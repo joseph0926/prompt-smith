@@ -7,6 +7,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.6.0] - 2026-01-09
+
+### Summary
+Prompt Smith v2.6.0 aligns all prompt engineering content with Anthropic official documentation (19 reference documents). Adds 3 new reference guides, updates example count from 2+ to 3-5, adds Prefill section, and introduces hallucination reduction strategies.
+
+### Added
+
+#### New Reference Guides (3 files)
+- **technique-priority.md**: 9-step prompt technique priority guide (Anthropic recommended order)
+  - Prompt Generator → Clear & Direct → Examples → CoT → XML Tags → Role → Prefill → Chaining → Long Context
+- **hallucination-reduction.md**: 4 basic + 3 advanced strategies for reducing hallucinations
+  - "I don't know" permission, citation-based, external knowledge restriction, CoT verification
+- **latency-optimization.md**: 5 optimization strategies for reducing latency
+  - Model selection, token optimization, max_tokens, temperature, streaming
+
+#### Prefill Section (claude-4x-best-practices.md)
+- **New Section 8**: Prefill (Response Pre-filling) - Anthropic recommended
+- Key rules: No trailing spaces, Extended Thinking incompatible, JSON forcing with `{`
+- Patterns: JSON forcing, role maintenance (`[Character]`), list start, XML structure
+
+#### Hallucination Pattern (#11)
+- **anti-patterns.md**: Added #11 Hallucination-Prone pattern
+- Types: Factual errors, non-existent citations, overconfident claims, context drift
+- Defense techniques: "I don't know" permission, citation-based response, CoT verification, Best-of-N
+
+### Changed
+
+#### Example Count Update (Anthropic alignment)
+- **quality-checklist.md**: 2+ examples → **3-5 examples** (Relevant/Diverse/Clear criteria)
+- **full-lint.md**: Updated scoring: 0=none, 1=1-2, 2=3-5 (Relevant/Diverse/Clear)
+- **quick-start.md**: Updated 7-Point table with new example criteria
+- **technique-priority.md**: 3-5 examples with quality criteria
+
+#### Chain of Thought Enhancement
+- **quality-checklist.md**: Added CoT 3-stage guide (Basic → Guided → Structured)
+- **technique-priority.md**: CoT patterns with `<thinking>` + `<answer>` XML tags
+
+#### Extended Thinking Update
+- **claude-4x-best-practices.md**: Enhanced with technical considerations
+  - Minimum budget: 1024 tokens, Large tasks: 32K+ batch, Language: English optimal
+  - High-level instructions preferred, thinking output reuse prohibited
+
+#### Self-Correction Chain Pattern
+- **prompt-chaining.md**: Added Generate → Review → Refine loop pattern
+- XML handoff patterns: Basic, multi-output, metadata inclusion
+
+#### Evaluation Methods
+- **full-lint.md**: Added Anthropic-recommended evaluation methods
+  - Code-based (exact match, JSON validation), LLM-based (Likert scale), Human-based
+
+#### Documentation Links
+- **SKILL.md**: Added 3 new reference links
+- **full-lint.md**: Added 3 new reference links
+- **prompt-chaining.md**: Added technique-priority, hallucination-reduction links
+- **README.md**: Added 3 new documentation links
+
+### Fixed
+- Consistency update: "2개 이상" → "3-5개" across all files
+
+---
+
 ## [2.5.4] - 2026-01-09
 
 ### Summary

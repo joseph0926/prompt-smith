@@ -105,7 +105,7 @@ Top 3 이슈:
 | 1 | ROLE | AI 역할이 명확한가? |
 | 2 | CONTEXT | 배경/맥락이 충분한가? |
 | 3 | INSTRUCTION | 지시가 구체적인가? |
-| 4 | EXAMPLE | 예시가 2개 이상인가? |
+| 4 | EXAMPLE | 예시가 3-5개인가? (Relevant/Diverse/Clear) |
 | 5 | FORMAT | 출력 형식이 지정되었는가? |
 | 6 | STATE_TRACKING | 상태 관리가 있는가? (멀티스텝) |
 | 7 | TOOL_USAGE | 도구 지시가 명확한가? (도구 사용) |

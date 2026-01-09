@@ -99,6 +99,92 @@ Step 4: 수정 결과 → 테스트 실행
 - 통합 보고서 생성
 ```
 
+### 4. 자가 수정 체인 (Self-Correction) - Anthropic 권장
+
+생성 → 검토 → 수정의 반복 루프로 품질 향상.
+
+```
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│ Generate │────▶│  Review  │────▶│  Refine  │
+│  (생성)  │     │  (검토)  │     │  (수정)  │
+└──────────┘     └──────────┘     └──────────┘
+                       │                │
+                       │    (반복)      │
+                       ◀────────────────┘
+```
+
+**적용 상황**:
+- 법률/의료 문서 작성 (정확성 필수)
+- 복잡한 분석 보고서
+- 고품질 코드 생성
+
+**예시**:
+```markdown
+## Chain: 법률 문서 검토
+
+### Step 1: Generate (초안 생성)
+계약서 초안을 작성하세요.
+Output: <draft>[초안]</draft>
+
+### Step 2: Review (검토)
+<draft>의 내용을 다음 기준으로 검토:
+- 법적 완전성
+- 모호한 조항
+- 당사자 권익 균형
+Output: <review>[검토 결과]</review>
+
+### Step 3: Refine (수정)
+<review>의 피드백을 반영하여 수정된 버전 작성
+Output: <refined>[수정본]</refined>
+
+### Step 4: Final Validation (선택)
+필요시 Step 2-3 반복 (최대 2회)
+```
+
+---
+
+## XML 핸드오프 패턴
+
+단계 간 데이터 전달 시 XML 태그로 명확히 구분.
+
+### 기본 패턴
+
+```markdown
+## Step 1 Output
+<step1_result>
+[이전 단계 결과]
+</step1_result>
+
+## Step 2 Input
+Use the content in <step1_result> to...
+```
+
+### 다중 출력 패턴
+
+```markdown
+## Step 1 Output
+<analysis>
+<entities>[추출된 개체]</entities>
+<relationships>[관계]</relationships>
+<issues>[발견된 문제]</issues>
+</analysis>
+
+## Step 2 Prompt
+<analysis>의 <issues> 섹션을 기반으로...
+```
+
+### 메타데이터 포함 패턴
+
+```markdown
+<step_output step="1" status="success" confidence="high">
+<data>[결과 데이터]</data>
+<metadata>
+  <timestamp>2026-01-03T10:00:00Z</timestamp>
+  <items_processed>45</items_processed>
+</metadata>
+</step_output>
+```
+
 ---
 
 ## 상태 관리
@@ -302,6 +388,8 @@ Bash: git add . && git commit -m "chore: migrate tests from Jest to Vitest"
 ## 관련 참조
 
 - [claude-4x-best-practices.md](../references/claude-4x-best-practices.md) - PARALLELIZED 패턴
+- [technique-priority.md](../references/technique-priority.md) - 기법 우선순위 (Chaining은 8번째)
+- [hallucination-reduction.md](../references/hallucination-reduction.md) - 자가 검증 체인
 - [state-tracking-guide.md](../references/state-tracking-guide.md) - 상태 관리 상세
 - [tool-usage-guide.md](../references/tool-usage-guide.md) - 도구 사용 전략
 - [anti-patterns.md](../references/anti-patterns.md) - 과도한 복잡성 방지
