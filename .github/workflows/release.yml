@@ -30,13 +30,36 @@ jobs:
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Extract changelog
+      - name: Get previous tag
+        if: steps.check_tag.outputs.exists == 'false'
+        id: prev_tag
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "tag=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Extract changelog and commits
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           VERSION="${{ steps.version.outputs.version }}"
+
+          # Extract changelog section
           awk "/^## \[${VERSION}\]/,/^## \[/" CHANGELOG.md | head -n -1 > release_notes.md
           if [ ! -s release_notes.md ]; then
-            echo "Release v${VERSION}" > release_notes.md
+            echo "## Release v${VERSION}" > release_notes.md
+          fi
+
+          # Append commit messages since last tag
+          echo "" >> release_notes.md
+          echo "---" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Commits" >> release_notes.md
+          echo "" >> release_notes.md
+
+          PREV_TAG="${{ steps.prev_tag.outputs.tag }}"
+          if [ -n "$PREV_TAG" ]; then
+            git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" >> release_notes.md
+          else
+            git log --pretty=format:"- %s (%h)" -20 >> release_notes.md
           fi
 
       - name: Create tag and release

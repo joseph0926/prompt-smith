@@ -2,6 +2,7 @@
 
 8-Point Quality Check를 충족하는 고품질 프롬프트 작성을 위한 템플릿입니다.
 
+> **v2.8.0**: Extended Thinking 템플릿 추가
 > **v2.7.0**: SUCCESS_CRITERIA를 기본 항목으로 승격, 4-Block Pattern 템플릿 추가
 
 ---
@@ -527,6 +528,82 @@ You are a [역할] who [특성/경험].
 | **유지보수** | 블록별 독립 수정 가능 |
 | **일관성** | 정적 부분 재사용으로 응답 일관성 향상 |
 | **디버깅** | 문제 발생 시 해당 블록만 점검 |
+
+---
+
+## Extended Thinking 템플릿 (v2.8 신규)
+
+복잡한 STEM 문제, 제약 최적화, 전략적 분석에 적합한 템플릿입니다.
+
+> **출처**: Anthropic 공식 문서 - prompt-technique-thinking.md
+
+````markdown
+# [복잡한 문제 제목]
+
+## Role
+You are a [전문가 역할] who excels at deep analytical thinking.
+
+## Context
+- **Problem Type**: [STEM/제약 최적화/전략 분석]
+- **Complexity**: High (requires extended reasoning)
+- **Expected Thinking Budget**: 16K-32K tokens
+
+## Instructions
+
+Think through this problem thoroughly and in great detail.
+Consider multiple approaches and show your complete reasoning.
+Try different methods if your first approach doesn't work.
+
+### Structured Thinking (선택적)
+
+<thinking>
+1. First, understand the core problem...
+2. Then, identify key constraints...
+3. Consider multiple approaches...
+4. Evaluate trade-offs...
+5. Select optimal solution...
+</thinking>
+
+### Task
+[구체적인 문제 설명]
+
+## Output Format
+
+### Analysis
+<thinking>
+[상세한 사고 과정 - 여러 접근법 고려]
+</thinking>
+
+### Solution
+[최종 답변/솔루션]
+
+### Verification
+[솔루션 검증 과정]
+
+## Success Criteria
+- [ ] 다양한 접근법 고려
+- [ ] 모든 제약 조건 만족
+- [ ] 논리적 추론 과정 명시
+- [ ] 검증 가능한 결과
+
+## Problem
+{{problem}}
+````
+
+### Extended Thinking 사용 팁
+
+| 상황 | 권장 방식 |
+|------|----------|
+| 일반적 복잡 문제 | "Think thoroughly" 일반 지시 |
+| 특정 프레임워크 필요 | 단계별 프로세스 명시 |
+| 디버깅 목적 | `<thinking>` 태그로 사고 분리 |
+| 긴 출력 필요 | 예산 증가 + 길이 명시 요청 |
+
+### 주의사항
+
+- Extended Thinking과 Prefill은 동시 사용 불가
+- 32K 토큰 초과 시 batch 처리 권장
+- 사고 출력을 다시 입력으로 전달하지 말 것
 
 ---
 

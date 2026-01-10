@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.0] - 2026-01-10
+
+### Summary
+Prompt Smith v3.0.0 is a major release featuring Progressive Skill Loading architecture, advanced prompt engineering guides (Extended Thinking, Prefill Response, Token Efficiency), and new modes directory structure.
+
+### Added
+
+#### Progressive Skill Loading
+- **New directory**: `modes/` for Level 2 progressive loading
+- **Mode files**: build.md, intercept.md, lint.md
+- **Benefit**: Reduced initial token load, on-demand loading
+
+#### Hooks & Subagent Support
+- **Hooks integration**: Automatic LINT for hook outputs
+- **Subagent separation**: Dedicated agent workflows
+
+#### Empirical Evaluation
+- **New command**: `/ps:eval` for prompt evaluation
+- **Playbook**: playbooks/eval/eval-mode.md
+
+---
+
+## [2.8.0] - 2026-01-10
+
+### Summary
+Prompt Smith v2.8.0 adds advanced prompt engineering guides based on official Anthropic documentation: Extended Thinking, Prefill Response, and Token Efficiency optimization.
+
+### Added
+
+#### Extended Thinking Guide
+- **New section** in quality-checklist.md: Extended Thinking usage guide
+- **When to use**: Complex STEM problems, constraint optimization, strategic frameworks
+- **Token budget guide**: Minimum 1,024 tokens, recommended 16K-32K
+- **Best practices**: General instructions first, then troubleshoot with specifics
+- **Source**: Anthropic official docs - prompt-technique-thinking.md
+
+#### Prefill Response Guide
+- **New section** in quality-checklist.md: Prefill technique for format enforcement
+- **Use cases**: JSON output (`{`), XML output (`<`), specific patterns
+- **Limitations**: Cannot use with Extended Thinking enabled
+- **Alternative**: Format enforcement through explicit instructions (for Claude Code)
+
+#### Token Efficiency Guide
+- **New section** in quality-checklist.md: Cost optimization tips
+- **Token estimation**: ~4 chars = 1 token (English), ~2 chars = 1 token (Korean)
+- **Optimization checklist**: Example limits, redundancy removal, 4-Block caching
+- **Cost awareness**: Average $6/developer/day, Claude Code commands (/cost, /compact)
+- **Source**: Anthropic official docs - cc-costs-tokens.md
+
+#### Extended Thinking Template
+- **New template** in prompt-template.md: Complex problem-solving structure
+- **Structure**: Role → Context → Thinking block → Solution → Verification
+- **Usage tips**: When to use general vs specific instructions
+
+### Changed
+
+#### Documentation Updates
+- **quality-checklist.md**: Added 3 new guide sections (Extended Thinking, Prefill, Token)
+- **prompt-template.md**: Added Extended Thinking template
+- **SKILL.md**: Version 2.7.0 → 2.8.0
+- **VERSION**: Updated to 2.8.0
+
+### Compatibility
+
+#### Backward Compatible
+- All existing workflows remain functional
+- New guides are additive, not replacing existing content
+- 8-Point Quality Check unchanged
+
+---
+
 ## [2.7.0] - 2026-01-10
 
 ### Summary

@@ -1,8 +1,8 @@
 {
   "name": "prompt-smith",
-  "version": "2.7.0",
-  "description": "Prompt quality management skill with 7-Point Quality Check, LINT/BUILD modes, and Intercept Pipeline for real-time prompt improvement.",
-  "short_description": "Prompt QA skill (7-Point Check + LINT + BUILD + Intercept)",
+  "version": "3.0.0",
+  "description": "Prompt quality management skill with 8-Point Quality Check, LINT/BUILD modes, Intercept Pipeline, and advanced guides (Extended Thinking, Prefill, Token Efficiency).",
+  "short_description": "Prompt QA skill (8-Point Check + LINT + BUILD + Intercept)",
   "author": "joseph0926",
   "license": "MIT",
   "repository": "https://github.com/joseph0926/prompt-smith",
@@ -29,10 +29,13 @@
     "default": "ko"
   },
   "features": [
-    "7-Point Quality Check (ROLE, CONTEXT, INSTRUCTION, EXAMPLE, FORMAT, STATE_TRACKING, TOOL_USAGE)",
+    "8-Point Quality Check (ROLE, CONTEXT, INSTRUCTION, EXAMPLE, FORMAT, SUCCESS_CRITERIA + STATE_TRACKING, TOOL_USAGE)",
     "LINT Mode - Diagnose and improve existing prompts",
     "BUILD Mode - Design new prompts from requirements",
     "Intercept Pipeline - Real-time prompt improvement with -r (review) and -a (auto) flags",
+    "Extended Thinking guide for complex reasoning tasks",
+    "Prefill Response technique for output format enforcement",
+    "Token efficiency optimization guide",
     "Test case generation (normal, edge, injection defense)",
     "Anti-pattern detection",
     "Bilingual support (English/Korean)"

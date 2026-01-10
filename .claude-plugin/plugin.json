@@ -1,7 +1,7 @@
 {
   "name": "ps",
-  "version": "2.7.0",
-  "description": "Prompt quality management. /ps:r, /ps:a, /ps:lint, /ps:build commands.",
+  "version": "3.0.0",
+  "description": "Prompt quality management with agents, hooks, and MCP integration. Commands: /ps:r, /ps:a, /ps:lint, /ps:build, /ps:eval",
   "author": {
     "name": "joseph0926"
   },
@@ -15,11 +15,18 @@
     "lint",
     "build",
     "intercept",
+    "evaluation",
     "engineering",
     "validation",
     "improvement",
-    "claude-4x"
+    "claude-4x",
+    "hooks",
+    "agents",
+    "mcp"
   ],
   "commands": "./commands/",
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
 }

@@ -2,6 +2,8 @@
 
 요구사항에서 고품질 프롬프트를 설계하는 7단계 워크플로우입니다.
 
+> **v2.9.0**: `--cache-aware` 옵션으로 4-Block Pattern 자동 적용 지원
+
 ---
 
 ## 워크플로우 개요
@@ -178,8 +180,54 @@
 | 코드 생성 | Code Generator |
 | 고객 응대 | Customer Support Agent |
 | 분석/평가 | Content Evaluator |
+| **캐시 최적화** | **4-Block Pattern** (`--cache-aware`) |
 
 → 상세: [template-selection.md](template-selection.md)
+
+### 4-Block Pattern (`--cache-aware`) - v2.9 신규
+
+API 비용 최적화를 위한 Cache-Aware 구조입니다.
+
+**활성화 조건:**
+- 사용자가 `--cache-aware` 옵션 명시
+- 또는 질문: "Cache-aware 구조로 생성할까요?"
+
+**구조:**
+```markdown
+## BLOCK 1: INSTRUCTIONS (Static - 캐시 가능)
+[시스템 역할 + 금칙어 + 기본 규칙]
+→ 거의 변경되지 않음, 프롬프트 상단 배치
+
+## BLOCK 2: CONTEXT (Semi-Static - 세션별)
+[도메인 정보 + 검색된 문서 + 도구 정의]
+→ 세션별로 변경 가능
+
+## BLOCK 3: TASK (Dynamic - 매 요청)
+[구체적인 작업 지시 + 예시]
+→ 매 요청마다 변경
+
+## BLOCK 4: OUTPUT FORMAT (Static - 캐시 가능)
+[출력 형식 + 성공 기준]
+→ 거의 변경되지 않음
+```
+
+**효과:**
+| 측면 | 효과 |
+|------|------|
+| 캐시 효율 | Block 1, 4 캐시 → 비용 ~50% 절감 |
+| 유지보수 | 블록별 독립 수정 가능 |
+| 일관성 | 정적 부분 재사용 |
+| 디버깅 | 문제 블록만 점검 |
+
+**출력 표시:**
+```
+┌─ 4-Block Structure ─────────────────────────────────┐
+│  BLOCK 1 (Static)     : Instructions    [Cacheable] │
+│  BLOCK 2 (Semi-Static): Context         [Session]   │
+│  BLOCK 3 (Dynamic)    : Task            [Per-Call]  │
+│  BLOCK 4 (Static)     : Output Format   [Cacheable] │
+└─────────────────────────────────────────────────────┘
+```
 
 ---
 

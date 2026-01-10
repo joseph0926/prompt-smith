@@ -1,0 +1,9 @@
+{
+  "prompt-registry": {
+    "command": "node",
+    "args": ["${CLAUDE_PLUGIN_ROOT}/servers/prompt-registry.js"],
+    "env": {
+      "PROMPT_REGISTRY_DATA": "${CLAUDE_PLUGIN_ROOT}/data"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 프롬프트 품질 평가의 핵심 프레임워크입니다. 모든 LINT 진단은 이 8가지 관점에서 수행됩니다.
 
+> **v2.8.0 변경**: Extended Thinking, Prefill Response, 토큰 효율성 가이드 추가
 > **v2.7.0 변경**: 7-Point → 8-Point로 확장 (SUCCESS_CRITERIA 추가)
 > **v2.0.0 변경**: 5-Point → 7-Point로 확장 (Claude 4.x 최적화)
 
@@ -224,6 +225,62 @@ Finally, write the personalized email in <email> tags.
 
 > **Tip**: Structured CoT는 사고 부분만 추출하여 디버깅하거나, 후처리로 사고 부분을 제거하고 답변만 사용할 수 있습니다.
 
+### Extended Thinking 가이드 (v2.8 신규)
+
+Extended Thinking은 Claude가 복잡한 문제를 단계별로 깊이 사고하도록 하는 고급 기능입니다.
+
+> **출처**: Anthropic 공식 문서 - prompt-technique-thinking.md
+
+#### 적용 시기
+
+- 복잡한 STEM 문제 (수학, 물리, 4D 시각화 등)
+- 제약 최적화 (여러 조건 동시 만족)
+- 전략적 프레임워크 적용 (Blue Ocean, Porter's Five Forces 등)
+- 높은 정확도가 요구되는 추론 작업
+
+#### 권장 방식
+
+| 상황 | 권장 | 이유 |
+|------|------|------|
+| 일반 복잡 문제 | 일반적 지시 먼저 | Claude의 창의적 접근이 더 효과적 |
+| 특정 프로세스 필요 | 구체적 단계 지시 | 원하는 사고 방향 유도 |
+| 디버깅/분석 | 사고 출력 검토 | 로직 문제 식별 가능 |
+
+#### 토큰 예산 가이드
+
+```
+최소: 1,024 토큰
+권장: 16,000 ~ 32,000 토큰
+주의: 32K 초과 시 batch 처리 권장 (타임아웃 방지)
+```
+
+#### 프롬프트 예시
+
+```markdown
+# 일반적 지시 (권장)
+Think through this problem thoroughly and in great detail.
+Consider multiple approaches and show your complete reasoning.
+Try different methods if your first approach doesn't work.
+
+# 프레임워크 적용 예시
+Develop a comprehensive strategy for entering the market by 2027.
+
+Begin with:
+1. A Blue Ocean Strategy canvas
+2. Apply Porter's Five Forces to identify competitive pressures
+
+For each scenario:
+- Develop strategic responses using the Ansoff Matrix
+
+Finally, apply the Three Horizons framework to map the transition pathway.
+```
+
+#### 주의사항
+
+- Extended Thinking 활성화 시 Prefill 사용 불가
+- 영어에서 가장 잘 작동 (최종 출력은 다른 언어 가능)
+- 사고 출력을 다시 입력으로 전달하면 성능 저하 가능
+
 ---
 
 ## 4. EXAMPLE (예시)
@@ -432,6 +489,61 @@ Respond with valid JSON:
 
 # 불충분한 형식
 JSON으로 줘 (스키마 없음)
+```
+
+### Prefill Response 기법 (v2.8 신규)
+
+Claude 응답의 시작 부분을 미리 채워 일관된 형식을 강제하는 기법입니다.
+
+> **출처**: Anthropic 공식 Prompt Engineering 가이드
+
+#### 적용 시기
+
+| 출력 형식 | Prefill 예시 | 효과 |
+|----------|-------------|------|
+| JSON | `{` 또는 `{"result":` | JSON 형식 강제 |
+| XML | `<response>` | XML 구조 강제 |
+| 특정 패턴 | `## Analysis\n` | 마크다운 헤더 시작 강제 |
+| 언어 지정 | `다음은 한국어 답변입니다:` | 특정 언어로 응답 강제 |
+
+#### 사용 예시
+
+```markdown
+## API 호출 예시 (Claude API)
+
+# System prompt
+분석 결과를 JSON으로 반환하세요.
+
+# User prompt
+다음 텍스트를 분석해주세요: "..."
+
+# Assistant prefill (응답 시작점)
+{"analysis":
+```
+
+#### 장점
+
+- 출력 형식 일관성 보장
+- 파싱 오류 감소
+- 불필요한 서문(preamble) 제거
+
+#### 주의사항
+
+- **Extended Thinking 활성화 시 사용 불가**
+- 너무 긴 prefill은 오히려 방해
+- Claude Code CLI에서는 직접 사용 제한 (API 레벨 기능)
+- 프롬프트에서 형식을 명확히 지정하는 것으로 대체 가능
+
+#### Prefill 대안 (Claude Code용)
+
+```markdown
+## Output Format
+Your response MUST start with a valid JSON object.
+Do not include any text before the JSON.
+Do not wrap in code blocks.
+
+Example of correct start:
+{"result":
 ```
 
 ---
@@ -813,6 +925,55 @@ grep으로 찾아서 수정해
 │  9+:A | 7-8:B | 5-6:C | 3-4:D | 0-2:F                      │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 토큰 효율성 가이드 (v2.8 신규)
+
+프롬프트 비용 최적화를 위한 가이드입니다.
+
+> **출처**: Anthropic 공식 문서 - cc-costs-tokens.md
+
+### 토큰 추정 규칙
+
+| 언어/유형 | 추정 | 예시 |
+|----------|------|------|
+| 영어 | ~4자 = 1토큰 | "Hello world" ≈ 2-3 토큰 |
+| 한글 | ~2자 = 1토큰 | "안녕하세요" ≈ 3-4 토큰 |
+| 코드 | 변수명/키워드별 1토큰 | `function foo()` ≈ 4 토큰 |
+| JSON | 키/값/구분자 각각 | `{"key": "value"}` ≈ 5-7 토큰 |
+
+### 비용 최적화 팁
+
+1. **예시 수 제한**: 3-5개로 충분 (더 많아도 효과 미미)
+2. **중복 지시 통합**: 반복되는 규칙은 한 곳에 정리
+3. **4-Block Pattern 활용**: 정적 부분 캐시로 50% 절감 가능
+4. **긴 문서 요약**: RAG 결과는 요약 후 포함
+5. **불필요한 서문 제거**: "Sure, I can help..." 등 비활성화
+
+### 세션별 비용 인식
+
+```
+평균 비용: $6/개발자/일
+월 예상: $100-200/개발자
+90% 사용자: 일 $12 이하
+```
+
+### Claude Code 비용 명령어
+
+```bash
+/cost          # 현재 세션 비용 확인
+/compact       # 컨텍스트 압축으로 토큰 절감
+/clear         # 대화 히스토리 초기화
+```
+
+### 토큰 절감 체크리스트
+
+- [ ] 예시가 3-5개를 초과하지 않는가?
+- [ ] 중복 지시가 없는가?
+- [ ] 불필요한 상세 설명이 없는가?
+- [ ] 긴 문서를 요약 없이 전달하고 있지 않은가?
+- [ ] 4-Block Pattern으로 캐시 가능한 부분을 분리했는가?
 
 ---
 
