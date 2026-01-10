@@ -7,6 +7,79 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.7.0] - 2026-01-10
+
+### Summary
+Prompt Smith v2.7.0 upgrades to **8-Point Quality Check** by adding SUCCESS_CRITERIA as a core evaluation dimension. Introduces 2026 prompt engineering concepts including Context Engineering, Cache-Aware Structure, Tree of Thought, and "Above and Beyond" explicit request pattern for Claude 4.x.
+
+### Added
+
+#### SUCCESS_CRITERIA (6th Core Dimension)
+- **New dimension**: SUCCESS_CRITERIA added to base 6 items (previously 5)
+- **Scoring criteria**: 0=none, 1=vague conditions, 2=measurable specific conditions
+- **Checklist**: Completion conditions, measurable criteria, verification methods, failure conditions
+- **SMART-based elements**: Specific, Measurable, Achievable, Relevant
+- **Files**: quality-checklist.md, full-lint.md, build-mode.md, SKILL.md, diagnostic-report.md
+
+#### Context Engineering (2026 Concept)
+- **New section** in technique-priority.md: Context Engineering paradigm
+- **5 context layers**: Static, Retrieved, Memory, Tool Definitions, User Input
+- **Cache-Aware Structure**: Static content at top, dynamic at bottom for caching efficiency
+- **Benefits**: 50% cost reduction for cached tokens, up to 80% latency reduction
+
+#### Tree of Thought (ToT)
+- **New section** in technique-priority.md: Advanced reasoning technique
+- **Multi-hypothesis exploration**: Generate hypotheses → Evaluate each → Select optimal
+- **Use cases**: Complex problems with uncertainty, creative problem-solving, optimal path selection
+
+#### "Above and Beyond" Pattern
+- **New section** (#10) in claude-4x-best-practices.md
+- **Claude 4.x behavior**: Only does what's explicitly requested (no proactive suggestions)
+- **Pattern comparison**: Implicit vs Explicit request examples
+- **Domain templates**: Code review, feature implementation, documentation
+
+#### 4-Block Pattern Template
+- **New template** in prompt-template.md: Cache-Aware prompt structure
+- **Blocks**: INSTRUCTIONS (static) → CONTEXT (semi-static) → TASK (dynamic) → OUTPUT FORMAT (static)
+- **Benefits**: Cache efficiency, maintainability, consistency, easier debugging
+
+#### Anti-Pattern #12
+- **New pattern**: "Success Criteria 누락" (Missing Success Criteria)
+- **Severity**: Medium (🟡)
+- **Improvement**: Add measurable success criteria section
+
+### Changed
+
+#### 7-Point → 8-Point Quality Check
+- **Base items**: 5 → 6 (added SUCCESS_CRITERIA)
+- **Extended items**: 2 (STATE_TRACKING, TOOL_USAGE) - unchanged
+- **Score calculation**: (raw_score / applicable_items × 2) × 10 = 10 points max
+- **Files updated**: 9 files across references, playbooks, templates
+
+#### Documentation Updates
+- **quality-checklist.md**: Complete rewrite with SUCCESS_CRITERIA section
+- **technique-priority.md**: Added Context Engineering (#10) and ToT (#11) sections
+- **claude-4x-best-practices.md**: Added "Above and Beyond" section (#10)
+- **anti-patterns.md**: Added #12 pattern, updated checklist
+- **SKILL.md**: Version 2.6.1 → 2.7.0, all 7-Point → 8-Point references
+- **full-lint.md**: Updated check table, improvement patterns
+- **build-mode.md**: Updated design checklist with SUCCESS_CRITERIA
+- **prompt-template.md**: Added 4-Block Pattern template
+- **diagnostic-report.md**: Added Success Criteria row to score tables
+
+#### Technique Selection Guide
+- **Updated table** in technique-priority.md with 2026 techniques
+- **New columns**: ToT for complex reasoning, Context Eng. for large systems
+
+### Compatibility
+
+#### Backward Compatible
+- Existing 7-Point prompts remain valid (SUCCESS_CRITERIA scored as additional item)
+- Legacy mode available: prompts without SUCCESS_CRITERIA calculated on 5 base items
+- No breaking changes to existing workflows
+
+---
+
 ## [2.6.0] - 2026-01-09
 
 ### Summary

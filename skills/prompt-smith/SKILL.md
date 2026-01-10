@@ -3,9 +3,11 @@ name: prompt-smith
 description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:build, /ps:help로 프롬프트 개선. 트리거: 프롬프트 점검/린트, 프롬프트 설계/만들기, prompt-smith -r/-a"
 ---
 
-# Prompt Smith v2.6.1
+# Prompt Smith v2.7.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
+
+**v2.7.0**: 8-Point Quality Check (SUCCESS_CRITERIA 추가), Context Engineering, Tree of Thought, "Above and Beyond" 패턴 추가
 
 **v2.5.0**: SKILL.md 최적화 - Level 2 섹션 축소 (748→444 라인), 상세 내용을 기존 문서 링크로 대체
 
@@ -188,26 +190,27 @@ prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 - 지시/데이터 분리 (구분자/섹션 라벨) 기본 적용
 - 상세: [references/input-handling-rules.md](references/input-handling-rules.md)
 
-### Core Principle: 7-Point Quality Check
+### Core Principle: 8-Point Quality Check
 
-프롬프트 품질 평가의 핵심 기준입니다. 모든 진단은 이 7가지 관점에서 수행됩니다.
+프롬프트 품질 평가의 핵심 기준입니다. 모든 진단은 이 8가지 관점에서 수행됩니다.
 
 ```
-┌─ 7-Point Quality Check ────────────────────────────────────────┐
+┌─ 8-Point Quality Check ────────────────────────────────────────┐
 │                                                                 │
-│  [기본 5항목]                                                    │
-│  1) ROLE         역할이 명확하게 정의되어 있는가?                │
-│  2) CONTEXT      배경/맥락이 충분한가?                          │
-│  3) INSTRUCTION  지시가 명확하고 구체적인가?                     │
-│  4) EXAMPLE      예시가 포함되어 있는가?                        │
-│  5) FORMAT       출력 형식이 지정되어 있는가?                    │
+│  [기본 6항목]                                                    │
+│  1) ROLE            역할이 명확하게 정의되어 있는가?             │
+│  2) CONTEXT         배경/맥락이 충분한가?                       │
+│  3) INSTRUCTION     지시가 명확하고 구체적인가?                  │
+│  4) EXAMPLE         예시가 포함되어 있는가?                     │
+│  5) FORMAT          출력 형식이 지정되어 있는가?                 │
+│  6) SUCCESS_CRITERIA 성공 조건이 측정 가능한가? ← v2.7 신규      │
 │                                                                 │
 │  [Claude 4.x 확장 - 해당 시에만 평가]                            │
-│  6) STATE_TRACKING  장기 태스크 상태 관리가 있는가?              │
-│  7) TOOL_USAGE      도구 사용 지시가 명확한가?                   │
+│  7) STATE_TRACKING  장기 태스크 상태 관리가 있는가?              │
+│  8) TOOL_USAGE      도구 사용 지시가 명확한가?                   │
 │                                                                 │
 │  → 각 항목 0-2점                                                │
-│  → 기본 5항목: 10점 만점                                        │
+│  → 기본 6항목: 12점 → 10점 정규화                               │
 │  → 확장 포함 시: (원점수/적용항목×2) × 10 = 10점 만점으로 정규화  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -230,14 +233,14 @@ prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 ┌─ 응답 전 Self-Check ───────────────────────────────────────────┐
 │                                                                 │
 │  [LINT Mode]                                                    │
-│  □ 7-Point Quality Check 수행했는가?                            │
+│  □ 8-Point Quality Check 수행했는가?                            │
 │  □ Top 3 이슈를 구체적으로 지적했는가?                          │
 │  □ Before/After 개선안을 제시했는가?                            │
 │  □ 테스트 케이스(정상/엣지/인젝션)를 생성했는가?                 │
 │                                                                 │
 │  [BUILD Mode]                                                   │
 │  □ 요구사항(목표/대상/도메인)을 확인했는가?                      │
-│  □ 7-Point 모든 요소를 포함했는가?                              │
+│  □ 8-Point 모든 요소를 포함했는가?                              │
 │  □ 자체 LINT로 8점 이상인가?                                    │
 │  □ 테스트 케이스 5개를 생성했는가?                              │
 │                                                                 │
@@ -263,7 +266,7 @@ prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 | 단계 | 내용 |
 |------|------|
 | INPUT | 프롬프트 텍스트 수신 |
-| ANALYZE | 7-Point Check + 안티패턴 탐지 → 점수 산정 |
+| ANALYZE | 8-Point Check + 안티패턴 탐지 → 점수 산정 |
 | DIAGNOSE | Top 3 이슈 도출 |
 | IMPROVE | Before/After + 변경 이유 |
 | TEST | 정상 2 + 엣지 1 + 인젝션 1 + 도메인 1 |
@@ -280,13 +283,13 @@ prompt-smith 사용 -a JSON 파싱 코드 작성해줘
 
 ### 2.2 BUILD Mode
 
-**목적**: 요구사항 → 7-Point 충족 고품질 프롬프트 설계
+**목적**: 요구사항 → 8-Point 충족 고품질 프롬프트 설계
 
 | 단계 | 내용 |
 |------|------|
 | GATHER | 목표/대상/도메인/제약/성공기준 확인 |
 | CLASSIFY | 태스크 유형 + 복잡도 + 도구 필요 여부 |
-| DESIGN | 템플릿 선택 + 7-Point 설계 + 인젝션 방어 |
+| DESIGN | 템플릿 선택 + 8-Point 설계 + 인젝션 방어 |
 | DRAFT | Role/Context/Instruction/Example/Format 작성 |
 | SELF-LINT | 8점 미만 시 DRAFT로 회귀 |
 | TEST | 5개 테스트 케이스 생성 |
@@ -374,8 +377,8 @@ LINT/BUILD 시 자동 탐지:
 
 ### References (참조 자료)
 
-- [references/quality-checklist.md](references/quality-checklist.md) - 7-Point Quality Check 상세
-- [references/anti-patterns.md](references/anti-patterns.md) - 피해야 할 프롬프트 패턴 (11개)
+- [references/quality-checklist.md](references/quality-checklist.md) - 8-Point Quality Check 상세
+- [references/anti-patterns.md](references/anti-patterns.md) - 피해야 할 프롬프트 패턴 (12개)
 - [references/claude-4x-best-practices.md](references/claude-4x-best-practices.md) - Claude 4.x 최적화 가이드
 - [references/technique-priority.md](references/technique-priority.md) - 프롬프트 기법 우선순위 (Anthropic 권장)
 - [references/hallucination-reduction.md](references/hallucination-reduction.md) - 할루시네이션 감소 전략
@@ -406,7 +409,7 @@ LINT/BUILD 시 자동 탐지:
 
 ### Do (권장)
 
-- 7-Point Quality Check를 모든 진단에 적용
+- 8-Point Quality Check를 모든 진단에 적용
 - Before/After를 명확하게 대비 (LINT)
 - 요구사항 확인 후 설계 시작 (BUILD)
 - 테스트 케이스에 인젝션 방어 포함

@@ -560,6 +560,103 @@ Claude Code 환경에서는 API 파라미터보다 **CLAUDE.md 규칙 파일**�
 
 ---
 
+## 10. "Above and Beyond" 명시적 요청 (v2.7 신규)
+
+> **출처**: Anthropic 공식 가이드 - "Customers who desire the 'above and beyond' behavior from previous Claude models might need to more explicitly request these behaviors with newer models."
+
+### Claude 4.x 특성
+
+Claude 4.x는 이전 모델들과 달리 **요청한 것만 정확히 수행**합니다. 과거 Claude 3.x에서 기대했던 "자발적인 추가 제안", "예상치 못한 개선", "능동적인 문제 발견" 같은 행동은 **명시적으로 요청해야** 발생합니다.
+
+### 왜 이런 변화가 생겼나?
+
+| 이유 | 설명 |
+|------|------|
+| **정밀한 지시 따르기** | 사용자가 원하지 않는 추가 작업 방지 |
+| **예측 가능한 동작** | 요청 범위 내에서만 응답 |
+| **과도한 수정 방지** | 코드 리팩토링, 불필요한 개선 감소 |
+
+### 패턴 비교
+
+| 원하는 것 | ❌ 암시적 (동작 안 함) | ✅ 명시적 (동작함) |
+|-----------|-------------------|-----------------|
+| 개선 제안 | "코드 작성해줘" | "코드 작성하고 더 좋은 방법이 있으면 제안해줘" |
+| Edge case | "함수 만들어" | "함수 만들고 edge case도 고려해줘" |
+| 테스트 | "구현해줘" | "구현하고 테스트도 작성해줘" |
+| 문서화 | "API 만들어" | "API 만들고 JSDoc 주석도 추가해줘" |
+| 최적화 | "동작하게 해줘" | "동작하게 하고 성능 개선 여지도 알려줘" |
+| 리뷰 | "코드 봐줘" | "코드 보고 문제점, 개선점, 보안 이슈 모두 지적해줘" |
+
+### 활용 패턴
+
+```markdown
+## 기본 요청 + Above and Beyond
+
+### Task
+[기본 요청 내용]
+
+### 추가 요청 (선택)
+완료 후 다음 사항도 검토해주세요:
+- [ ] 더 나은 접근 방법이 있다면 제안
+- [ ] 발견된 잠재적 문제점 지적
+- [ ] 관련된 개선 기회 알림
+- [ ] 누락된 edge case 식별
+```
+
+### 예시
+
+```markdown
+# ❌ 이전 Claude에서 기대했던 방식 (4.x에서 동작 안 함)
+이 함수 구현해줘
+(테스트도 작성해주겠지... 에러 처리도 알아서 하겠지...)
+
+# ✅ Claude 4.x에 맞는 방식
+이 함수를 구현해줘:
+
+## Task
+- calculateTax(amount, region) 함수 구현
+- 지역별 세율 적용
+
+## 추가 요청
+구현 완료 후:
+1. edge case 고려사항 리스트업
+2. 에러 처리 추가 필요 여부 검토
+3. 테스트 케이스 3개 작성
+4. 성능상 주의할 점 있으면 언급
+```
+
+### 도메인별 "Above and Beyond" 템플릿
+
+#### 코드 리뷰
+```markdown
+코드 리뷰해주세요:
+- 버그 및 논리 오류
+- 보안 취약점 (OWASP Top 10)
+- 성능 문제
+- 코드 스타일/가독성
+- 테스트 커버리지 갭
+- **추가로 발견한 개선 기회도 알려주세요**
+```
+
+#### 기능 구현
+```markdown
+기능 구현해주세요:
+- [기본 요구사항]
+- **구현 후 더 좋은 설계가 있으면 대안 제시**
+- **놓치기 쉬운 edge case 지적**
+```
+
+#### 문서 작성
+```markdown
+API 문서 작성해주세요:
+- 기본 사용법
+- 파라미터 설명
+- **개발자가 자주 하는 실수도 Warning으로 포함**
+- **관련 API와의 연동 예시도 추가**
+```
+
+---
+
 ## Anti-Patterns (Claude 4.x에서 피해야 할 것)
 
 ### 1. 암시적 기대
@@ -638,7 +735,7 @@ Claude Code 환경에서는 API 파라미터보다 **CLAUDE.md 규칙 파일**�
 
 ## 관련 참조
 
-- [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check
+- [quality-checklist.md](quality-checklist.md) - 8-Point Quality Check
 - [anti-patterns.md](anti-patterns.md) - 피해야 할 패턴
 - [../templates/prompt-template.md](../templates/prompt-template.md) - 프롬프트 템플릿
 - [state-tracking-guide.md](state-tracking-guide.md) - 상태 관리 상세

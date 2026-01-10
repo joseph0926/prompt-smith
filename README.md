@@ -6,7 +6,7 @@
 
 ![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 
-**Features**: 7-Point Quality Check | LINT Mode | BUILD Mode | Intercept Pipeline
+**Features**: 8-Point Quality Check | LINT Mode | BUILD Mode | Intercept Pipeline
 
 ## Quick Start
 
@@ -84,20 +84,21 @@ use prompt-smith -r Your prompt here
 | LINT      | `/ps:lint <prompt>`  | `lint this prompt`      | Diagnose existing prompts         |
 | BUILD     | `/ps:build <goal>`   | `build a prompt for...` | Design from requirements          |
 
-## 7-Point Quality Check
+## 8-Point Quality Check
 
-| #   | Dimension      | Score |
-| --- | -------------- | ----- |
-| 1   | ROLE           | 0-2   |
-| 2   | CONTEXT        | 0-2   |
-| 3   | INSTRUCTION    | 0-2   |
-| 4   | EXAMPLE        | 0-2   |
-| 5   | FORMAT         | 0-2   |
-| 6   | STATE_TRACKING | 0-2   |
-| 7   | TOOL_USAGE     | 0-2   |
+| #   | Dimension        | Score | Note |
+| --- | ---------------- | ----- | ---- |
+| 1   | ROLE             | 0-2   | Base |
+| 2   | CONTEXT          | 0-2   | Base |
+| 3   | INSTRUCTION      | 0-2   | Base |
+| 4   | EXAMPLE          | 0-2   | Base |
+| 5   | FORMAT           | 0-2   | Base |
+| 6   | SUCCESS_CRITERIA | 0-2   | Base (v2.7+) |
+| 7   | STATE_TRACKING   | 0-2   | Extended |
+| 8   | TOOL_USAGE       | 0-2   | Extended |
 
-**Base Score**: Dimensions 1-5 (max 10)
-**Extended Score**: All 7 dimensions (normalized)
+**Base Score**: Dimensions 1-6 (max 12 → normalized to 10)
+**Extended Score**: All 8 dimensions (normalized)
 
 ## Platform
 

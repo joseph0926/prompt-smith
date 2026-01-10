@@ -349,9 +349,194 @@ Use the content in <step1_result> to...
 
 ---
 
+## 10. Context Engineering (2026 신규)
+
+> **출처**: IBM 2026 Guide, Anthropic Best Practices
+
+### 개념
+
+Context Engineering은 프롬프트 엔지니어링을 넘어 전체 컨텍스트를 최적화하는 새로운 패러다임입니다.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              Context Engineering 구성요소                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. Static Context ────────── 시스템 지시 (캐시 가능)        │
+│         ↓                                                   │
+│  2. Retrieved Context ─────── RAG 문서, 검색 결과            │
+│         ↓                                                   │
+│  3. Memory Context ────────── 이전 대화, 세션 상태           │
+│         ↓                                                   │
+│  4. Tool Definitions ──────── 사용 가능한 도구 목록          │
+│         ↓                                                   │
+│  5. User Input ────────────── 동적 사용자 요청               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Cache-Aware 구조 (성능 최적화)
+
+프롬프트 구조를 캐시 효율적으로 배치하여 지연시간과 비용을 최적화합니다.
+
+```markdown
+## 권장 프롬프트 구조
+
+┌─ 상단 (Static) ─────────────────────────────────────────────┐
+│  시스템 지시, 역할 정의, 금칙어                              │
+│  → 캐시 가능, 거의 변경되지 않음                             │
+├─ 중단 (Semi-Static) ────────────────────────────────────────┤
+│  도구 정의, RAG 검색 결과, 참조 문서                         │
+│  → 세션별로 변경 가능                                        │
+├─ 하단 (Dynamic) ────────────────────────────────────────────┤
+│  사용자 질문, 동적 입력                                      │
+│  → 매 요청마다 변경                                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 적용 예시
+
+```markdown
+## System Instructions (Static - Top)
+You are a senior software engineer specializing in Python.
+Always follow PEP 8 guidelines and prioritize code readability.
+
+## Available Tools (Semi-Static - Middle)
+<tools>
+- read_file: Read file contents
+- write_file: Write to file
+- run_tests: Execute test suite
+</tools>
+
+## Retrieved Documentation (Semi-Static - Middle)
+<context>
+[RAG로 검색된 관련 문서]
+</context>
+
+## User Request (Dynamic - Bottom)
+<user_input>
+{{user_question}}
+</user_input>
+```
+
+### 왜 중요한가?
+
+| 측면 | 효과 |
+|------|------|
+| **비용 절감** | 캐시된 토큰은 비용 50% 감소 |
+| **지연시간 감소** | 캐시 히트 시 최대 80% 지연 감소 |
+| **일관성** | 정적 컨텍스트 재사용으로 응답 일관성 향상 |
+| **유지보수** | 컨텍스트 레이어별 독립 관리 가능 |
+
+---
+
+## 11. Tree of Thought (ToT) - 고급 추론
+
+> **출처**: 2026 Prompt Engineering Trends
+
+### 개념
+
+여러 가설이나 추론 경로를 병렬로 탐색한 후 최적의 결론을 도출하는 고급 추론 기법입니다.
+
+### Chain of Thought vs Tree of Thought
+
+| 기법 | 구조 | 적용 상황 |
+|------|------|---------|
+| **CoT** | 단일 선형 추론 | 명확한 단계적 문제 |
+| **ToT** | 다중 병렬 추론 | 불확실성 높은 복잡한 문제 |
+
+```
+CoT: A → B → C → 결론
+
+ToT:
+     ┌→ 가설1 → 검증 → 결론1
+A → ├→ 가설2 → 검증 → 결론2 → 최종 선택
+     └→ 가설3 → 검증 → 결론3
+```
+
+### 적용 시점
+
+- 여러 해결책이 가능한 복잡한 문제
+- 불확실성이 높아 여러 가설 탐색 필요
+- 최적 경로 선택이 중요한 의사결정
+- 창의적 문제 해결 (여러 관점 필요)
+
+### 프롬프트 패턴
+
+```markdown
+## Tree of Thought 패턴
+
+이 문제를 해결하기 전에:
+
+1. **가설 생성**: 가능한 3가지 접근법을 나열하세요
+2. **각 가설 평가**: 각 접근법의 장단점을 분석하세요
+3. **최적 선택**: 가장 적합한 접근법을 선택하고 이유를 설명하세요
+4. **실행**: 선택한 접근법으로 문제를 해결하세요
+
+<thinking>
+## 가설 1: [접근법 A]
+- 장점: ...
+- 단점: ...
+- 적합도: X/10
+
+## 가설 2: [접근법 B]
+- 장점: ...
+- 단점: ...
+- 적합도: X/10
+
+## 가설 3: [접근법 C]
+- 장점: ...
+- 단점: ...
+- 적합도: X/10
+
+## 결정: [선택한 접근법]
+이유: ...
+</thinking>
+
+<solution>
+[최종 해결책]
+</solution>
+```
+
+### 실제 사용 예시
+
+```markdown
+# Before (단순 요청)
+이 버그를 고쳐줘
+
+# After (ToT 적용)
+이 버그를 분석하기 전에:
+
+1. 가능한 원인을 3가지 가설로 나열하세요
+2. 각 가설의 가능성을 코드 증거와 함께 평가하세요
+3. 가장 가능성 높은 원인을 선택하고 수정 방법을 제시하세요
+
+<bug_analysis>
+[버그 코드]
+</bug_analysis>
+```
+
+---
+
+## 기법 선택 가이드 (업데이트)
+
+### 작업 유형별 우선 기법 (2026)
+
+| 작업 유형 | 1순위 | 2순위 | 3순위 | 고급 |
+|-----------|-------|-------|-------|------|
+| **분류** | Examples | XML Tags | - | - |
+| **생성** | Clear Instructions | Role | Examples | - |
+| **분석** | CoT | XML Tags | Examples | ToT |
+| **추출** | Examples | XML Tags | Prefill | - |
+| **대화** | Role | Clear Instructions | Context Eng. | - |
+| **복잡한 추론** | ToT | CoT | Chaining | - |
+| **대규모 시스템** | Context Eng. | Chaining | Role | - |
+
+---
+
 ## 관련 참조
 
-- [quality-checklist.md](quality-checklist.md) - 7-Point Quality Check
+- [quality-checklist.md](quality-checklist.md) - 8-Point Quality Check
 - [claude-4x-best-practices.md](claude-4x-best-practices.md) - Claude 4.x 최적화
 - [hallucination-reduction.md](hallucination-reduction.md) - 할루시네이션 감소
 - [latency-optimization.md](latency-optimization.md) - 지연시간 최적화

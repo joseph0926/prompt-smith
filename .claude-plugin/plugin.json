@@ -1,6 +1,6 @@
 {
   "name": "ps",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "Prompt quality management. /ps:r, /ps:a, /ps:lint, /ps:build commands.",
   "author": {
     "name": "joseph0926"
