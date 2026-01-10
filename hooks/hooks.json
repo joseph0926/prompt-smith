@@ -1,13 +1,16 @@
 {
-  "UserPromptSubmit": [
-    {
-      "matcher": "",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "${CLAUDE_PLUGIN_ROOT}/hooks/prompt-quality-check.sh"
-        }
-      ]
-    }
-  ]
+  "description": "Prompt Smith quality check hooks",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/prompt-quality-check.sh"
+          }
+        ]
+      }
+    ]
+  }
 }

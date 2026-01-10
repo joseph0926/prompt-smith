@@ -1,6 +1,6 @@
 {
   "name": "ps",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Prompt quality management with agents, hooks, and MCP integration. Commands: /ps:r, /ps:a, /ps:lint, /ps:build, /ps:eval",
   "author": {
     "name": "joseph0926"
@@ -23,10 +23,5 @@
     "hooks",
     "agents",
     "mcp"
-  ],
-  "commands": "../commands/",
-  "skills": "../skills/",
-  "agents": "../agents/",
-  "hooks": "../hooks/hooks.json",
-  "mcpServers": "../.mcp.json"
+  ]
 }
