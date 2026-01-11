@@ -1,30 +1,51 @@
 # prompt-smith
 
-> prompt quality management for Claude Code
+> Prompt quality management for Claude Code
+
+> **[한국어 문서 (Korean)](README.ko.md)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-3.2.0-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
 
 ![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 
-**Features**: 8-Point Quality Check | LINT Mode | BUILD Mode | Intercept Pipeline
+**Core Features**:
+
+- 8-Point Quality Check (LINT / BUILD / Review / Intercept)
+- Eval Mode: A/B testing with test datasets
+- Long Context: 200K token optimization
+- Token Management: Cost estimation & context validation
+- Structured Outputs: 100% JSON validity
+
+## When to Use Which Mode?
+
+| Situation                     | Recommended | Command                                                          |
+| ----------------------------- | ----------- | ---------------------------------------------------------------- |
+| "Is this prompt good enough?" | LINT        | `/ps:lint <prompt>`                                              |
+| "Make this prompt better"     | Review      | `/ps:r <prompt>`                                                 |
+| "Just fix it and run"         | Intercept   | `/ps:a <prompt>`                                                 |
+| "Design a new prompt"         | BUILD       | `/ps:build <goal>`                                               |
+| "Compare prompt variants"     | Eval        | See [Eval Mode](skills/prompt-smith/playbooks/eval/eval-mode.md) |
 
 ## Quick Start
 
 ### Commands at a Glance
 
-| Command | Description | Best For |
-|---------|-------------|----------|
-| `/ps:r <prompt>` | **Review Mode** - Show improvements, await approval | Daily use (safe) |
-| `/ps:lint <prompt>` | **LINT Mode** - Full diagnosis with test cases | Debugging prompts |
-| `/ps:a <prompt>` | **Intercept Mode** - Auto-improve and execute immediately | Quick tasks |
-| `/ps:build <goal>` | **BUILD Mode** - Design from requirements | New prompts |
-| `/ps:help [topic]` | **Help** - Show usage guide and command reference | Getting started |
+| Command             | Description                                               | Best For          |
+| ------------------- | --------------------------------------------------------- | ----------------- |
+| `/ps:r <prompt>`    | **Review Mode** - Show improvements, await approval       | Daily use (safe)  |
+| `/ps:lint <prompt>` | **LINT Mode** - Full diagnosis with test cases            | Debugging prompts |
+| `/ps:a <prompt>`    | **Intercept Mode** - Auto-improve and execute immediately | Quick tasks       |
+| `/ps:build <goal>`  | **BUILD Mode** - Design from requirements                 | New prompts       |
+| `/ps:help [topic]`  | **Help** - Show usage guide and command reference         | Getting started   |
 
 **Quick Example**:
+
 ```
 /ps:r Write a function to parse JSON
 ```
-→ Shows score (3/10 → 8/10), changes, asks "Proceed? (y/n/e)"
+
+Shows score (3/10 → 8/10), changes, asks "Proceed? (y/n/e)"
 
 ---
 
@@ -58,14 +79,14 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 
 **Slash Commands (recommended)**:
 
-````
+```
 /ps:r your prompt here            # Review Mode (single line)
 /ps:r your prompt here
 with multiple lines               # Review Mode (multiline)
 /ps:a your prompt here            # Intercept Mode
 /ps:lint your prompt              # LINT Mode
 /ps:build requirements            # BUILD Mode
-````
+```
 
 > **Note**: Triple backticks (```) are optional. Plain text and multiline input are fully supported.
 
@@ -75,111 +96,145 @@ with multiple lines               # Review Mode (multiline)
 use prompt-smith -r Your prompt here
 ```
 
+## Real Examples
+
+### LINT Mode (Diagnose)
+
+```
+/ps:lint Analyze user feedback
+```
+
+**Output**: Score 3/10 → Top 3 issues → Improved prompt → 5 test cases
+
+### Review Mode (Safe Improvement)
+
+```
+/ps:r Write a function to parse JSON
+```
+
+**Output**:
+
+```
++----------------------------------------------------------+
+| Score: 3/10 -> 8/10 (+5)                                 |
++----------------------------------------------------------+
+Changes:
+- [+] Added: Software engineer role
+- [+] Added: Error handling examples
+- [~] Modified: Specified return format
+
+Proceed? (y/n/e)
+```
+
+### Intercept Mode (Auto-fix)
+
+```
+/ps:a Summarize this document
+```
+
+**Output**: Auto-improved if +2 points possible → Executes immediately
+
+## What's New in v3.x
+
+### v3.2.0 (Latest)
+
+| Feature                | Description                                   |
+| ---------------------- | --------------------------------------------- |
+| **Eval Mode**          | A/B prompt comparison with test datasets      |
+| **Long Context**       | 200K token optimization (chunking, placement) |
+| **Token Management**   | Cost estimation, context window validation    |
+| **Structured Outputs** | 100% JSON validity techniques                 |
+
+### v3.0.0 - v3.1.0
+
+| Feature                 | Description                                        |
+| ----------------------- | -------------------------------------------------- |
+| **Progressive Loading** | Skills load on-demand                              |
+| **Hooks**               | Auto-LINT on prompt submit (optional)              |
+| **Agents**              | 3 specialized: optimizer, reviewer, test-generator |
+| **GitHub Actions**      | CI/CD integration                                  |
+
+See [CHANGELOG.md](CHANGELOG.md) for full release notes.
+
 ## Modes
 
-| Mode      | Slash Command        | Natural Language        | Description                       |
-| --------- | -------------------- | ----------------------- | --------------------------------- |
-| Review    | `/ps:r <prompt>`     | `use prompt-smith -r`   | Show improvements, await approval |
-| Intercept | `/ps:a <prompt>`     | `use prompt-smith -a`   | Auto-improve and execute          |
-| LINT      | `/ps:lint <prompt>`  | `lint this prompt`      | Diagnose existing prompts         |
-| BUILD     | `/ps:build <goal>`   | `build a prompt for...` | Design from requirements          |
+| Mode      | Slash Command       | Natural Language        | Description                       |
+| --------- | ------------------- | ----------------------- | --------------------------------- |
+| Review    | `/ps:r <prompt>`    | `use prompt-smith -r`   | Show improvements, await approval |
+| Intercept | `/ps:a <prompt>`    | `use prompt-smith -a`   | Auto-improve and execute          |
+| LINT      | `/ps:lint <prompt>` | `lint this prompt`      | Diagnose existing prompts         |
+| BUILD     | `/ps:build <goal>`  | `build a prompt for...` | Design from requirements          |
 
 ## 8-Point Quality Check
 
-| #   | Dimension        | Score | Note |
-| --- | ---------------- | ----- | ---- |
-| 1   | ROLE             | 0-2   | Base |
-| 2   | CONTEXT          | 0-2   | Base |
-| 3   | INSTRUCTION      | 0-2   | Base |
-| 4   | EXAMPLE          | 0-2   | Base |
-| 5   | FORMAT           | 0-2   | Base |
+| #   | Dimension        | Score | Note         |
+| --- | ---------------- | ----- | ------------ |
+| 1   | ROLE             | 0-2   | Base         |
+| 2   | CONTEXT          | 0-2   | Base         |
+| 3   | INSTRUCTION      | 0-2   | Base         |
+| 4   | EXAMPLE          | 0-2   | Base         |
+| 5   | FORMAT           | 0-2   | Base         |
 | 6   | SUCCESS_CRITERIA | 0-2   | Base (v2.7+) |
-| 7   | STATE_TRACKING   | 0-2   | Extended |
-| 8   | TOOL_USAGE       | 0-2   | Extended |
+| 7   | STATE_TRACKING   | 0-2   | Extended     |
+| 8   | TOOL_USAGE       | 0-2   | Extended     |
 
 **Base Score**: Dimensions 1-6 (max 12 → normalized to 10)
 **Extended Score**: All 8 dimensions (normalized)
+
+## Documentation
+
+### Getting Started
+
+- [Quick Start](skills/prompt-smith/onboarding/quick-start.md)
+- [First LINT](skills/prompt-smith/onboarding/first-lint.md)
+- [First BUILD](skills/prompt-smith/onboarding/first-build.md)
+
+### Mode Guides
+
+- [LINT Mode](skills/prompt-smith/playbooks/lint/full-lint.md)
+- [BUILD Mode](skills/prompt-smith/playbooks/build/build-mode.md)
+- [Review Mode](skills/prompt-smith/playbooks/intercept/review-mode.md)
+- [Intercept Mode](skills/prompt-smith/playbooks/intercept/intercept-mode.md)
+- [Eval Mode](skills/prompt-smith/playbooks/eval/eval-mode.md)
+
+### Advanced (v3.2.0)
+
+- [Long Context Optimization](skills/prompt-smith/references/long-context-optimization.md)
+- [Token Management](skills/prompt-smith/references/token-management.md)
+- [Structured Outputs](skills/prompt-smith/references/structured-outputs.md)
+- [Prompt Chaining](skills/prompt-smith/playbooks/prompt-chaining.md)
+
+### Reference
+
+- [8-Point Quality Checklist](skills/prompt-smith/references/quality-checklist.md)
+- [Anti-Patterns](skills/prompt-smith/references/anti-patterns.md)
+- [Technique Priority](skills/prompt-smith/references/technique-priority.md) (Anthropic recommended)
+- [Claude 4.x Best Practices](skills/prompt-smith/references/claude-4x-best-practices.md)
+
+## Troubleshooting
+
+### Slash commands not working
+
+1. Verify plugin: In VS Code, type `/plugin` → check installed list
+2. Restart VS Code or reload Claude Code extension
+3. Try reinstalling: Remove plugin, then reinstall
+
+### Score seems wrong
+
+- Extended items (STATE_TRACKING, TOOL_USAGE) only apply to multi-step or tool-using prompts
+- If N/A, they're excluded from score calculation
 
 ## Platform
 
 - **Claude Code** (CLI / VS Code extension)
 
-## Documentation
+## Contributing
 
-- [Quick Start](skills/prompt-smith/onboarding/quick-start.md)
-- [LINT Mode](skills/prompt-smith/playbooks/lint/full-lint.md)
-- [BUILD Mode](skills/prompt-smith/playbooks/build/build-mode.md)
-- [Intercept Pipeline](skills/prompt-smith/playbooks/intercept/review-mode.md)
-- [Prompt Chaining](skills/prompt-smith/playbooks/prompt-chaining.md)
-- [Quality Checklist](skills/prompt-smith/references/quality-checklist.md)
-- [Technique Priority](skills/prompt-smith/references/technique-priority.md) (Anthropic recommended)
-- [Hallucination Reduction](skills/prompt-smith/references/hallucination-reduction.md)
-- [Latency Optimization](skills/prompt-smith/references/latency-optimization.md)
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+- [Report a bug](https://github.com/joseph0926/prompt-smith/issues)
+- [Security issues](SECURITY.md)
 
 ## License
 
 MIT License - see [LICENSE](LICENSE)
-
----
-
-## 한국어
-
-[한국어 문서 바로가기](skills/prompt-smith/SKILL.md)
-
-![ps_demo_01](https://github.com/user-attachments/assets/fe3d2a32-9317-4df4-a418-b4d3ac42d920)
-
-### 빠른 시작
-
-**방법 1: 플러그인 설치 (슬래시 커맨드 활성화)**
-
-1. VS Code에서 `/plugin` 입력하여 플러그인 터미널 열기
-2. `Tab` 키로 "Add Marketplace" 이동
-3. `joseph0926/prompt-smith` 입력
-4. `Tab` 키로 "Install Plugin" 이동
-5. `ps@prompt-smith` 선택
-
-![설치 가이드](assets/install_g_01.png)
-
-**방법 2: 로컬 플러그인 (개발용)**
-
-```bash
-git clone https://github.com/joseph0926/prompt-smith
-claude --plugin-dir ./prompt-smith
-```
-
-**방법 3: 스킬만 설치 (자연어 트리거)**
-
-```bash
-git clone https://github.com/joseph0926/prompt-smith
-cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
-```
-
-> **참고**: 이 방법은 자연어 트리거(`prompt-smith 사용 -r`)만 활성화됩니다. 슬래시 커맨드는 사용 불가.
-
-**슬래시 커맨드 (권장)**:
-
-````
-/ps:r 프롬프트                     # Review Mode (한 줄)
-/ps:r 프롬프트
-여러 줄로 작성 가능                # Review Mode (여러 줄)
-/ps:a 프롬프트                     # Intercept Mode
-/ps:lint 프롬프트                  # LINT Mode
-/ps:build 요구사항                 # BUILD Mode
-````
-
-> **참고**: 트리플 백틱(```)은 선택사항입니다. 일반 텍스트와 여러 줄 입력을 완전히 지원합니다.
-
-**자연어 (대안)**:
-
-```
-prompt-smith 사용 -r 프롬프트 내용
-```
-
-### 모드
-
-| 모드      | 슬래시 커맨드          | 자연어                    | 설명                       |
-| --------- | ---------------------- | ------------------------- | -------------------------- |
-| Review    | `/ps:r <프롬프트>`     | `prompt-smith 사용 -r`    | 개선안 표시 후 승인 대기   |
-| Intercept | `/ps:a <프롬프트>`     | `prompt-smith 사용 -a`    | 자동 개선 후 즉시 실행     |
-| LINT      | `/ps:lint <프롬프트>`  | `이 프롬프트 점검해줘`    | 기존 프롬프트 진단         |
-| BUILD     | `/ps:build <목표>`     | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |
