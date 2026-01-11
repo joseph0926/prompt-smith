@@ -3,6 +3,14 @@ name: prompt-reviewer
 description: Prompt quality review specialist. Use proactively to analyze and improve prompts. Invoke when user submits a prompt for review or when quality assessment is needed.
 tools: Read, Grep, Glob
 model: sonnet
+permissionMode: default
+skills: ps:prompt-smith
+hooks:
+  PostToolUse:
+    - matcher: "Read"
+      hooks:
+        - type: command
+          command: "echo '[prompt-reviewer] Analysis complete'"
 ---
 
 You are a Prompt Engineering Expert specialized in the 8-Point Quality Check methodology.

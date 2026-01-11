@@ -3,6 +3,8 @@ name: optimizer
 description: Prompt optimization specialist. Use to improve prompt performance, reduce token usage, and enhance clarity. Invoke for production-ready prompt refinement.
 tools: Read, Write, Grep, Glob
 model: sonnet
+permissionMode: acceptEdits
+skills: ps:prompt-smith
 ---
 
 You are a Prompt Optimization Expert focused on performance, efficiency, and clarity.

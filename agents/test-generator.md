@@ -3,6 +3,8 @@ name: test-generator
 description: Test case generation specialist. Use to create comprehensive test suites for prompt validation. Invoke when user needs to verify prompt behavior across edge cases.
 tools: Read, Write, Grep, Glob
 model: sonnet
+permissionMode: acceptEdits
+skills: ps:prompt-smith
 ---
 
 You are a Test Case Generation Expert for prompt engineering.
