@@ -23,7 +23,7 @@ INPUT → ANALYZE → DIAGNOSE → IMPROVE → TEST → REPORT
 - 자연어: "프롬프트 점검해줘", "프롬프트 진단해줘"
 
 ### Step 2: ANALYZE
-8-Point Quality Check + 안티패턴 탐지
+8-Point Quality Check + 안티패턴 탐지 + **토큰 분석**
 
 ```
 ┌─ 8-Point Quality Check ─────────────────────────────────┐
@@ -48,6 +48,19 @@ INPUT → ANALYZE → DIAGNOSE → IMPROVE → TEST → REPORT
 - 1점: 있으나 불충분
 - 2점: 명확하고 충분함
 - N/A: 해당 없음 (분모에서 제외)
+
+**토큰 분석** (Detail 레벨에서 표시):
+
+| 항목 | 설명 |
+|------|------|
+| 추정 토큰 | 영어 4자=1토큰, 한글 2자=1토큰 기준 |
+| 컨텍스트 사용률 | 대상 모델(200K) 대비 비율 |
+| 예상 비용 | Sonnet 기준 입력 비용 |
+
+경고 임계값:
+- ⚠️ 50-80%: 최적화 권장
+- 🔶 80-90%: 압축 필요
+- 🔴 >90%: 즉시 최적화 필요
 
 ### Step 3: DIAGNOSE
 Top 3 이슈 도출
@@ -134,6 +147,15 @@ Suggestion: "You are a..." 추가, 입력-출력 예시 2개 추가
 | CONTEXT | 1/2 | 도메인 언급 있으나 불충분 |
 | ... | ... | ... |
 
+### 토큰 분석
+| 항목 | 값 |
+|------|-----|
+| 추정 토큰 | ~1,200 |
+| 대상 모델 | Sonnet (200K) |
+| 사용률 | 0.6% |
+| 예상 비용 | $0.0036/호출 |
+| 상태 | ✅ 정상 |
+
 ### Top 3 Issues
 [상세 분석]
 
@@ -179,5 +201,7 @@ LINT 시 자동 탐지되는 패턴:
 
 - [../references/quality-checklist.md](../references/quality-checklist.md) - 8-Point 상세
 - [../references/anti-patterns.md](../references/anti-patterns.md) - 안티패턴
+- [../references/token-management.md](../references/token-management.md) - 토큰 관리
+- [../references/structured-outputs.md](../references/structured-outputs.md) - 구조화 출력
 - [../templates/diagnostic-report.md](../templates/diagnostic-report.md) - 리포트 템플릿
 - [express-lint.md](../playbooks/lint/express-lint.md) - Express LINT

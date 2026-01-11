@@ -1,6 +1,6 @@
 {
   "name": "prompt-smith",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Prompt quality management skill with 8-Point Quality Check, LINT/BUILD modes, Intercept Pipeline, and advanced guides (Extended Thinking, Prefill, Token Efficiency).",
   "short_description": "Prompt QA skill (8-Point Check + LINT + BUILD + Intercept)",
   "author": "joseph0926",

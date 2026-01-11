@@ -3,11 +3,13 @@ name: prompt-smith
 description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:build, /ps:help로 프롬프트 개선. 트리거: 프롬프트 점검/린트, 프롬프트 설계/만들기, prompt-smith -r/-a"
 ---
 
-# Prompt Smith v3.1.0
+# Prompt Smith v3.2.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
-**v3.0**: Progressive Skill Loading, Hooks 자동 LINT, Subagent 분리, Empirical Evaluation, Extended Thinking/Prefill/Token Efficiency 가이드 추가
+**v3.2**: Evaluation Mode 구현, Long Context Optimization, Token Management, Structured Outputs 가이드 추가
+**v3.1**: 확장된 훅 시스템 (PostToolUse, SessionStart), GitHub Actions CI, 에이전트 강화
+**v3.0**: Progressive Skill Loading, Hooks 자동 LINT, Subagent 분리, Extended Thinking/Prefill 가이드
 
 ---
 
@@ -115,10 +117,14 @@ description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:buil
 - [references/anti-patterns.md](references/anti-patterns.md) - 안티패턴 (12개)
 - [references/claude-4x-best-practices.md](references/claude-4x-best-practices.md) - Claude 4.x 최적화
 - [references/technique-priority.md](references/technique-priority.md) - 기법 우선순위
+- [references/long-context-optimization.md](references/long-context-optimization.md) - 긴 컨텍스트 최적화
+- [references/token-management.md](references/token-management.md) - 토큰 관리
+- [references/structured-outputs.md](references/structured-outputs.md) - 구조화 출력
 
 ### Templates
 - [templates/prompt-template.md](templates/prompt-template.md) - 프롬프트 템플릿
 - [templates/test-case-template.md](templates/test-case-template.md) - 테스트 템플릿
+- [templates/eval-report.md](templates/eval-report.md) - 평가 리포트 템플릿
 
 ### Onboarding
 - [onboarding/quick-start.md](onboarding/quick-start.md) - 5분 시작 가이드
@@ -133,5 +139,7 @@ description: "프롬프트 품질관리 스킬. /ps:r, /ps:a, /ps:lint, /ps:buil
 | 1.0 | LINT Mode | ✅ |
 | 2.0 | BUILD Mode + 8-Point | ✅ |
 | 2.1 | Intercept Pipeline | ✅ |
-| **3.0** | **Progressive Loading + Hooks + Agents + Eval + Extended Thinking** | **✅ 현재** |
+| 3.0 | Progressive Loading + Hooks + Agents + Extended Thinking | ✅ |
+| 3.1 | PostToolUse 훅, SessionStart 훅, GitHub Actions CI | ✅ |
+| **3.2** | **Eval Mode + Long Context + Token Management + Structured Outputs** | **✅ 현재** |
 | 4.0 | DEBUG Mode (실패 분석) | 예정 |
