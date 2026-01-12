@@ -6,6 +6,20 @@ Common rules for all Prompt Smith commands.
 
 ---
 
+## ⚠️ Skill Invocation Rule (스킬 호출 필수 규칙)
+
+**CRITICAL FOR CLAUDE:**
+
+사용자가 `/ps:build`, `/ps:r`, `/ps:a`, `/ps:lint` 등을 입력한 경우:
+
+1. **Skill 도구로 즉시 호출** - 입력 내용 분석 전에 스킬 먼저 호출
+2. **입력 주제로 스킬 적합성 판단 금지** - "이건 프롬프트 설계가 아니다" 같은 선제적 판단 금지
+3. **스킬 시뮬레이션 금지** - Skill 도구 없이 GATHER/LINT 출력 생성 금지
+
+**참조**: [SKILL.md - Command Execution Rules](../SKILL.md#command-execution-rules)
+
+---
+
 ## XML Tag Separation (핵심 원칙)
 
 모든 `/ps:*` 커맨드는 입력을 XML 태그로 감쌉니다:

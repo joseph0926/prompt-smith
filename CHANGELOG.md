@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.1] - 2026-01-12
+
+### Summary
+Fix for `/ps:build` skill being skipped when input content appears unrelated to prompt design. Claude was pre-judging input content and simulating skill output instead of invoking the Skill tool.
+
+### Fixed
+
+#### Skill Invocation Enforcement
+- **Root cause**: Claude analyzed input content (e.g., "AI orchestrator for node-based web app") and decided it wasn't "prompt design", skipping skill invocation
+- **Solution**: Added explicit rules requiring immediate skill invocation regardless of input content
+
+### Changed
+
+#### SKILL.md
+- **description**: Added `**CRITICAL: /ps:로 시작하는 모든 명령은 입력 내용과 무관하게 반드시 이 스킬을 호출**`
+- **New section**: Command Execution Rules - explicit requirements for Claude to invoke skill tool immediately
+- **Files**: skills/prompt-smith/SKILL.md
+
+#### commands/build.md
+- **New section**: MANDATORY EXECUTION RULE - prohibits simulation without proper skill invocation
+- **New step**: Step 0.5 Scope Clarification - ASK instead of REFUSE for ambiguous inputs
+- **Interpretation guide**: Examples like "AI orchestrator" → "prompt for AI orchestration" design
+
+#### input-handling-rules.md
+- **New section**: Skill Invocation Rule - cross-reference to Command Execution Rules
+- **Files**: skills/prompt-smith/references/input-handling-rules.md
+
+### Technical Details
+
+| Issue | Before | After |
+|-------|--------|-------|
+| Input: `/ps:build AI orchestrator...` | Claude says "이건 프롬프트 설계가 아닙니다" | Skill tool invoked → GATHER or Step 0.5 question |
+| Skill simulation | Claude outputs GATHER/CLASSIFY without tool call | Forbidden - must use Skill tool |
+| Pre-filtering | Claude judges input relevance before skill call | Forbidden - skill handles scope validation |
+
+### Compatibility
+- Backward compatible with all existing workflows
+- No changes to 8-Point Quality Check scoring
+- No changes to LINT/Review/Intercept modes
+
+---
+
 ## [3.0.0] - 2026-01-10
 
 ### Summary
