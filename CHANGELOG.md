@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.2] - 2026-01-13
+
+### Summary
+Intercept Mode (ps:a) and Review Mode (ps:r) UX improvements. ps:a now shows minimal output for token efficiency, ps:r adds AskUserQuestion step for intent clarification before improvement.
+
+### Changed
+
+#### ps:a (Intercept Mode) - Token Optimization
+- **Output simplified**: Reduced verbose output to single-line `[Prompt Smith] 활성화됨 (X→Y점)`
+- **No improvement case**: Executes original prompt silently (no message)
+- **Token savings**: Changes list omitted to reduce token usage
+- **Files**: `playbooks/intercept/intercept-mode.md`, `modes/intercept.md`
+
+#### ps:r (Review Mode) - User Intent Clarification
+- **New step**: Added AskUserQuestion step (Step 2.5) after Express LINT
+- **4 questions asked**:
+  1. 출력 형식 (Output format): 목록/서술/코드/구조화
+  2. 세부 수준 (Detail level): 간략/보통/상세
+  3. 제약 조건 (Constraints): 없음/토큰 절약/특정 도구
+  4. 성공 기준 (Success criteria): 정확성/실행 가능성/완결성
+- **Intent reflection**: User answers incorporated into prompt improvement
+- **Timeout handling**: 60-second timeout with default values fallback
+- **Files**: `playbooks/intercept/review-mode.md`, `modes/intercept.md`
+
+#### Self-Check Updates
+- **Separated**: Review Mode and Intercept Mode now have distinct self-check lists
+- **New items**: AskUserQuestion verification for Review Mode
+- **Token efficiency check**: Intercept Mode verifies minimal output
+
+### Technical Details
+
+| Mode | Before | After |
+|------|--------|-------|
+| ps:a output | Box + Changes list + "Executing..." | `[Prompt Smith] 활성화됨 (X→Y점)` |
+| ps:a (no improvement) | "No significant improvement..." message | Silent execution |
+| ps:r workflow | LINT → Show → Approve | LINT → AskUserQuestion → Show → Approve |
+
+### Compatibility
+- Backward compatible with existing workflows
+- No changes to 8-Point Quality Check scoring
+- No changes to LINT/BUILD modes
+
+---
+
 ## [3.2.1] - 2026-01-12
 
 ### Summary

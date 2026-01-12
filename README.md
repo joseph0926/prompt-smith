@@ -5,7 +5,7 @@
 > **[한국어 문서 (Korean)](README.ko.md)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-3.2.0-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
+[![Version](https://img.shields.io/badge/version-3.2.2-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
 
 ![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 
@@ -136,7 +136,14 @@ Proceed? (y/n/e)
 
 ## What's New in v3.x
 
-### v3.2.0 (Latest)
+### v3.2.2 (Latest)
+
+| Feature                   | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| **ps:a Token Efficiency** | Minimal output: `[Prompt Smith] 활성화됨 (X→Y점)`       |
+| **ps:r Intent Capture**   | AskUserQuestion for format/detail/constraints/goals  |
+
+### v3.2.0
 
 | Feature                | Description                                   |
 | ---------------------- | --------------------------------------------- |

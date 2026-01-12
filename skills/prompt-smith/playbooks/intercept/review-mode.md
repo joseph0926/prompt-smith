@@ -9,7 +9,7 @@
 리뷰 모드는 프롬프트를 가로채어 Express LINT로 개선한 후, 개선된 버전으로 실행하기 전에 사용자 승인을 기다립니다.
 
 ```
-사용자 입력 -> Express LINT -> 개선사항 표시 -> 승인 대기 -> 실행
+사용자 입력 -> Express LINT -> 의도 확인(AskUserQuestion) -> 개선사항 표시 -> 승인 대기 -> 실행
 ```
 
 ---
@@ -40,7 +40,71 @@
 - EXAMPLE: 예시가 포함되었는가?
 - FORMAT: 출력 형식이 지정되었는가?
 
-### 단계 3: 개선사항 표시
+### 단계 2.5: 의도 확인 (AskUserQuestion)
+
+> **사용자 의도 반영**: Express LINT 후, 개선 방향을 결정하기 전에 사용자에게 질문합니다.
+
+AskUserQuestion 도구를 사용하여 다음 4가지 항목을 확인합니다:
+
+```json
+{
+  "questions": [
+    {
+      "question": "원하는 응답 형식은 무엇인가요?",
+      "header": "출력 형식",
+      "options": [
+        { "label": "목록/글머리", "description": "항목별 정리" },
+        { "label": "서술형", "description": "문단으로 설명" },
+        { "label": "코드 중심", "description": "예제 코드 포함" },
+        { "label": "구조화 (JSON/표)", "description": "데이터 형식" }
+      ],
+      "multiSelect": false
+    },
+    {
+      "question": "응답의 상세도 수준은?",
+      "header": "세부 수준",
+      "options": [
+        { "label": "간략", "description": "핵심만 2-3문장" },
+        { "label": "보통", "description": "적절한 설명 포함" },
+        { "label": "상세", "description": "배경/예시/주의사항 포함" }
+      ],
+      "multiSelect": false
+    },
+    {
+      "question": "특별한 제약 조건이 있나요?",
+      "header": "제약 조건",
+      "options": [
+        { "label": "없음", "description": "제약 없이 최선의 답변" },
+        { "label": "토큰 절약", "description": "간결한 응답 우선" },
+        { "label": "특정 도구 사용", "description": "지정 도구만 활용" }
+      ],
+      "multiSelect": true
+    },
+    {
+      "question": "좋은 결과란 무엇인가요? (선택 또는 직접 입력)",
+      "header": "성공 기준",
+      "options": [
+        { "label": "정확성", "description": "오류 없는 정보" },
+        { "label": "실행 가능성", "description": "바로 적용 가능" },
+        { "label": "완결성", "description": "추가 질문 불필요" }
+      ],
+      "multiSelect": true
+    }
+  ]
+}
+```
+
+**타임아웃 처리**: 60초 내 응답 없으면 기본값으로 진행 (보통 상세도, 제약 없음)
+
+### 단계 3: 의도 반영 개선
+
+사용자 응답을 바탕으로 프롬프트를 개선합니다:
+- **FORMAT 섹션**: 출력 형식 선택 반영
+- **CONSTRAINT 섹션**: 제약 조건 추가
+- **SUCCESS_CRITERIA 섹션**: 성공 기준 포함
+- **상세도 수준**: 세부 수준에 따라 지시 구체성 조정
+
+### 단계 4: 개선사항 표시
 
 ```
 원본 프롬프트 (점수: 3/10)

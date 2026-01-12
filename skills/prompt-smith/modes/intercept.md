@@ -20,7 +20,7 @@ Intercept Pipeline은 실시간 프롬프트 개선 파이프라인입니다.
 ### 워크플로우
 
 ```
-INPUT → Express LINT → SHOW Improved → WAIT Approval → EXECUTE (if approved)
+INPUT → Express LINT → AskUserQuestion (의도 확인) → SHOW Improved → WAIT Approval → EXECUTE (if approved)
 ```
 
 ### 사용법
@@ -104,27 +104,17 @@ prompt-smith 사용 -a <프롬프트>
 
 ### 출력 형식
 
+> **토큰 효율성**: 인터셉트 모드는 최소한의 메시지만 표시하여 토큰 사용량을 줄입니다.
+
 **개선 적용 시:**
-```markdown
-+----------------------------------------------------------+
-| Auto-improved: X/10 -> Y/10 (+Z)                         |
-+----------------------------------------------------------+
-
-Changes:
-- [+] [addition]
-- [~] [modification]
-
-Executing improved prompt...
 ```
+[Prompt Smith] 활성화됨 (X→Y점)
+```
+이후 Claude 응답만 표시됩니다. (변경사항 목록 생략)
 
 **개선 없이 실행 시:**
-```markdown
-+----------------------------------------------------------+
-| No significant improvement possible: X/10                 |
-+----------------------------------------------------------+
 
-Executing original prompt...
-```
+메시지 없이 원본 프롬프트로 즉시 실행됩니다.
 
 ---
 
@@ -235,13 +225,24 @@ JSON을 파싱하고
 
 ## Self-Check (매 Intercept 후)
 
+### Review Mode (`-r`) Self-Check
 ```
+□ AskUserQuestion으로 의도를 확인했는가? (4가지 항목)
+□ 사용자 응답을 개선안에 반영했는가?
 □ 전체 개선 프롬프트 텍스트를 표시했는가?
 □ 점수 변화 (X/10 → Y/10)를 표시했는가?
 □ Changes 목록 ([+]/[~])을 표시했는가?
 □ [DEBUG] Final Submitted Prompt을 표시했는가?
-□ 승인 요청 (Review 모드)을 했는가?
+□ 승인 요청을 했는가?
 □ 승인 전 실행하지 않았는가?
+```
+
+### Intercept Mode (`-a`) Self-Check
+```
+□ Express LINT를 수행했는가?
+□ 개선 점수 >= 2점이면 "[Prompt Smith] 활성화됨 (X→Y점)" 메시지만 표시했는가?
+□ 개선 점수 < 2점이면 메시지 없이 바로 실행했는가?
+□ 변경사항 목록을 생략했는가? (토큰 효율성)
 ```
 
 ---
