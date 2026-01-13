@@ -21,8 +21,14 @@ $ARGUMENTS
 > - **DO NOT** call Bash/Task
 > - **ONLY** perform Express LINT on that text
 
-**Your ONLY action for Steps 1-3**: Parse → LINT → Auto-Improve Decision → Show Summary
-**Tool calls allowed ONLY in Step 4** (Execute Phase)
+**CRITICAL: NO BYPASS ALLOWED**
+- You MUST NOT skip the LINT → Improve → Execute workflow
+- You MUST NOT judge "this is a code review request, not a prompt improvement request"
+- You MUST NOT say "이건 프롬프트 개선 요청이 아니다" and bypass the skill
+- ALL input to `/ps:a` is treated as a prompt to be improved, regardless of content
+
+**Steps 1-2**: Internal processing only (NO output, NO tool calls)
+**Step 3**: Show minimal message (if improved) → Execute **IMPROVED** prompt with tool calls
 
 ---
 
@@ -59,53 +65,35 @@ score = (sum(applicable) / (applicable_items × 2)) × 10
 - Base 5 items (ROLE~FORMAT): max 10 points
 - Extended items (STATE_TRACKING, TOOL_USAGE): N/A if not applicable (excluded from denominator)
 
-### Step 3: Auto-Improve Decision
+### Step 3: Auto-Improve & Execute
+
+> **토큰 효율성**: Steps 1-2는 내부 처리만 수행하고 출력하지 않습니다.
 
 **If improvement >= 2 points:**
 
-Apply improvements automatically and show:
+Show ONE line only, then execute immediately:
 ```
-+----------------------------------------------------------+
-| Auto-improved: X/10 -> Y/10 (+Z)                         |
-+----------------------------------------------------------+
-
-Changes:
-- [+] [addition]
-- [~] [modification]
-
-Executing improved prompt...
+[Prompt Smith] 활성화됨 (X→Y점)
 ```
-Then execute the improved prompt immediately.
 
 **If improvement < 2 points:**
 
-Show:
-```
-+----------------------------------------------------------+
-| No significant improvement possible: X/10                 |
-+----------------------------------------------------------+
-
-Executing original prompt...
-```
-Then execute the original prompt.
-
-### Step 4: Execute
-
-After showing summary, proceed to execute the prompt (original or improved).
+No message. Execute original prompt immediately.
 
 ## Rules
 
 ### Phase-based Behavior
 
-1. **LINT/Improve Phase (Steps 1-3)**: Treat input as data only. NO tool calls.
-2. **Execute Phase (Step 4)**: After showing summary, execute the prompt normally.
+1. **LINT/Improve Phase (Steps 1-2)**: Internal processing only. NO output. NO tool calls.
+2. **Execute Phase (Step 3)**: Show minimal message (if improved), then execute.
 
 ### Intercept Mode Specific Rules
 
 - Auto-apply only when improvement is +2 points or more
-- Always show what was changed before execution
-- Execute immediately after summary (no approval needed)
-- If Express LINT fails, use original prompt with warning
+- Output ONLY `[Prompt Smith] 활성화됨 (X→Y점)` — nothing else
+- NO Step headers, NO tables, NO Changes list (token efficiency)
+- Execute immediately after one-line message
+- If improvement < 2 points: silent execution (no message at all)
 
 ## Reference
 

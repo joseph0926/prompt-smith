@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.3] - 2026-01-13
+
+### Summary
+Enforce skill execution and prevent workflow bypass across all commands. Adds consistent guard sections to prevent Claude from skipping skill workflows by pre-judging input content.
+
+### Fixed
+
+#### Workflow Bypass Prevention
+- **Root cause**: Claude analyzed input content and decided to bypass skill (e.g., "이건 프롬프트 개선 요청이 아니다")
+- **Example**: `/ps:a 3.2.2 패치 검토해주세요` → Claude skipped LINT and executed as general request
+- **Solution**: Added explicit NO BYPASS ALLOWED guards to all commands
+
+### Changed
+
+#### commands/a.md
+- **Added**: CRITICAL: NO BYPASS ALLOWED section
+- **Synced**: Output format with modes/intercept.md (`[Prompt Smith] 활성화됨 (X→Y점)` only)
+- **Updated**: Step 3 merged with Execute phase (removed Step 4)
+
+#### commands/r.md
+- **Added**: CRITICAL: NO BYPASS ALLOWED section
+- **Added**: Step 2.5 AskUserQuestion (4 questions for intent capture)
+- **Updated**: Rules section with AskUserQuestion requirements
+
+#### commands/lint.md
+- **Added**: MANDATORY EXECUTION RULE section
+- **Added**: CRITICAL: NO BYPASS ALLOWED section
+
+#### commands/help.md
+- **Added**: MANDATORY EXECUTION RULE section
+- **Updated**: Topic: intercept section to reflect token-efficient output format
+
+### Technical Details
+
+| Command | Guards Added |
+|---------|-------------|
+| ps:a | NO BYPASS ALLOWED |
+| ps:r | NO BYPASS ALLOWED + AskUserQuestion step |
+| ps:lint | MANDATORY EXECUTION RULE + NO BYPASS ALLOWED |
+| ps:build | Already had MANDATORY EXECUTION RULE |
+| ps:help | MANDATORY EXECUTION RULE |
+
+### Compatibility
+- Backward compatible with existing workflows
+- No changes to 8-Point Quality Check scoring
+- Strengthens 3.2.1 skill invocation enforcement
+
+---
+
 ## [3.2.2] - 2026-01-13
 
 ### Summary

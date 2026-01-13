@@ -7,6 +7,19 @@ argument-hint: [topic]
 
 **Input:** $ARGUMENTS
 
+---
+
+## ⚠️ MANDATORY EXECUTION RULE
+
+> **This command MUST be executed when user types `/ps:help`**
+>
+> The Claude agent MUST:
+> 1. Invoke this skill via the Skill tool IMMEDIATELY
+> 2. NEVER simulate or mimic this skill's output without proper invocation
+> 3. NEVER skip showing the help content
+
+---
+
 ## Available Topics
 
 Parse the input argument to determine which help topic to show:
@@ -266,28 +279,18 @@ USAGE
 
 WORKFLOW
   1. Parse input as literal prompt text
-  2. Run Express LINT (7-Point Quality Check)
-  3. Calculate potential improvement
-  4. Auto-decision:
+  2. Run Express LINT internally (no output)
+  3. Auto-decision:
      - If improvement >= 2 points: Apply and execute
-     - If improvement < 2 points: Execute original
-  5. Show summary and execute immediately
+     - If improvement < 2 points: Execute original silently
 
-OUTPUT FORMAT
+OUTPUT FORMAT (Token-efficient)
   If improved:
-  +----------------------------------------------------------+
-  | Auto-improved: X/10 -> Y/10 (+Z)                         |
-  +----------------------------------------------------------+
-  Changes:
-  - [+] [additions]
-  - [~] [modifications]
-  Executing improved prompt...
+    [Prompt Smith] 활성화됨 (X→Y점)
+    (Then executes improved prompt immediately)
 
   If not improved:
-  +----------------------------------------------------------+
-  | No significant improvement possible: X/10                 |
-  +----------------------------------------------------------+
-  Executing original prompt...
+    (No message - executes original prompt silently)
 
 WHEN TO USE
   - Quick, low-stakes tasks

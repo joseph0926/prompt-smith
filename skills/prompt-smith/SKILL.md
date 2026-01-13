@@ -3,7 +3,7 @@ name: prompt-smith
 description: "프롬프트 품질관리 스킬. /ps:build, /ps:r, /ps:a, /ps:lint로 프롬프트 개선. **CRITICAL: /ps:로 시작하는 모든 명령은 입력 내용과 무관하게 반드시 이 스킬을 호출**. 트리거: /ps: 접두사, 프롬프트 점검, 프롬프트 설계"
 ---
 
-# Prompt Smith v3.2.2
+# Prompt Smith v3.2.3
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
