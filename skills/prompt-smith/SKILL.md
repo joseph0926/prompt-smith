@@ -1,9 +1,9 @@
 ---
 name: prompt-smith
-description: "프롬프트 품질관리 스킬. /ps:build, /ps:r, /ps:a, /ps:lint로 프롬프트 개선. **CRITICAL: /ps:로 시작하는 모든 명령은 입력 내용과 무관하게 반드시 이 스킬을 호출**. 트리거: /ps: 접두사, 프롬프트 점검, 프롬프트 설계"
+description: "프롬프트 품질을 진단·개선·설계하는 스킬. /ps:build, /ps:r, /ps:a, /ps:lint, /ps:eval 입력 또는 프롬프트 점검/설계 요청에서 사용."
 ---
 
-# Prompt Smith v3.3.0
+# Prompt Smith v3.3.1
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
@@ -24,6 +24,12 @@ description: "프롬프트 품질관리 스킬. /ps:build, /ps:r, /ps:a, /ps:lin
 | `/ps:build <요구사항>` | BUILD Mode | [modes/build.md](modes/build.md) |
 | `/ps:eval` | Evaluation | [playbooks/eval/eval-mode.md](playbooks/eval/eval-mode.md) |
 | `/ps:help` | Help | 도움말 표시 |
+
+---
+
+## Examples
+
+- [examples.md](examples.md) - LINT/BUILD/Review 예시 모음
 
 ---
 
@@ -155,6 +161,8 @@ description: "프롬프트 품질관리 스킬. /ps:build, /ps:r, /ps:a, /ps:lin
 - [references/long-context-optimization.md](references/long-context-optimization.md) - 긴 컨텍스트 최적화
 - [references/token-management.md](references/token-management.md) - 토큰 관리
 - [references/structured-outputs.md](references/structured-outputs.md) - 구조화 출력
+- [references/state-tracking-guide.md](references/state-tracking-guide.md) - 상태 추적 가이드
+- [references/tool-usage-guide.md](references/tool-usage-guide.md) - 도구 사용 가이드
 
 ### Templates
 - [templates/prompt-template.md](templates/prompt-template.md) - 프롬프트 템플릿

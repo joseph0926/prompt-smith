@@ -1,6 +1,6 @@
 {
   "name": "ps",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Prompt quality management with agents, hooks, and MCP integration. Commands: /ps:r, /ps:a, /ps:lint, /ps:build, /ps:eval",
   "author": {
     "name": "joseph0926"

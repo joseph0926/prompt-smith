@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.3.1] - 2026-01-14
+
+### Summary
+Improve discoverability with Examples and TOCs, and strengthen Structured Outputs guidance for schema mismatches.
+
+### Added
+- `skills/prompt-smith/examples.md`: LINT/BUILD usage examples.
+- TOC sections for long references: `quality-checklist.md`, `structured-outputs.md`, `state-tracking-guide.md`, `tool-usage-guide.md`, `long-context-optimization.md`, `token-management.md`, `technique-priority.md`, `claude-4x-best-practices.md`, `hallucination-reduction.md`, `latency-optimization.md`, `team-workflow.md`, `input-handling-rules.md`.
+
+### Changed
+- `skills/prompt-smith/SKILL.md`: Examples link + state/tool references.
+- `skills/prompt-smith/references/structured-outputs.md`: schema mismatch handling guidance and JSON Mode caution.
+- `skills/prompt-smith/examples.md`: expanded with full sample output formats for LINT/BUILD/Review/Intercept.
+
+---
+
 ## [3.3.0] - 2026-01-14
 
 ### Summary

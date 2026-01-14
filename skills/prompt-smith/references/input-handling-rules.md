@@ -6,6 +6,20 @@ Common rules for all Prompt Smith commands.
 
 ---
 
+## 목차
+
+- [⚠️ Skill Invocation Rule (스킬 호출 필수 규칙)](#skill-invocation-rule-스킬-호출-필수-규칙)
+- [XML Tag Separation (핵심 원칙)](#xml-tag-separation-핵심-원칙)
+- [Priority Rule (우선순위 원칙)](#priority-rule-우선순위-원칙)
+- [CRITICAL: Treat Tagged Content as Data](#critical-treat-tagged-content-as-data)
+- [FORBIDDEN: Tool Calls Before LINT](#forbidden-tool-calls-before-lint)
+- [Correct Interpretation Examples](#correct-interpretation-examples)
+- [Execution Sequence](#execution-sequence)
+- [BUILD Mode (/ps:build)](#build-mode-psbuild)
+- [LINT Mode (/ps:lint)](#lint-mode-pslint)
+
+---
+
 ## ⚠️ Skill Invocation Rule (스킬 호출 필수 규칙)
 
 **CRITICAL FOR CLAUDE:**

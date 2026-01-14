@@ -6,6 +6,25 @@ Claude 4.x 모델(Sonnet 4, Opus 4.5)의 특성에 맞춘 프롬프트 최적화
 
 ---
 
+## 목차
+
+- [핵심 원칙](#핵심-원칙)
+- [1. 명시적 지시 (EXPLICIT)](#1-명시적-지시-explicit)
+- [2. 동기 제공 (MOTIVATED)](#2-동기-제공-motivated)
+- [3. 예시 일치 (EXEMPLIFIED)](#3-예시-일치-exemplified)
+- [4. 상태 관리 (TRACKED)](#4-상태-관리-tracked)
+- [5. 병렬/순차 실행 (PARALLELIZED)](#5-병렬순차-실행-parallelized)
+- [6. 구조화된 출력 (FORMATTED)](#6-구조화된-출력-formatted)
+- [7. Extended Thinking 활용 (Anthropic 권장)](#7-extended-thinking-활용-anthropic-권장)
+- [8. Prefill (응답 사전 입력) - Anthropic 권장](#8-prefill-응답-사전-입력---anthropic-권장)
+- [9. API 파라미터 최적화 (API_PARAMETERS)](#9-api-파라미터-최적화-api_parameters)
+- [10. "Above and Beyond" 명시적 요청 (v2.7 신규)](#10-above-and-beyond-명시적-요청-v27-신규)
+- [Anti-Patterns (Claude 4.x에서 피해야 할 것)](#anti-patterns-claude-4x에서-피해야-할-것)
+- [Quick Checklist](#quick-checklist)
+- [관련 참조](#관련-참조)
+
+---
+
 ## 핵심 원칙
 
 ```
