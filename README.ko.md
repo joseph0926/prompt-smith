@@ -3,7 +3,7 @@
 > Claude Code를 위한 프롬프트 품질 관리 도구
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-3.2.2-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
+[![Version](https://img.shields.io/badge/version-3.3.0-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
 
 ![ps_demo_01](https://github.com/user-attachments/assets/fe3d2a32-9317-4df4-a418-b4d3ac42d920)
 
@@ -124,7 +124,7 @@ prompt-smith 사용 -r 프롬프트 내용
 
 ## v3.x 신기능
 
-### v3.2.2 (최신)
+### v3.3.0 (최신)
 
 | 기능 | 설명 |
 |------|------|

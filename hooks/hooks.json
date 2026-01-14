@@ -3,11 +3,11 @@
   "hooks": {
     "UserPromptSubmit": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/prompt-quality-check.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/prompt-quality-check.sh",
+            "timeout": 5
           }
         ]
       }
@@ -26,11 +26,11 @@
     ],
     "SessionStart": [
       {
-        "matcher": "startup",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh",
+            "timeout": 5
           }
         ]
       }

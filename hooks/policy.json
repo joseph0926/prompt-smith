@@ -1,0 +1,9 @@
+{
+  "userPromptSubmit": {
+    "mode": "warn",
+    "minWordCount": 5,
+    "minQualityPercent": 60,
+    "blockReason": "Prompt is missing key structure (ROLE/GOAL/CONTEXT/FORMAT/CONSTRAINTS). Please expand it and try again.",
+    "notes": "Set mode=block to reject low-quality prompts. Default warn only injects guidance to avoid UX disruption."
+  }
+}

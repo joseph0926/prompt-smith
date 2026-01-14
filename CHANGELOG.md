@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.3.0] - 2026-01-14
+
+### Summary
+Expose the Prompt Registry as MCP **Prompts** (slash commands) in addition to MCP tools, and split hook blocking behavior into a configurable policy.
+
+### Added
+
+#### MCP Prompts Capability
+- Implemented `prompts/list` and `prompts/get` on the prompt-registry MCP server.
+- Saved prompts are now discoverable as slash commands: `/mcp__prompt-registry__<prompt_name>`.
+- Added built-in `/mcp__prompt-registry__registry_help` prompt.
+- Emits `notifications/prompts/list_changed` when prompts are saved/deleted so clients can refresh without reconnecting.
+
+#### Hook Blocking Policy
+- Added `hooks/policy.json` to control whether `UserPromptSubmit` is **warn-only** (default) or can **block** (`decision=block`) low-quality prompts.
+
+### Changed
+- `hooks/prompt-quality-check.sh`: reads `hooks/policy.json` and conditionally returns `decision: "block"` + `reason` when enabled.
+- `hooks/session-start.sh`: documents MCP prompts and the hook policy file in the session capability card.
+
+---
+
+## [3.2.4] - 2026-01-13
+
+### Summary
+Stabilize MCP config loading, strengthen hooks reliability, and connect subagents to MCP registry tools.
+
+### Added
+- `.mcp.json` standardized to use `mcpServers` wrapper.
+- Subagents now explicitly allow MCP registry tools.
+
+### Changed
+- Hooks: matcher cleanup + timeouts.
+- Hooks outputs standardized to JSON `additionalContext` to reduce transcript noise.
+
 ## [3.2.3] - 2026-01-13
 
 ### Summary

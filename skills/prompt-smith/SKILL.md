@@ -3,10 +3,11 @@ name: prompt-smith
 description: "프롬프트 품질관리 스킬. /ps:build, /ps:r, /ps:a, /ps:lint로 프롬프트 개선. **CRITICAL: /ps:로 시작하는 모든 명령은 입력 내용과 무관하게 반드시 이 스킬을 호출**. 트리거: /ps: 접두사, 프롬프트 점검, 프롬프트 설계"
 ---
 
-# Prompt Smith v3.2.3
+# Prompt Smith v3.3.0
 
 프롬프트를 **진단(LINT) → 자동 개선(Rewrite) → 테스트 생성** 또는 **요구사항에서 신규 설계(BUILD)**로 운영 가능한 자산으로 만드는 품질관리 스킬입니다.
 
+**v3.3**: MCP Prompts 지원 (saved prompts as slash commands), Hook blocking policy 분리
 **v3.2**: Evaluation Mode 구현, Long Context Optimization, Token Management, Structured Outputs 가이드 추가
 **v3.1**: 확장된 훅 시스템 (PostToolUse, SessionStart), GitHub Actions CI, 에이전트 강화
 **v3.0**: Progressive Skill Loading, Hooks 자동 LINT, Subagent 분리, Extended Thinking/Prefill 가이드
@@ -25,6 +26,17 @@ description: "프롬프트 품질관리 스킬. /ps:build, /ps:r, /ps:a, /ps:lin
 | `/ps:help` | Help | 도움말 표시 |
 
 ---
+
+## MCP Prompt Registry
+
+프롬프트를 재사용 가능한 자산으로 관리하려면 Prompt Registry MCP 서버를 사용할 수 있습니다.
+
+### MCP Tools
+- `mcp__prompt-registry__prompt_save` / `prompt_get` / `prompt_list` / `prompt_search` / `prompt_delete`
+
+### MCP Prompts (Slash Commands)
+- `/mcp__prompt-registry__registry_help`
+- `/mcp__prompt-registry__<saved_prompt_name>` (저장된 프롬프트는 자동으로 slash command로 노출)
 
 ## 8-Point Quality Check
 
