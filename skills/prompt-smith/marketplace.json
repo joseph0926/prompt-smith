@@ -21,13 +21,6 @@
   "compatibility": {
     "claude-code": ">=1.0.0"
   },
-  "i18n": {
-    "locales": [
-      "ko",
-      "en"
-    ],
-    "default": "ko"
-  },
   "features": [
     "8-Point Quality Check (ROLE, CONTEXT, INSTRUCTION, EXAMPLE, FORMAT, SUCCESS_CRITERIA + STATE_TRACKING, TOOL_USAGE)",
     "LINT Mode - Diagnose and improve existing prompts",
@@ -39,6 +32,6 @@
     "Test case generation (normal, edge, injection defense)",
     "MCP Prompt Registry: saved prompts exposed as slash commands (prompts/list, prompts/get)",
     "Anti-pattern detection",
-    "Bilingual support (English/Korean)"
+    "Bilingual docs (README.ko.md + README.md)"
   ]
 }

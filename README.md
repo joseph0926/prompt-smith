@@ -5,7 +5,7 @@
 > **[한국어 문서 (Korean)](README.ko.md)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-3.3.0-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
+[![Version](https://img.shields.io/badge/version-3.3.1-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
 
 ![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 
@@ -136,7 +136,14 @@ Proceed? (y/n/e)
 
 ## What's New in v3.x
 
-### v3.3.0 (Latest)
+### v3.3.1 (Latest)
+
+| Feature                   | Description                                                         |
+| ------------------------- | ------------------------------------------------------------------- |
+| **Examples & TOCs**       | Expanded examples and added TOCs to long references                 |
+| **Structured Outputs**    | Stronger guidance for schema mismatch and JSON mode caution         |
+
+### v3.3.0
 
 | Feature                   | Description                                          |
 | ------------------------- | ---------------------------------------------------- |

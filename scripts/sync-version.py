@@ -120,10 +120,6 @@ def main() -> None:
         root / "skills/prompt-smith/SKILL.md",
         version,
     )
-    update_markdown_frontmatter(
-        root / "skills/prompt-smith/i18n/en/SKILL.md",
-        version,
-    )
 
     print()
     print(f"✅ Version synced to {version} in all files")

@@ -20,6 +20,9 @@ Improve discoverability with Examples and TOCs, and strengthen Structured Output
 - `skills/prompt-smith/SKILL.md`: Examples link + state/tool references.
 - `skills/prompt-smith/references/structured-outputs.md`: schema mismatch handling guidance and JSON Mode caution.
 - `skills/prompt-smith/examples.md`: expanded with full sample output formats for LINT/BUILD/Review/Intercept.
+- `CONTRIBUTING.md`: clarify i18n policy (no `i18n/` directories; bilingual README only).
+- `skills/prompt-smith/marketplace.json`: remove non-standard `i18n` field.
+- `scripts/sync-version.py`: stop syncing removed i18n SKILL paths.
 
 ---
 

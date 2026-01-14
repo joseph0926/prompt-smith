@@ -18,7 +18,6 @@ prompt-smith/
 │   ├── playbooks/     # Mode-specific workflows
 │   ├── references/    # Reference documentation
 │   ├── templates/     # Output templates
-│   └── i18n/en/       # English translations
 ├── .github/           # GitHub configuration
 └── scripts/           # Build and utility scripts
 ```
@@ -40,13 +39,13 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 <type>(<scope>): <description>
 
 Types: feat, fix, docs, chore, refactor, test
-Scope: skill, commands, ci, i18n
+Scope: skill, commands, ci, docs
 ```
 
 Examples:
 - `feat(skill): add new quality check rule`
 - `fix(commands): correct lint output format`
-- `docs(i18n): update English translations`
+- `docs: update English README`
 
 ### Pull Request Process
 
@@ -54,15 +53,16 @@ Examples:
 2. Make your changes
 3. Run lint checks locally
 4. Update documentation if needed
-5. Sync i18n files if content changed
+5. Keep bilingual docs (README.md / README.ko.md) in sync if content changed
 6. Submit PR with clear description
 
 ## Code Guidelines
 
 ### Language
 
-- Primary: Korean (root level)
-- Translations: `i18n/en/`
+- Primary: Korean for skill content under `skills/prompt-smith/`
+- English docs are maintained only as parallel files (e.g., `README.md` + `README.ko.md`)
+- Do not create `i18n/` directories unless an official spec requires it
 
 ### SKILL.md Requirements
 
@@ -78,23 +78,13 @@ description: "Clear description"
 ### File Naming
 
 - Use kebab-case: `feature-name.md`
-- Match structure in i18n directories
+- For bilingual docs, keep filenames aligned (e.g., `README.md` + `README.ko.md`)
 
-## i18n Guidelines
+## i18n Policy
 
-1. Primary language files at root level (Korean)
-2. English translations in `i18n/en/`
-3. Keep directory structure identical
-4. Update both when changing content
-
-When adding a new file:
-```bash
-# Create Korean version
-skills/prompt-smith/playbooks/new-feature.md
-
-# Create English version
-skills/prompt-smith/i18n/en/playbooks/new-feature.md
-```
+1. This repo does not use `skills/**/i18n/` directories
+2. Bilingual docs live side-by-side at the same level (e.g., `README.md` + `README.ko.md`)
+3. Update both files together when shared content changes
 
 ## Testing
 
@@ -109,7 +99,6 @@ skills/prompt-smith/i18n/en/playbooks/new-feature.md
 The following checks run automatically:
 - SKILL.md existence and size
 - Frontmatter validation
-- i18n structure consistency
 - Markdown lint
 
 ## Reporting Issues
