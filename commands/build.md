@@ -112,14 +112,15 @@ Classify:
 
 ### Step 3: DESIGN - Structure
 
-Plan all 7-Point elements:
+Plan all 8-Point elements:
 1. ROLE - Who is the AI?
 2. CONTEXT - What background info?
 3. INSTRUCTION - What specific actions?
 4. EXAMPLE - 2+ examples
 5. FORMAT - Output structure?
-6. STATE_TRACKING - (if multi-step)
-7. TOOL_USAGE - (if tools needed)
+6. SUCCESS_CRITERIA - What defines success?
+7. STATE_TRACKING - (if multi-step)
+8. TOOL_USAGE - (if tools needed)
 
 ### Step 4: DRAFT - Write Prompt
 
@@ -127,7 +128,7 @@ Write complete prompt following design.
 
 ### Step 5: SELF-LINT - Verify Quality
 
-Perform 7-Point Check on draft:
+Perform 8-Point Check on draft:
 - If score < 8: Revise and repeat
 - If score >= 8: Proceed
 

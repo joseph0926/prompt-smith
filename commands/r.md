@@ -54,7 +54,7 @@ and handles errors  (multiline)
 
 ### Step 2: Express LINT (Internal)
 
-Perform 7-Point Quality Check internally (no output).
+Perform 8-Point Quality Check internally (no output).
 
 ### Step 2.5: Intent Clarification (AskUserQuestion)
 

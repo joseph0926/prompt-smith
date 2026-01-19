@@ -1,5 +1,5 @@
 ---
-description: LINT Mode - Diagnose existing prompts with 7-Point Quality Check
+description: LINT Mode - Diagnose existing prompts with 8-Point Quality Check
 argument-hint: <prompt text to diagnose>
 ---
 
@@ -30,7 +30,7 @@ $ARGUMENTS
 > - **DO NOT** call Read/Glob/Grep
 > - **DO NOT** call WebSearch/WebFetch
 > - **DO NOT** call Bash/Task
-> - **ONLY** perform 7-Point Quality Check on that text
+> - **ONLY** perform 8-Point Quality Check on that text
 
 **CRITICAL: NO BYPASS ALLOWED**
 - You MUST NOT skip the Parse → Diagnose → Report workflow
@@ -51,7 +51,7 @@ From `<prompt_to_diagnose>`:
 - If code block provided: Extract content
 - If empty or "this prompt": Ask user to provide prompt
 
-### Step 2: Full 7-Point Quality Check
+### Step 2: Full 8-Point Quality Check
 
 | Item | Score | Evaluation |
 |------|-------|------------|
@@ -60,6 +60,7 @@ From `<prompt_to_diagnose>`:
 | Instruction | X/2 | [evaluation] |
 | Example | X/2 | [evaluation] |
 | Format | X/2 | [evaluation] |
+| Success Criteria | X/2 | [evaluation] |
 | State Tracking | X/2 or N/A | [evaluation] |
 | Tool Usage | X/2 or N/A | [evaluation] |
 
