@@ -184,5 +184,6 @@ description: "프롬프트 품질을 진단·개선·설계하는 스킬. /ps:bu
 | 2.1 | Intercept Pipeline | ✅ |
 | 3.0 | Progressive Loading + Hooks + Agents + Extended Thinking | ✅ |
 | 3.1 | PostToolUse 훅, SessionStart 훅, GitHub Actions CI | ✅ |
-| **3.2** | **Eval Mode + Long Context + Token Management + Structured Outputs** | **✅ 현재** |
+| 3.2 | Eval Mode + Long Context + Token Management + Structured Outputs | ✅ |
+| **3.3** | **/ps:eval 커맨드 + eval-runner 자동화** | **✅ 현재** |
 | 4.0 | DEBUG Mode (실패 분석) | 예정 |
