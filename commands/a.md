@@ -55,14 +55,14 @@ and handles errors  (multiline)
 
 ### Step 2: Express LINT
 
-Perform quick 7-Point Quality Check.
+Perform quick 8-Point Quality Check.
 Calculate original score and potential improved score.
 
 **Score Calculation**:
 ```
 score = (sum(applicable) / (applicable_items × 2)) × 10
 ```
-- Base 5 items (ROLE~FORMAT): max 10 points
+- Base 6 items (ROLE~SUCCESS_CRITERIA): max 12 points, normalized to 10
 - Extended items (STATE_TRACKING, TOOL_USAGE): N/A if not applicable (excluded from denominator)
 
 ### Step 3: Auto-Improve & Execute

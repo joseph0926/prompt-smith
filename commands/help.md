@@ -28,7 +28,7 @@ Parse the input argument to determine which help topic to show:
 - `build` - BUILD mode detailed guide
 - `review` or `r` - Review mode guide
 - `intercept` or `a` - Intercept/Auto mode guide
-- `7point` or `quality` - 7-Point Quality Check explanation
+- `8point`, `7point`, or `quality` - 8-Point Quality Check explanation
 - (empty or `help`) - General overview
 
 ## Output Format
@@ -45,7 +45,7 @@ COMMANDS
   /ps:a <prompt>      Auto Mode - improve and execute immediately
   /ps:lint <prompt>   LINT Mode - full diagnosis with test cases
   /ps:build <goal>    BUILD Mode - design new prompt from requirements
-  /ps:help [topic]    This help (topics: commands, lint, build, 7point)
+  /ps:help [topic]    This help (topics: commands, lint, build, 8point/7point)
 
 QUICK START
   1. Try: /ps:r Write a function to parse JSON
@@ -64,7 +64,7 @@ OUTPUT LEVELS
 
 MORE INFO
   /ps:help commands   - All command details
-  /ps:help 7point     - Scoring criteria explained
+  /ps:help 8point     - Scoring criteria explained (alias: 7point)
 ```
 
 ### Topic: commands
@@ -89,7 +89,7 @@ MORE INFO
 
 /ps:lint <prompt>
   LINT Mode - Deep diagnosis
-  - Full 7-Point Quality Check with scores
+  - Full 8-Point Quality Check with scores
   - Identifies top 3 issues (Critical/Major/Minor)
   - Generates improved version
   - Creates 5 test cases including edge cases
@@ -98,20 +98,20 @@ MORE INFO
 /ps:build <goal>
   BUILD Mode - Design from scratch
   - Takes requirements, outputs production prompt
-  - 7-step process: GATHER → CLASSIFY → DESIGN → DRAFT → SELF-LINT → TEST → DELIVER
+  - 7-step workflow: GATHER → CLASSIFY → DESIGN → DRAFT → SELF-LINT → TEST → DELIVER
   - Includes test cases and usage examples
   - Best for creating new prompts
 
 /ps:help [topic]
   Show this help
-  Topics: commands, lint, build, review, 7point
+  Topics: commands, lint, build, review, 8point/7point
 ```
 
-### Topic: 7point or quality
+### Topic: 8point, 7point, or quality
 
 ```
 +----------------------------------------------------------+
-| 7-Point Quality Check                                     |
+| 8-Point Quality Check                                     |
 +----------------------------------------------------------+
 
 SCORING CRITERIA (0-2 each)
@@ -141,21 +141,26 @@ SCORING CRITERIA (0-2 each)
    1: Basic format hint
    2: Explicit structure (JSON, markdown, etc.)
 
-6. STATE_TRACKING (For multi-turn)
+6. SUCCESS_CRITERIA (What defines success?)
+   0: No success criteria
+   1: Vague or implicit criteria
+   2: Measurable, verifiable conditions
+
+7. STATE_TRACKING (For multi-turn)
    0: No state management
    1: Basic memory
    2: Explicit state variables and transitions
    N/A: Single-turn prompts
 
-7. TOOL_USAGE (For tool-enabled AI)
+8. TOOL_USAGE (For tool-enabled AI)
    0: Tools mentioned but not guided
    1: Basic tool instructions
    2: Clear tool selection criteria and examples
    N/A: No tools involved
 
 SCORING
-  Base Score: Dimensions 1-5 (max 10 points)
-  Extended: All 7 normalized to 10 if 6-7 apply
+  Base Score: Dimensions 1-6 (max 12 points, normalized to 10)
+  Extended: All 8 normalized to 10 if 7-8 apply
 
 INTERPRETATION
   0-3: Critical issues, major rewrite needed
@@ -177,13 +182,13 @@ USAGE
 
 WORKFLOW
   1. Parse input prompt
-  2. Run 7-Point Quality Check (full scores)
+  2. Run 8-Point Quality Check (full scores)
   3. Identify top 3 issues by severity
   4. Generate improved version with diff
   5. Create 5 test cases
 
 OUTPUT SECTIONS
-  - Score Table (7 dimensions)
+  - Score Table (8 dimensions)
   - Top 3 Issues (Critical > Major > Minor)
   - Before/After Comparison
   - Change Log (what changed and why)
@@ -211,13 +216,13 @@ WORKFLOW (7 Steps)
   2. CLASSIFY  - Determine prompt type (single/multi-turn, tools)
   3. DESIGN    - Plan structure based on classification
   4. DRAFT     - Write initial prompt
-  5. SELF-LINT - Run 7-Point Check, iterate until 8+
+  5. SELF-LINT - Run 8-Point Check, iterate until 8+
   6. TEST      - Generate test cases
   7. DELIVER   - Output final prompt + usage guide
 
 OUTPUT
   - Final prompt (copy-ready)
-  - 7-Point score breakdown
+  - 8-Point score breakdown
   - 3 usage examples
   - 5 test cases
   - Recommended deployment notes
@@ -241,7 +246,7 @@ USAGE
 
 WORKFLOW
   1. Parse input as literal prompt text
-  2. Run Express LINT (7-Point Quality Check)
+  2. Run Express LINT (8-Point Quality Check)
   3. Generate improved version
   4. Show before/after comparison with score
   5. Await user approval (y/n/e)
