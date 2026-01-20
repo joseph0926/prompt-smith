@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.4.0] - 2026-01-20
+
+### Summary
+Add evaluation command with automated runner, weighted scoring system, anti-pattern detection, and documentation improvements.
+
+### Added
+
+#### Evaluation System (PR #17)
+- **New command**: `/ps:eval` for prompt evaluation with two operational modes
+- **Guided Mode**: Interactive workflow for manual prompt evaluation
+- **Dataset Mode**: JSON-based automated evaluation processing
+- **Evaluation Runner**: `scripts/eval-runner.js` with DatasetLoader, PromptExecutor, Scorer, ReportGenerator modules
+- **Local-First Design**: Defaults to dry-run with no external API dependencies
+- **Optional LLM Integration**: `--llm-eval` flag enables model-based evaluation
+
+#### Weighted Scoring & Anti-Pattern Detection (PR #19)
+- **Configurable Scoring System**: Weighted evaluation of prompt quality
+- **Custom Keywords**: User-defined keyword matching for quality checks
+- **Anti-Pattern Detection**: Automatic detection of problematic prompt patterns
+- **Enhanced Linting**: Improved messaging and code-block filtering
+
+### Changed
+
+#### Documentation Updates (PR #16, PR #18)
+- **Terminology Unification**: 7-Point → 8-Point across all command files (lint.md, build.md, help.md, a.md, r.md)
+- **SUCCESS_CRITERIA**: Added as sixth base item in quality check tables
+- **Token Management**: Replaced hardcoded pricing with official Anthropic docs link
+- **Backward Compatibility**: Preserved 7point alias in help.md
+
+### Closed Issues
+- #1: 7-Point → 8-Point specification unified
+- #2: /ps:eval command implementation
+- #4: Remove hardcoded pricing tables
+- #5: Add anti-pattern detection with weighted scoring
+
+---
+
 ## [3.3.1] - 2026-01-14
 
 ### Summary

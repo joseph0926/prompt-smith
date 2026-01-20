@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Prompt quality management plugin for Claude Code",
-    "version": "3.3.1"
+    "version": "3.4.0"
   },
   "plugins": [
     {
       "name": "ps",
       "source": "./",
       "description": "Prompt quality management. /ps:r, /ps:a, /ps:lint, /ps:build commands.",
-      "version": "3.3.1",
+      "version": "3.4.0",
       "author": {
         "name": "joseph0926"
       },
