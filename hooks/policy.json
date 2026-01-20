@@ -4,6 +4,28 @@
     "minWordCount": 5,
     "minQualityPercent": 60,
     "blockReason": "Prompt is missing key structure (ROLE/GOAL/CONTEXT/FORMAT/CONSTRAINTS). Please expand it and try again.",
-    "notes": "Set mode=block to reject low-quality prompts. Default warn only injects guidance to avoid UX disruption."
+    "notes": "Set mode=block to reject low-quality prompts. Default warn only injects guidance to avoid UX disruption.",
+    "scoring": {
+      "rolePresent": 2,
+      "goalPresent": 2,
+      "contextPresent": 2,
+      "formatPresent": 2,
+      "constraintPresent": 2,
+      "antiPatternVague": -2,
+      "antiPatternAmbiguous": -1,
+      "antiPatternOverConfident": -1
+    },
+    "customKeywords": {
+      "role": ["역할", "당신은"],
+      "goal": ["요구사항", "목표", "해야 할 일"],
+      "context": ["배경", "상황", "전제"],
+      "format": ["형식", "출력"],
+      "constraint": ["제약조건", "금지", "하지 마"]
+    },
+    "antiPatterns": {
+      "vague": ["잘", "깔끔", "적당", "자연스럽", "좋은", "최대한", "가능하면"],
+      "ambiguous": ["maybe", "somehow", "어느정도", "약간", "조금", "많이"],
+      "overConfident": ["확실히", "반드시", "항상", "절대로"]
+    }
   }
 }
