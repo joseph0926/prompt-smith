@@ -24,8 +24,8 @@
 
 | Sprint | Goal | Key Deliverable | Status |
 |--------|------|-----------------|--------|
-| 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | **In Progress** |
-| 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | Planned |
+| 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | **Done** |
+| 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | **In Progress** |
 | 2 | Unified Rule Engine | Hook/CI 단일 규칙 엔진 | Planned |
 | 3 | Registry v2 | 버전 히스토리/롤백/디프 | Planned |
 | 4 | PromptPack v0.1 | pack/install 배포 단위 | Planned |
@@ -44,9 +44,9 @@
 
 **Deliverables**:
 - [x] ADR-001: Naming/Brand Decision
-- [ ] ROADMAP.md (this document)
-- [ ] ARCHITECTURE.md
-- [ ] Version sync 범위 확장 (README 포함)
+- [x] ROADMAP.md (this document)
+- [x] ARCHITECTURE.md
+- [x] Version sync 범위 확장 (README 포함)
 - [ ] GitHub Issue Templates (optional)
 
 **Acceptance Criteria**:
@@ -60,10 +60,10 @@
 **Goal**: 품질 미달이면 CI가 실패해서 PR 머지가 막히게 함
 
 **Deliverables**:
-- `ps.config.json` (threshold/paths 설정)
-- `ci-lint.sh` exit code 정책 (threshold 미달 → exit 1)
-- GitHub Actions 요약 개선 (실패 원인 표시)
-- 로컬 재현 문서
+- [x] `ps.config.json` (threshold/paths 설정)
+- [x] `ci-lint.sh` exit code 정책 (threshold 미달 → exit 1)
+- [x] GitHub Actions 요약 개선 (실패 원인 표시)
+- [x] 로컬 재현 문서 (`docs/ci-gate-guide.md`)
 
 **Acceptance Criteria**:
 - 의도적으로 품질 낮은 prompt를 커밋하면 PR job이 FAIL

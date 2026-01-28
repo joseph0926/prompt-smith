@@ -1,4 +1,4 @@
-name: Prompt Quality Check
+name: Prompt Quality Gate
 
 on:
   pull_request:
@@ -7,25 +7,84 @@ on:
       - 'skills/**'
       - 'commands/**'
       - 'agents/**'
+      - 'prompts/**'
+      - 'ps.config.json'
 
 jobs:
   lint:
+    name: Quality Gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Prompt LINT
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Run Prompt Quality Gate
+        id: lint
         run: |
           chmod +x ./scripts/ci-lint.sh
-          ./scripts/ci-lint.sh
+          ./scripts/ci-lint.sh 2>&1 | tee /tmp/lint-output.txt
+        continue-on-error: true
 
       - name: Post Quality Summary
         if: always()
         run: |
-          echo "## Prompt Quality Report" >> $GITHUB_STEP_SUMMARY
+          echo "## Prompt Quality Gate Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Read config for threshold display
+          if [ -f ps.config.json ]; then
+            THRESHOLD=$(jq -r '.lint.minScoreCI // 6' ps.config.json)
+            MAX_SCORE=$(jq -r '.lint.maxScore // 10' ps.config.json)
+            echo "**Threshold:** $THRESHOLD/$MAX_SCORE" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Add results table
           if [ -f /tmp/lint-results.txt ]; then
             cat /tmp/lint-results.txt >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          STATUS="UNKNOWN"
+          if [ -f /tmp/lint-status.txt ]; then
+            STATUS=$(cat /tmp/lint-status.txt)
+          fi
+
+          # Add status badge
+          if [ "$STATUS" == "PASS" ]; then
+            echo "### Result: PASSED" >> $GITHUB_STEP_SUMMARY
+            echo "All prompts meet the quality threshold." >> $GITHUB_STEP_SUMMARY
+          elif [ "$STATUS" == "WARN" ]; then
+            echo "### Result: REPORT ONLY (WARN)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Some prompts are below the quality threshold, but Gate is in report-only mode." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Next steps:**" >> $GITHUB_STEP_SUMMARY
+            echo "1. Run \`./scripts/ci-lint.sh\` locally to reproduce" >> $GITHUB_STEP_SUMMARY
+            echo "2. Use \`/ps:lint\` for detailed analysis" >> $GITHUB_STEP_SUMMARY
+            echo "3. Improve prompts to meet threshold ($THRESHOLD/$MAX_SCORE)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "All prompts passed quality check." >> $GITHUB_STEP_SUMMARY
+            echo "### Result: FAILED" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Some prompts are below the quality threshold." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Next steps:**" >> $GITHUB_STEP_SUMMARY
+            echo "1. Run \`./scripts/ci-lint.sh\` locally to reproduce" >> $GITHUB_STEP_SUMMARY
+            echo "2. Use \`/ps:lint\` for detailed analysis" >> $GITHUB_STEP_SUMMARY
+            echo "3. Improve prompts to meet threshold ($THRESHOLD/$MAX_SCORE)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail if threshold breached
+        if: always()
+        run: |
+          if [ "${{ steps.lint.outcome }}" == "failure" ]; then
+            echo "Quality gate error. See logs for details."
+            exit 1
+          fi
+
+          if [ -f /tmp/lint-status.txt ] && [ "$(cat /tmp/lint-status.txt)" == "FAIL" ]; then
+            echo "Quality gate failed. See summary for details."
+            exit 1
           fi

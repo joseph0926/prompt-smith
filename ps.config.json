@@ -1,0 +1,26 @@
+{
+  "$schema": "./ps.config.schema.json",
+  "version": "1.0.0",
+  "lint": {
+    "minScoreCI": 6,
+    "minScoreWarn": 4,
+    "maxScore": 10,
+    "includeGlobs": [
+      "commands/**/*.md",
+      "skills/**/*.md",
+      "agents/**/*.md",
+      "prompts/**/*.md"
+    ],
+    "excludeGlobs": [
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/README.md",
+      "**/CHANGELOG.md"
+    ]
+  },
+  "ci": {
+    "failOnThresholdBreach": true,
+    "reportFormat": "markdown",
+    "maxFailuresShown": 5
+  }
+}

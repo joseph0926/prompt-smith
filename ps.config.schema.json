@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://prompt-shield.dev/ps.config.schema.json",
+  "title": "PromptShield Configuration",
+  "description": "Configuration schema for PromptShield CI Quality Gate",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Configuration version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "lint": {
+      "type": "object",
+      "description": "Lint configuration",
+      "properties": {
+        "minScoreCI": {
+          "type": "integer",
+          "description": "Minimum score for CI Gate pass (exit 1 if below)",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 6
+        },
+        "minScoreWarn": {
+          "type": "integer",
+          "description": "Minimum score before warning (no exit code impact)",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 4
+        },
+        "maxScore": {
+          "type": "integer",
+          "description": "Maximum possible score",
+          "minimum": 1,
+          "default": 10
+        },
+        "includeGlobs": {
+          "type": "array",
+          "description": "Glob patterns for files to include",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "commands/**/*.md",
+            "skills/**/*.md",
+            "agents/**/*.md",
+            "prompts/**/*.md"
+          ]
+        },
+        "excludeGlobs": {
+          "type": "array",
+          "description": "Glob patterns for files to exclude",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/README.md",
+            "**/CHANGELOG.md"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "ci": {
+      "type": "object",
+      "description": "CI-specific configuration",
+      "properties": {
+        "failOnThresholdBreach": {
+          "type": "boolean",
+          "description": "If true, exit 1 on threshold breach. If false, report only.",
+          "default": true
+        },
+        "reportFormat": {
+          "type": "string",
+          "description": "Output format for CI report",
+          "enum": ["markdown", "json", "text"],
+          "default": "markdown"
+        },
+        "maxFailuresShown": {
+          "type": "integer",
+          "description": "Maximum number of failures to show in summary",
+          "minimum": 1,
+          "default": 5
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
