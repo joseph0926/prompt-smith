@@ -3,7 +3,7 @@ description: Review Mode - Improve prompt and await approval before execution
 argument-hint: <prompt text>
 ---
 
-# Prompt Smith - Review Mode
+# PromptShield - Review Mode
 
 <prompt_to_improve>
 $ARGUMENTS
@@ -171,8 +171,8 @@ Wait for user response (y/n/e) before execution.
 
 ### Input Handling (see PRE-FLIGHT CHECK above)
 
-Details: [input-handling-rules.md](../skills/prompt-smith/references/input-handling-rules.md)
+Details: [input-handling-rules.md](../skills/prompt-shield/references/input-handling-rules.md)
 
 ## Reference
 
-For detailed workflow: skills/prompt-smith/playbooks/intercept/review-mode.md
+For detailed workflow: skills/prompt-shield/playbooks/intercept/review-mode.md

@@ -1,4 +1,4 @@
-# Contributing to prompt-smith
+# Contributing to PromptShield
 
 ## Quick Start
 
@@ -11,9 +11,9 @@
 ## Project Structure
 
 ```
-prompt-smith/
+prompt-shield/
 ├── commands/           # Slash command definitions
-├── skills/prompt-smith/
+├── skills/prompt-shield/
 │   ├── SKILL.md       # Main skill definition
 │   ├── playbooks/     # Mode-specific workflows
 │   ├── references/    # Reference documentation
@@ -60,7 +60,7 @@ Examples:
 
 ### Language
 
-- Primary: Korean for skill content under `skills/prompt-smith/`
+- Primary: Korean for skill content under `skills/prompt-shield/`
 - English docs are maintained only as parallel files (e.g., `README.md` + `README.ko.md`)
 - Do not create `i18n/` directories unless an official spec requires it
 

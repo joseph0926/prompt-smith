@@ -369,7 +369,7 @@ jobs:
 
 ```bash
 # crontab - 매주 월요일 9시 실행
-0 9 * * 1 /path/to/prompt-smith/scripts/weekly-eval.sh
+0 9 * * 1 /path/to/prompt-shield/scripts/weekly-eval.sh
 ```
 
 ---

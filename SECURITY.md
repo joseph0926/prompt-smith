@@ -36,4 +36,4 @@ This project follows these security practices:
 
 ## Scope
 
-This security policy applies to the prompt-smith project and its official distributions.
+This security policy applies to the PromptShield project and its official distributions.

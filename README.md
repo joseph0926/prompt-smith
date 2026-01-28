@@ -1,11 +1,11 @@
-# prompt-smith
+# PromptShield
 
 > Prompt quality management for Claude Code
 
 > **[한국어 문서 (Korean)](README.ko.md)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-3.3.1-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
+[![Version](https://img.shields.io/badge/version-3.4.0-blue.svg)](https://github.com/joseph0926/prompt-shield/releases)
 
 ![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 
@@ -25,7 +25,7 @@
 | "Make this prompt better"     | Review      | `/ps:r <prompt>`                                                 |
 | "Just fix it and run"         | Intercept   | `/ps:a <prompt>`                                                 |
 | "Design a new prompt"         | BUILD       | `/ps:build <goal>`                                               |
-| "Compare prompt variants"     | Eval        | See [Eval Mode](skills/prompt-smith/playbooks/eval/eval-mode.md) |
+| "Compare prompt variants"     | Eval        | See [Eval Mode](skills/prompt-shield/playbooks/eval/eval-mode.md) |
 
 ## Quick Start
 
@@ -53,27 +53,27 @@ Shows score (3/10 → 8/10), changes, asks "Proceed? (y/n/e)"
 
 1. In VS Code, type `/plugin` to open plugin terminal
 2. Press `Tab` to navigate to "Add Marketplace"
-3. Enter: `joseph0926/prompt-smith`
+3. Enter: `joseph0926/prompt-shield`
 4. Press `Tab` to navigate to "Install Plugin"
-5. Select `ps@prompt-smith`
+5. Select `ps@prompt-shield`
 
 ![Install Guide](assets/install_g_01.png)
 
 ### Option 2: Local Plugin (development)
 
 ```bash
-git clone https://github.com/joseph0926/prompt-smith
-claude --plugin-dir ./prompt-smith
+git clone https://github.com/joseph0926/prompt-shield
+claude --plugin-dir ./prompt-shield
 ```
 
 ### Option 3: Skill Only (natural language triggers)
 
 ```bash
-git clone https://github.com/joseph0926/prompt-smith
-cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+git clone https://github.com/joseph0926/prompt-shield
+cp -r prompt-shield/skills/prompt-shield ~/.claude/skills/
 ```
 
-> **Note**: This method only enables natural language triggers (`use prompt-smith -r`), not slash commands.
+> **Note**: This method only enables natural language triggers (`use prompt-shield -r`), not slash commands.
 
 ### Usage
 
@@ -93,7 +93,7 @@ with multiple lines               # Review Mode (multiline)
 **Natural Language (alternative)**:
 
 ```
-use prompt-smith -r Your prompt here
+use prompt-shield -r Your prompt here
 ```
 
 ## Real Examples
@@ -147,7 +147,7 @@ Proceed? (y/n/e)
 
 | Feature                   | Description                                          |
 | ------------------------- | ---------------------------------------------------- |
-| **ps:a Token Efficiency** | Minimal output: `[Prompt Smith] 활성화됨 (X→Y점)`       |
+| **ps:a Token Efficiency** | Minimal output: `[PromptShield] 활성화됨 (X→Y점)`       |
 | **ps:r Intent Capture**   | AskUserQuestion for format/detail/constraints/goals  |
 
 ### v3.2.0
@@ -174,8 +174,8 @@ See [CHANGELOG.md](CHANGELOG.md) for full release notes.
 
 | Mode      | Slash Command       | Natural Language        | Description                       |
 | --------- | ------------------- | ----------------------- | --------------------------------- |
-| Review    | `/ps:r <prompt>`    | `use prompt-smith -r`   | Show improvements, await approval |
-| Intercept | `/ps:a <prompt>`    | `use prompt-smith -a`   | Auto-improve and execute          |
+| Review    | `/ps:r <prompt>`    | `use prompt-shield -r`   | Show improvements, await approval |
+| Intercept | `/ps:a <prompt>`    | `use prompt-shield -a`   | Auto-improve and execute          |
 | LINT      | `/ps:lint <prompt>` | `lint this prompt`      | Diagnose existing prompts         |
 | BUILD     | `/ps:build <goal>`  | `build a prompt for...` | Design from requirements          |
 
@@ -199,31 +199,31 @@ See [CHANGELOG.md](CHANGELOG.md) for full release notes.
 
 ### Getting Started
 
-- [Quick Start](skills/prompt-smith/onboarding/quick-start.md)
-- [First LINT](skills/prompt-smith/onboarding/first-lint.md)
-- [First BUILD](skills/prompt-smith/onboarding/first-build.md)
+- [Quick Start](skills/prompt-shield/onboarding/quick-start.md)
+- [First LINT](skills/prompt-shield/onboarding/first-lint.md)
+- [First BUILD](skills/prompt-shield/onboarding/first-build.md)
 
 ### Mode Guides
 
-- [LINT Mode](skills/prompt-smith/playbooks/lint/full-lint.md)
-- [BUILD Mode](skills/prompt-smith/playbooks/build/build-mode.md)
-- [Review Mode](skills/prompt-smith/playbooks/intercept/review-mode.md)
-- [Intercept Mode](skills/prompt-smith/playbooks/intercept/intercept-mode.md)
-- [Eval Mode](skills/prompt-smith/playbooks/eval/eval-mode.md)
+- [LINT Mode](skills/prompt-shield/playbooks/lint/full-lint.md)
+- [BUILD Mode](skills/prompt-shield/playbooks/build/build-mode.md)
+- [Review Mode](skills/prompt-shield/playbooks/intercept/review-mode.md)
+- [Intercept Mode](skills/prompt-shield/playbooks/intercept/intercept-mode.md)
+- [Eval Mode](skills/prompt-shield/playbooks/eval/eval-mode.md)
 
 ### Advanced (v3.2.0)
 
-- [Long Context Optimization](skills/prompt-smith/references/long-context-optimization.md)
-- [Token Management](skills/prompt-smith/references/token-management.md)
-- [Structured Outputs](skills/prompt-smith/references/structured-outputs.md)
-- [Prompt Chaining](skills/prompt-smith/playbooks/prompt-chaining.md)
+- [Long Context Optimization](skills/prompt-shield/references/long-context-optimization.md)
+- [Token Management](skills/prompt-shield/references/token-management.md)
+- [Structured Outputs](skills/prompt-shield/references/structured-outputs.md)
+- [Prompt Chaining](skills/prompt-shield/playbooks/prompt-chaining.md)
 
 ### Reference
 
-- [8-Point Quality Checklist](skills/prompt-smith/references/quality-checklist.md)
-- [Anti-Patterns](skills/prompt-smith/references/anti-patterns.md)
-- [Technique Priority](skills/prompt-smith/references/technique-priority.md) (Anthropic recommended)
-- [Claude 4.x Best Practices](skills/prompt-smith/references/claude-4x-best-practices.md)
+- [8-Point Quality Checklist](skills/prompt-shield/references/quality-checklist.md)
+- [Anti-Patterns](skills/prompt-shield/references/anti-patterns.md)
+- [Technique Priority](skills/prompt-shield/references/technique-priority.md) (Anthropic recommended)
+- [Claude 4.x Best Practices](skills/prompt-shield/references/claude-4x-best-practices.md)
 
 ## Troubleshooting
 
@@ -246,7 +246,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full release notes.
 
 We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-- [Report a bug](https://github.com/joseph0926/prompt-smith/issues)
+- [Report a bug](https://github.com/joseph0926/prompt-shield/issues)
 - [Security issues](SECURITY.md)
 
 ## License

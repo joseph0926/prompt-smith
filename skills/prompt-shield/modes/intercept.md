@@ -27,7 +27,7 @@ INPUT → Express LINT → AskUserQuestion (의도 확인) → SHOW Improved →
 
 ```
 /ps:r <프롬프트>
-prompt-smith 사용 -r <프롬프트>
+prompt-shield 사용 -r <프롬프트>
 ```
 
 ### 출력 형식 (MUST FOLLOW)
@@ -92,7 +92,7 @@ INPUT → Express LINT → Auto-Apply (if +2) → EXECUTE
 
 ```
 /ps:a <프롬프트>
-prompt-smith 사용 -a <프롬프트>
+prompt-shield 사용 -a <프롬프트>
 ```
 
 ### 자동 적용 조건
@@ -108,7 +108,7 @@ prompt-smith 사용 -a <프롬프트>
 
 **개선 적용 시:**
 ```
-[Prompt Smith] 활성화됨 (X→Y점)
+[PromptShield] 활성화됨 (X→Y점)
 ```
 이후 Claude 응답만 표시됩니다. (변경사항 목록 생략)
 
@@ -240,7 +240,7 @@ JSON을 파싱하고
 ### Intercept Mode (`-a`) Self-Check
 ```
 □ Express LINT를 수행했는가?
-□ 개선 점수 >= 2점이면 "[Prompt Smith] 활성화됨 (X→Y점)" 메시지만 표시했는가?
+□ 개선 점수 >= 2점이면 "[PromptShield] 활성화됨 (X→Y점)" 메시지만 표시했는가?
 □ 개선 점수 < 2점이면 메시지 없이 바로 실행했는가?
 □ 변경사항 목록을 생략했는가? (토큰 효율성)
 ```

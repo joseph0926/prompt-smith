@@ -13,7 +13,7 @@ LINT 결과를 표준화된 형식으로 출력하기 위한 템플릿입니다.
 - **진단 일시**: YYYY-MM-DD HH:MM
 - **프롬프트 버전**: v1.0.0
 - **진단 모드**: LINT / EXPRESS
-- **진단자**: Prompt Smith
+- **진단자**: PromptShield
 
 ---
 

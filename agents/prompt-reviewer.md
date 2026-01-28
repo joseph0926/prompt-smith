@@ -4,7 +4,7 @@ description: Review prompts and provide actionable feedback for improvement
 tools: Read, Grep, Glob, mcp__prompt-registry__prompt_get, mcp__prompt-registry__prompt_list, mcp__prompt-registry__prompt_search
 model: sonnet
 permissionMode: default
-skills: ps:prompt-smith
+skills: ps:prompt-shield
 ---
 
 # Prompt Reviewer Agent

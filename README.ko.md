@@ -1,9 +1,9 @@
-# prompt-smith
+# PromptShield
 
 > Claude Code를 위한 프롬프트 품질 관리 도구
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-3.3.1-blue.svg)](https://github.com/joseph0926/prompt-smith/releases)
+[![Version](https://img.shields.io/badge/version-3.4.0-blue.svg)](https://github.com/joseph0926/prompt-shield/releases)
 
 ![ps_demo_01](https://github.com/user-attachments/assets/fe3d2a32-9317-4df4-a418-b4d3ac42d920)
 
@@ -22,7 +22,7 @@
 | "프롬프트 개선해줘" | Review | `/ps:r <프롬프트>` |
 | "그냥 고쳐서 실행해" | Intercept | `/ps:a <프롬프트>` |
 | "새 프롬프트 설계해줘" | BUILD | `/ps:build <목표>` |
-| "A/B 테스트 해보고 싶어" | Eval | [Eval Mode](skills/prompt-smith/playbooks/eval/eval-mode.md) 참고 |
+| "A/B 테스트 해보고 싶어" | Eval | [Eval Mode](skills/prompt-shield/playbooks/eval/eval-mode.md) 참고 |
 
 ## 빠른 시작
 
@@ -48,27 +48,27 @@
 
 1. VS Code에서 `/plugin` 입력하여 플러그인 터미널 열기
 2. `Tab` 키로 "Add Marketplace" 이동
-3. `joseph0926/prompt-smith` 입력
+3. `joseph0926/prompt-shield` 입력
 4. `Tab` 키로 "Install Plugin" 이동
-5. `ps@prompt-smith` 선택
+5. `ps@prompt-shield` 선택
 
 ![설치 가이드](assets/install_g_01.png)
 
 ### 방법 2: 로컬 플러그인 (개발용)
 
 ```bash
-git clone https://github.com/joseph0926/prompt-smith
-claude --plugin-dir ./prompt-smith
+git clone https://github.com/joseph0926/prompt-shield
+claude --plugin-dir ./prompt-shield
 ```
 
 ### 방법 3: 스킬만 설치 (자연어 트리거)
 
 ```bash
-git clone https://github.com/joseph0926/prompt-smith
-cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
+git clone https://github.com/joseph0926/prompt-shield
+cp -r prompt-shield/skills/prompt-shield ~/.claude/skills/
 ```
 
-> **참고**: 이 방법은 자연어 트리거(`prompt-smith 사용 -r`)만 활성화됩니다. 슬래시 커맨드는 사용 불가.
+> **참고**: 이 방법은 자연어 트리거(`prompt-shield 사용 -r`)만 활성화됩니다. 슬래시 커맨드는 사용 불가.
 
 ### 사용법
 
@@ -88,7 +88,7 @@ cp -r prompt-smith/skills/prompt-smith ~/.claude/skills/
 **자연어 (대안)**:
 
 ```
-prompt-smith 사용 -r 프롬프트 내용
+prompt-shield 사용 -r 프롬프트 내용
 ```
 
 ## 실제 예시
@@ -135,7 +135,7 @@ prompt-smith 사용 -r 프롬프트 내용
 
 | 기능 | 설명 |
 |------|------|
-| **ps:a 토큰 효율화** | 최소 출력: `[Prompt Smith] 활성화됨 (X→Y점)` |
+| **ps:a 토큰 효율화** | 최소 출력: `[PromptShield] 활성화됨 (X→Y점)` |
 | **ps:r 의도 반영** | AskUserQuestion으로 형식/상세도/제약/성공기준 질문 |
 
 ### v3.2.0
@@ -162,8 +162,8 @@ prompt-smith 사용 -r 프롬프트 내용
 
 | 모드      | 슬래시 커맨드          | 자연어                    | 설명                       |
 | --------- | ---------------------- | ------------------------- | -------------------------- |
-| Review    | `/ps:r <프롬프트>`     | `prompt-smith 사용 -r`    | 개선안 표시 후 승인 대기   |
-| Intercept | `/ps:a <프롬프트>`     | `prompt-smith 사용 -a`    | 자동 개선 후 즉시 실행     |
+| Review    | `/ps:r <프롬프트>`     | `prompt-shield 사용 -r`    | 개선안 표시 후 승인 대기   |
+| Intercept | `/ps:a <프롬프트>`     | `prompt-shield 사용 -a`    | 자동 개선 후 즉시 실행     |
 | LINT      | `/ps:lint <프롬프트>`  | `이 프롬프트 점검해줘`    | 기존 프롬프트 진단         |
 | BUILD     | `/ps:build <목표>`     | `~하는 프롬프트 만들어줘` | 요구사항에서 프롬프트 설계 |
 
@@ -186,28 +186,28 @@ prompt-smith 사용 -r 프롬프트 내용
 ## 문서
 
 ### 시작하기
-- [빠른 시작](skills/prompt-smith/onboarding/quick-start.md)
-- [첫 LINT](skills/prompt-smith/onboarding/first-lint.md)
-- [첫 BUILD](skills/prompt-smith/onboarding/first-build.md)
+- [빠른 시작](skills/prompt-shield/onboarding/quick-start.md)
+- [첫 LINT](skills/prompt-shield/onboarding/first-lint.md)
+- [첫 BUILD](skills/prompt-shield/onboarding/first-build.md)
 
 ### 모드 가이드
-- [LINT Mode](skills/prompt-smith/playbooks/lint/full-lint.md)
-- [BUILD Mode](skills/prompt-smith/playbooks/build/build-mode.md)
-- [Review Mode](skills/prompt-smith/playbooks/intercept/review-mode.md)
-- [Intercept Mode](skills/prompt-smith/playbooks/intercept/intercept-mode.md)
-- [Eval Mode](skills/prompt-smith/playbooks/eval/eval-mode.md)
+- [LINT Mode](skills/prompt-shield/playbooks/lint/full-lint.md)
+- [BUILD Mode](skills/prompt-shield/playbooks/build/build-mode.md)
+- [Review Mode](skills/prompt-shield/playbooks/intercept/review-mode.md)
+- [Intercept Mode](skills/prompt-shield/playbooks/intercept/intercept-mode.md)
+- [Eval Mode](skills/prompt-shield/playbooks/eval/eval-mode.md)
 
 ### 고급 (v3.2.0)
-- [Long Context 최적화](skills/prompt-smith/references/long-context-optimization.md)
-- [Token 관리](skills/prompt-smith/references/token-management.md)
-- [Structured Outputs](skills/prompt-smith/references/structured-outputs.md)
-- [Prompt Chaining](skills/prompt-smith/playbooks/prompt-chaining.md)
+- [Long Context 최적화](skills/prompt-shield/references/long-context-optimization.md)
+- [Token 관리](skills/prompt-shield/references/token-management.md)
+- [Structured Outputs](skills/prompt-shield/references/structured-outputs.md)
+- [Prompt Chaining](skills/prompt-shield/playbooks/prompt-chaining.md)
 
 ### 참고
-- [8-Point Quality 체크리스트](skills/prompt-smith/references/quality-checklist.md)
-- [안티패턴](skills/prompt-smith/references/anti-patterns.md)
-- [기법 우선순위](skills/prompt-smith/references/technique-priority.md) (Anthropic 권장)
-- [Claude 4.x 베스트 프랙티스](skills/prompt-smith/references/claude-4x-best-practices.md)
+- [8-Point Quality 체크리스트](skills/prompt-shield/references/quality-checklist.md)
+- [안티패턴](skills/prompt-shield/references/anti-patterns.md)
+- [기법 우선순위](skills/prompt-shield/references/technique-priority.md) (Anthropic 권장)
+- [Claude 4.x 베스트 프랙티스](skills/prompt-shield/references/claude-4x-best-practices.md)
 
 ## 문제 해결
 
@@ -228,7 +228,7 @@ prompt-smith 사용 -r 프롬프트 내용
 
 기여를 환영합니다! [CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요.
 
-- [버그 리포트](https://github.com/joseph0926/prompt-smith/issues)
+- [버그 리포트](https://github.com/joseph0926/prompt-shield/issues)
 - [보안 이슈](SECURITY.md)
 
 ## 라이선스

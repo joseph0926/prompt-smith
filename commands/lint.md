@@ -3,7 +3,7 @@ description: LINT Mode - Diagnose existing prompts with 8-Point Quality Check
 argument-hint: <prompt text to diagnose>
 ---
 
-# Prompt Smith - LINT Mode
+# PromptShield - LINT Mode
 
 <prompt_to_diagnose>
 $ARGUMENTS
@@ -103,7 +103,7 @@ Create 5 test cases:
 
 ### Step 6: Output Report
 
-Use diagnostic report format from skills/prompt-smith/templates/diagnostic-report.md
+Use diagnostic report format from skills/prompt-shield/templates/diagnostic-report.md
 
 ## Express Mode
 
@@ -113,4 +113,4 @@ For "quick lint" or "express" requests:
 
 ## Reference
 
-For detailed workflow: skills/prompt-smith/playbooks/lint/full-lint.md
+For detailed workflow: skills/prompt-shield/playbooks/lint/full-lint.md

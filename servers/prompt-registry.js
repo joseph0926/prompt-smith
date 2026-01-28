@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Prompt Smith - Prompt Registry MCP Server
+ * PromptShield - Prompt Registry MCP Server
  *
  * Purpose:
  * - Provide a small local registry to store/retrieve versioned prompts.
@@ -362,7 +362,7 @@ function handleInitialize(id, params) {
       name: "prompt-registry",
       title: "Prompt Registry",
       version: "1.2.0",
-      description: "Local prompt registry (CRUD) for Prompt Smith",
+      description: "Local prompt registry (CRUD) for PromptShield",
     },
     instructions:
       "This server stores prompts locally. Saved prompts are also exposed via MCP prompts (slash commands). Tool errors are returned with isError=true so the model can self-correct.",

@@ -1,5 +1,5 @@
 {
-  "name": "prompt-smith",
+  "name": "prompt-shield",
   "owner": {
     "name": "joseph0926"
   },
@@ -16,8 +16,8 @@
       "author": {
         "name": "joseph0926"
       },
-      "homepage": "https://github.com/joseph0926/prompt-smith",
-      "repository": "https://github.com/joseph0926/prompt-smith",
+      "homepage": "https://github.com/joseph0926/prompt-shield",
+      "repository": "https://github.com/joseph0926/prompt-shield",
       "license": "MIT",
       "keywords": [
         "prompt",

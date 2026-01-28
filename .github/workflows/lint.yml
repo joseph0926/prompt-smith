@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  SKILL_PATH: skills/prompt-smith
+  SKILL_PATH: skills/prompt-shield
 
 jobs:
   validate:
@@ -44,24 +44,24 @@ jobs:
             python3 -c "import json; json.load(open('${{ env.SKILL_PATH }}/marketplace.json'))"
           fi
 
-      - name: Check deprecated /prompt-smith references
+      - name: Check deprecated /prompt-shield references
         run: |
-          # Check for deprecated slash command "/prompt-smith" (not folder paths)
-          # Pattern: backtick/prompt-smith (command in markdown) followed by space/backtick/end
+          # Check for deprecated slash command "/prompt-shield" (not folder paths)
+          # Pattern: backtick/prompt-shield (command in markdown) followed by space/backtick/end
           # Excludes: github.com URLs, folder paths, changelog migration mentions (→)
-          FOUND=$(grep -rEh '`/prompt-smith' --include="*.md" \
+          FOUND=$(grep -rEh '`/prompt-shield' --include="*.md" \
             --exclude="CHANGELOG.md" \
             --exclude="*-review-report.md" \
             ${{ env.SKILL_PATH }}/ 2>/dev/null | \
-            grep -v "github.com/.*prompt-smith" | \
+            grep -v "github.com/.*prompt-shield" | \
             grep -v "→.*ps:" | wc -l || echo "0")
           if [ "$FOUND" -gt 0 ]; then
-            echo "Found deprecated /prompt-smith command references:"
-            grep -rE '`/prompt-smith' --include="*.md" \
+            echo "Found deprecated /prompt-shield command references:"
+            grep -rE '`/prompt-shield' --include="*.md" \
               --exclude="CHANGELOG.md" \
               --exclude="*-review-report.md" \
               ${{ env.SKILL_PATH }}/ | \
-              grep -v "github.com/.*prompt-smith" | \
+              grep -v "github.com/.*prompt-shield" | \
               grep -v "→.*ps:"
             echo ""
             echo "Please use /ps:r or /ps:a instead."

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prompt Smith - SessionStart: inject a short "capability card" into context.
+# PromptShield - SessionStart: inject a short "capability card" into context.
 
 set -euo pipefail
 
@@ -75,7 +75,7 @@ fi
 if [[ "$SOURCE" == "resume" ]]; then
   additional_context=$(
     cat <<EOF
-Prompt Smith resumed.
+PromptShield resumed.
 - session_id: $SESSION_ID
 - cwd: $CWD
 
@@ -85,7 +85,7 @@ EOF
 else
   additional_context=$(
     cat <<EOF
-Prompt Smith plugin loaded.
+PromptShield plugin loaded.
 - session_id: $SESSION_ID
 - cwd: $CWD
 

@@ -4,7 +4,7 @@ description: Optimize prompts for clarity, coverage, and model reliability witho
 tools: Read, Write, Grep, Glob, mcp__prompt-registry__prompt_get, mcp__prompt-registry__prompt_save, mcp__prompt-registry__prompt_list, mcp__prompt-registry__prompt_search, mcp__prompt-registry__prompt_delete
 model: sonnet
 permissionMode: acceptEdits
-skills: ps:prompt-smith
+skills: ps:prompt-shield
 ---
 
 # Prompt Optimizer Agent

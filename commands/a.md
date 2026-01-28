@@ -3,7 +3,7 @@ description: Intercept Mode - Auto-improve and execute immediately
 argument-hint: <prompt text>
 ---
 
-# Prompt Smith - Intercept Mode
+# PromptShield - Intercept Mode
 
 <prompt_to_improve>
 $ARGUMENTS
@@ -73,7 +73,7 @@ score = (sum(applicable) / (applicable_items × 2)) × 10
 
 Show ONE line only, then execute immediately:
 ```
-[Prompt Smith] 활성화됨 (X→Y점)
+[PromptShield] 활성화됨 (X→Y점)
 ```
 
 **If improvement < 2 points:**
@@ -90,11 +90,11 @@ No message. Execute original prompt immediately.
 ### Intercept Mode Specific Rules
 
 - Auto-apply only when improvement is +2 points or more
-- Output ONLY `[Prompt Smith] 활성화됨 (X→Y점)` — nothing else
+- Output ONLY `[PromptShield] 활성화됨 (X→Y점)` — nothing else
 - NO Step headers, NO tables, NO Changes list (token efficiency)
 - Execute immediately after one-line message
 - If improvement < 2 points: silent execution (no message at all)
 
 ## Reference
 
-For detailed workflow: skills/prompt-smith/playbooks/intercept/intercept-mode.md
+For detailed workflow: skills/prompt-shield/playbooks/intercept/intercept-mode.md

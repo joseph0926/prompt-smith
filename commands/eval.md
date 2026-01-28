@@ -3,7 +3,7 @@ description: EVAL Mode - Evaluate prompts with test datasets
 argument-hint: [dataset.json] or --guided
 ---
 
-# Prompt Smith - EVAL Mode
+# PromptShield - EVAL Mode
 
 <eval_arguments>
 $ARGUMENTS
@@ -153,7 +153,7 @@ node scripts/eval-runner.js --help
 
 ### Step 3: Report Generation
 
-Use format from [templates/eval-report.md](../skills/prompt-smith/templates/eval-report.md):
+Use format from [templates/eval-report.md](../skills/prompt-shield/templates/eval-report.md):
 
 ```markdown
 # Evaluation Report: [Prompt Name]
@@ -191,6 +191,6 @@ Before running evaluation:
 
 ## Reference
 
-- Detailed workflow: [playbooks/eval/eval-mode.md](../skills/prompt-smith/playbooks/eval/eval-mode.md)
-- Report template: [templates/eval-report.md](../skills/prompt-smith/templates/eval-report.md)
-- Test case template: [templates/test-case-template.md](../skills/prompt-smith/templates/test-case-template.md)
+- Detailed workflow: [playbooks/eval/eval-mode.md](../skills/prompt-shield/playbooks/eval/eval-mode.md)
+- Report template: [templates/eval-report.md](../skills/prompt-shield/templates/eval-report.md)
+- Test case template: [templates/test-case-template.md](../skills/prompt-shield/templates/test-case-template.md)

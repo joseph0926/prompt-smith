@@ -3,7 +3,7 @@ description: BUILD Mode - Design new prompts from requirements
 argument-hint: <prompt requirements or goal>
 ---
 
-# Prompt Smith - BUILD Mode
+# PromptShield - BUILD Mode
 
 <design_requirement>
 $ARGUMENTS
@@ -183,4 +183,4 @@ Perform 8-Point Check on draft:
 
 ## Reference
 
-For detailed workflow: skills/prompt-smith/playbooks/build/build-mode.md
+For detailed workflow: skills/prompt-shield/playbooks/build/build-mode.md

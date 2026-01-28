@@ -4,7 +4,7 @@ description: Generate comprehensive test cases for prompts to validate output qu
 tools: Read, Write, Grep, Glob, mcp__prompt-registry__prompt_get, mcp__prompt-registry__prompt_save, mcp__prompt-registry__prompt_list, mcp__prompt-registry__prompt_search
 model: sonnet
 permissionMode: acceptEdits
-skills: ps:prompt-smith
+skills: ps:prompt-shield
 ---
 
 # Prompt Test Generator Agent

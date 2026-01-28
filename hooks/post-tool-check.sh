@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prompt Smith - PostToolUse lint for prompt files
+# PromptShield - PostToolUse lint for prompt files
 # Triggered after Write/Edit. If a prompt file looks incomplete, add context for Claude.
 
 set -euo pipefail

@@ -77,10 +77,34 @@ def update_markdown_frontmatter(path: Path, version: str) -> None:
     )
 
     content = re.sub(
-        r'^(# Prompt Smith v)[\d.]+',
+        r'^(# PromptShield v)[\d.]+',
         rf'\g<1>{version}',
         content,
         flags=re.MULTILINE,
+    )
+
+    if content != original:
+        path.write_text(content)
+        print(f"  Updated {path}")
+    else:
+        print(f"  No change needed in {path}")
+
+
+def update_readme_badge(path: Path, version: str) -> None:
+    """Update version badge in README.md."""
+    if not path.exists():
+        print(f"  Warning: {path} not found, skipping")
+        return
+
+    content = path.read_text()
+    original = content
+
+    # Update shields.io version badge
+    # Pattern: ![...](https://img.shields.io/badge/version-X.Y.Z-blue.svg)
+    content = re.sub(
+        r'(https://img\.shields\.io/badge/version-)[\d.]+(-.+?\.svg)',
+        rf'\g<1>{version}\2',
+        content,
     )
 
     if content != original:
@@ -109,7 +133,7 @@ def main() -> None:
         version,
     )
     update_json_file(
-        root / "skills/prompt-smith/marketplace.json",
+        root / "skills/prompt-shield/marketplace.json",
         ["version"],
         version,
     )
@@ -117,9 +141,14 @@ def main() -> None:
     print()
     print("Markdown files:")
     update_markdown_frontmatter(
-        root / "skills/prompt-smith/SKILL.md",
+        root / "skills/prompt-shield/SKILL.md",
         version,
     )
+
+    print()
+    print("README files:")
+    update_readme_badge(root / "README.md", version)
+    update_readme_badge(root / "README.ko.md", version)
 
     print()
     print(f"✅ Version synced to {version} in all files")

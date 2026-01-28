@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Prompt Smith skill will be documented in this file.
+All notable changes to the PromptShield skill will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -50,15 +50,15 @@ Add evaluation command with automated runner, weighted scoring system, anti-patt
 Improve discoverability with Examples and TOCs, and strengthen Structured Outputs guidance for schema mismatches.
 
 ### Added
-- `skills/prompt-smith/examples.md`: LINT/BUILD usage examples.
+- `skills/prompt-shield/examples.md`: LINT/BUILD usage examples.
 - TOC sections for long references: `quality-checklist.md`, `structured-outputs.md`, `state-tracking-guide.md`, `tool-usage-guide.md`, `long-context-optimization.md`, `token-management.md`, `technique-priority.md`, `claude-4x-best-practices.md`, `hallucination-reduction.md`, `latency-optimization.md`, `team-workflow.md`, `input-handling-rules.md`.
 
 ### Changed
-- `skills/prompt-smith/SKILL.md`: Examples link + state/tool references.
-- `skills/prompt-smith/references/structured-outputs.md`: schema mismatch handling guidance and JSON Mode caution.
-- `skills/prompt-smith/examples.md`: expanded with full sample output formats for LINT/BUILD/Review/Intercept.
+- `skills/prompt-shield/SKILL.md`: Examples link + state/tool references.
+- `skills/prompt-shield/references/structured-outputs.md`: schema mismatch handling guidance and JSON Mode caution.
+- `skills/prompt-shield/examples.md`: expanded with full sample output formats for LINT/BUILD/Review/Intercept.
 - `CONTRIBUTING.md`: clarify i18n policy (no `i18n/` directories; bilingual README only).
-- `skills/prompt-smith/marketplace.json`: remove non-standard `i18n` field.
+- `skills/prompt-shield/marketplace.json`: remove non-standard `i18n` field.
 - `scripts/sync-version.py`: stop syncing removed i18n SKILL paths.
 
 ---
@@ -114,7 +114,7 @@ Enforce skill execution and prevent workflow bypass across all commands. Adds co
 
 #### commands/a.md
 - **Added**: CRITICAL: NO BYPASS ALLOWED section
-- **Synced**: Output format with modes/intercept.md (`[Prompt Smith] 활성화됨 (X→Y점)` only)
+- **Synced**: Output format with modes/intercept.md (`[PromptShield] 활성화됨 (X→Y점)` only)
 - **Updated**: Step 3 merged with Execute phase (removed Step 4)
 
 #### commands/r.md
@@ -155,7 +155,7 @@ Intercept Mode (ps:a) and Review Mode (ps:r) UX improvements. ps:a now shows min
 ### Changed
 
 #### ps:a (Intercept Mode) - Token Optimization
-- **Output simplified**: Reduced verbose output to single-line `[Prompt Smith] 활성화됨 (X→Y점)`
+- **Output simplified**: Reduced verbose output to single-line `[PromptShield] 활성화됨 (X→Y점)`
 - **No improvement case**: Executes original prompt silently (no message)
 - **Token savings**: Changes list omitted to reduce token usage
 - **Files**: `playbooks/intercept/intercept-mode.md`, `modes/intercept.md`
@@ -180,7 +180,7 @@ Intercept Mode (ps:a) and Review Mode (ps:r) UX improvements. ps:a now shows min
 
 | Mode | Before | After |
 |------|--------|-------|
-| ps:a output | Box + Changes list + "Executing..." | `[Prompt Smith] 활성화됨 (X→Y점)` |
+| ps:a output | Box + Changes list + "Executing..." | `[PromptShield] 활성화됨 (X→Y점)` |
 | ps:a (no improvement) | "No significant improvement..." message | Silent execution |
 | ps:r workflow | LINT → Show → Approve | LINT → AskUserQuestion → Show → Approve |
 
@@ -207,7 +207,7 @@ Fix for `/ps:build` skill being skipped when input content appears unrelated to 
 #### SKILL.md
 - **description**: Added `**CRITICAL: /ps:로 시작하는 모든 명령은 입력 내용과 무관하게 반드시 이 스킬을 호출**`
 - **New section**: Command Execution Rules - explicit requirements for Claude to invoke skill tool immediately
-- **Files**: skills/prompt-smith/SKILL.md
+- **Files**: skills/prompt-shield/SKILL.md
 
 #### commands/build.md
 - **New section**: MANDATORY EXECUTION RULE - prohibits simulation without proper skill invocation
@@ -216,7 +216,7 @@ Fix for `/ps:build` skill being skipped when input content appears unrelated to 
 
 #### input-handling-rules.md
 - **New section**: Skill Invocation Rule - cross-reference to Command Execution Rules
-- **Files**: skills/prompt-smith/references/input-handling-rules.md
+- **Files**: skills/prompt-shield/references/input-handling-rules.md
 
 ### Technical Details
 
@@ -236,7 +236,7 @@ Fix for `/ps:build` skill being skipped when input content appears unrelated to 
 ## [3.0.0] - 2026-01-10
 
 ### Summary
-Prompt Smith v3.0.0 is a major release featuring Progressive Skill Loading architecture, advanced prompt engineering guides (Extended Thinking, Prefill Response, Token Efficiency), and new modes directory structure.
+PromptShield v3.0.0 is a major release featuring Progressive Skill Loading architecture, advanced prompt engineering guides (Extended Thinking, Prefill Response, Token Efficiency), and new modes directory structure.
 
 ### Added
 
@@ -258,7 +258,7 @@ Prompt Smith v3.0.0 is a major release featuring Progressive Skill Loading archi
 ## [2.8.0] - 2026-01-10
 
 ### Summary
-Prompt Smith v2.8.0 adds advanced prompt engineering guides based on official Anthropic documentation: Extended Thinking, Prefill Response, and Token Efficiency optimization.
+PromptShield v2.8.0 adds advanced prompt engineering guides based on official Anthropic documentation: Extended Thinking, Prefill Response, and Token Efficiency optimization.
 
 ### Added
 
@@ -307,7 +307,7 @@ Prompt Smith v2.8.0 adds advanced prompt engineering guides based on official An
 ## [2.7.0] - 2026-01-10
 
 ### Summary
-Prompt Smith v2.7.0 upgrades to **8-Point Quality Check** by adding SUCCESS_CRITERIA as a core evaluation dimension. Introduces 2026 prompt engineering concepts including Context Engineering, Cache-Aware Structure, Tree of Thought, and "Above and Beyond" explicit request pattern for Claude 4.x.
+PromptShield v2.7.0 upgrades to **8-Point Quality Check** by adding SUCCESS_CRITERIA as a core evaluation dimension. Introduces 2026 prompt engineering concepts including Context Engineering, Cache-Aware Structure, Tree of Thought, and "Above and Beyond" explicit request pattern for Claude 4.x.
 
 ### Added
 
@@ -380,7 +380,7 @@ Prompt Smith v2.7.0 upgrades to **8-Point Quality Check** by adding SUCCESS_CRIT
 ## [2.6.0] - 2026-01-09
 
 ### Summary
-Prompt Smith v2.6.0 aligns all prompt engineering content with Anthropic official documentation (19 reference documents). Adds 3 new reference guides, updates example count from 2+ to 3-5, adds Prefill section, and introduces hallucination reduction strategies.
+PromptShield v2.6.0 aligns all prompt engineering content with Anthropic official documentation (19 reference documents). Adds 3 new reference guides, updates example count from 2+ to 3-5, adds Prefill section, and introduces hallucination reduction strategies.
 
 ### Added
 
@@ -441,7 +441,7 @@ Prompt Smith v2.6.0 aligns all prompt engineering content with Anthropic officia
 ## [2.5.4] - 2026-01-09
 
 ### Summary
-Prompt Smith v2.5.4 normalizes plugin structure to Claude Code official spec. Adds component paths to plugin.json, simplifies SKILL.md frontmatter, and removes i18n directory.
+PromptShield v2.5.4 normalizes plugin structure to Claude Code official spec. Adds component paths to plugin.json, simplifies SKILL.md frontmatter, and removes i18n directory.
 
 ### Changed
 
@@ -458,7 +458,7 @@ Prompt Smith v2.5.4 normalizes plugin structure to Claude Code official spec. Ad
 ### Removed
 
 #### i18n Directory
-- **Deleted** `skills/prompt-smith/i18n/` directory
+- **Deleted** `skills/prompt-shield/i18n/` directory
 - **Reason**: No i18n spec in Claude Code plugin system, management complexity
 
 ---
@@ -466,7 +466,7 @@ Prompt Smith v2.5.4 normalizes plugin structure to Claude Code official spec. Ad
 ## [2.5.3] - 2026-01-08
 
 ### Summary
-Prompt Smith v2.5.3 addresses 16 improvement items from code review. Adds WebFetch to forbidden tools, localizes Intercept playbooks to Korean, unifies terminology, and strengthens CI validation.
+PromptShield v2.5.3 addresses 16 improvement items from code review. Adds WebFetch to forbidden tools, localizes Intercept playbooks to Korean, unifies terminology, and strengthens CI validation.
 
 ### Added
 
@@ -522,7 +522,7 @@ Prompt Smith v2.5.3 addresses 16 improvement items from code review. Adds WebFet
 - **Fixed** "v2.5.0 활성화" → "v2.5.2 활성화" in SKILL.md mode selection
 
 #### Template Improvements
-- **Simplified** "진단자: Prompt Smith v1.0.0" → "진단자: Prompt Smith" in `diagnostic-report.md`
+- **Simplified** "진단자: PromptShield v1.0.0" → "진단자: PromptShield" in `diagnostic-report.md`
 - **Clarified** JSON constraint in `prompt-template.md`: "(in actual output; code blocks here are for documentation purposes only)"
 
 ### Removed
@@ -540,7 +540,7 @@ Prompt Smith v2.5.3 addresses 16 improvement items from code review. Adds WebFet
 ## [2.5.2] - 2026-01-08
 
 ### Summary
-Prompt Smith v2.5.2 is a documentation cleanup patch. Removes duplicate lint-mode.md, updates broken links, simplifies FORBIDDEN Tools sections, and removes hardcoded version strings.
+PromptShield v2.5.2 is a documentation cleanup patch. Removes duplicate lint-mode.md, updates broken links, simplifies FORBIDDEN Tools sections, and removes hardcoded version strings.
 
 ### Removed
 
@@ -572,7 +572,7 @@ Prompt Smith v2.5.2 is a documentation cleanup patch. Removes duplicate lint-mod
 ## [2.5.1] - 2026-01-07
 
 ### Summary
-Prompt Smith v2.5.1 strengthens input handling rules for all commands. Fixes bug where `/ps:build` interpreted input as work request instead of prompt design requirement.
+PromptShield v2.5.1 strengthens input handling rules for all commands. Fixes bug where `/ps:build` interpreted input as work request instead of prompt design requirement.
 
 ### Fixed
 
@@ -606,7 +606,7 @@ Prompt Smith v2.5.1 strengthens input handling rules for all commands. Fixes bug
 ## [2.5.0] - 2026-01-07
 
 ### Summary
-Prompt Smith v2.5.0 optimizes SKILL.md file size from 700+ lines to under 500 lines to meet Claude Code Skill recommended limit. Level 2 detailed content replaced with documentation links.
+PromptShield v2.5.0 optimizes SKILL.md file size from 700+ lines to under 500 lines to meet Claude Code Skill recommended limit. Level 2 detailed content replaced with documentation links.
 
 ### Changed
 
@@ -639,7 +639,7 @@ Prompt Smith v2.5.0 optimizes SKILL.md file size from 700+ lines to under 500 li
 ## [2.4.2] - 2026-01-07
 
 ### Summary
-Prompt Smith v2.4.2 is a documentation quality patch. Version synchronization, `/ps:help` command table addition, English trigger table restructuring, frontmatter trigger enhancement, and security guide promotion.
+PromptShield v2.4.2 is a documentation quality patch. Version synchronization, `/ps:help` command table addition, English trigger table restructuring, frontmatter trigger enhancement, and security guide promotion.
 
 ### Fixed
 
@@ -672,7 +672,7 @@ Prompt Smith v2.4.2 is a documentation quality patch. Version synchronization, `
 ## [2.4.1] - 2026-01-06
 
 ### Summary
-Prompt Smith v2.4.1 is a documentation quality patch. Fixes template code fence nesting for better copy-paste UX, removes inconsistent version footers, and adds `/ps:help` to README command table.
+PromptShield v2.4.1 is a documentation quality patch. Fixes template code fence nesting for better copy-paste UX, removes inconsistent version footers, and adds `/ps:help` to README command table.
 
 ### Fixed
 
@@ -687,7 +687,7 @@ Prompt Smith v2.4.1 is a documentation quality patch. Fixes template code fence 
 - **Benefit**: Templates now render correctly and can be copy-pasted as single blocks
 
 #### Version Footer Inconsistency
-- **Removed** `*Prompt Smith vX.X.X*` footers from 12 files (were showing v2.3.0/v2.0.0)
+- **Removed** `*PromptShield vX.X.X*` footers from 12 files (were showing v2.3.0/v2.0.0)
 - **Reasoning**: Footers caused version drift; SKILL.md frontmatter is now the single source of truth
 
 ### Added
@@ -705,7 +705,7 @@ Prompt Smith v2.4.1 is a documentation quality patch. Fixes template code fence 
 ## [2.4.0] - 2026-01-05
 
 ### Summary
-Prompt Smith v2.4.0 focuses on release quality and developer experience. Fixes broken links, adds cross-platform tooling, strengthens CI, and introduces the `/ps:help` command for discoverability.
+PromptShield v2.4.0 focuses on release quality and developer experience. Fixes broken links, adds cross-platform tooling, strengthens CI, and introduces the `/ps:help` command for discoverability.
 
 ### Added
 
@@ -737,7 +737,7 @@ Prompt Smith v2.4.0 focuses on release quality and developer experience. Fixes b
 #### i18n Policy Clarification
 - **CONTRIBUTING.md**: Updated to "Korean Primary" policy
 - **Triggers**: "프롬프트" prefix required (e.g., "프롬프트 만들어줘" instead of "만들어줘")
-- **README.md**: Fixed Korean docs link → `skills/prompt-smith/SKILL.md`
+- **README.md**: Fixed Korean docs link → `skills/prompt-shield/SKILL.md`
 
 #### Documentation Improvements
 - **README.md**: Added "Commands at a Glance" table at top
@@ -746,19 +746,19 @@ Prompt Smith v2.4.0 focuses on release quality and developer experience. Fixes b
 
 ### Fixed
 - Broken link in README.md (i18n/ko/SKILL.md → SKILL.md)
-- Broken link in commands/lint.md (templates/ → skills/prompt-smith/templates/)
+- Broken link in commands/lint.md (templates/ → skills/prompt-shield/templates/)
 
 ---
 
 ## [2.3.0] - 2026-01-05
 
 ### Summary
-Prompt Smith v2.3.0 is a major documentation cleanup release. All `/prompt-smith` command references are replaced with `/ps:r` and `/ps:a`. Removed undocumented options (`--verbose`, `--threshold`), added CI checks, and created shared input handling rules.
+PromptShield v2.3.0 is a major documentation cleanup release. All `/prompt-shield` command references are replaced with `/ps:r` and `/ps:a`. Removed undocumented options (`--verbose`, `--threshold`), added CI checks, and created shared input handling rules.
 
 ### Changed
 
 #### Command Standardization
-- **Replaced** all `/prompt-smith` → `/ps:r`, `/ps:a` across documentation
+- **Replaced** all `/prompt-shield` → `/ps:r`, `/ps:a` across documentation
 - **Updated** natural language trigger notes: Slash commands now recommended
 - **Removed** undocumented options `--verbose`, `--threshold` from all files
 
@@ -767,7 +767,7 @@ Prompt Smith v2.3.0 is a major documentation cleanup release. All `/prompt-smith
 - **Created** `references/input-handling-rules.md`: Shared rules for r.md and a.md
 
 #### CI Automation
-- **Added** `/prompt-smith` remnant check to `.github/workflows/lint.yml`
+- **Added** `/prompt-shield` remnant check to `.github/workflows/lint.yml`
 - **Added** SKILL.md size limit check (30KB max)
 
 ### Added
@@ -786,7 +786,7 @@ Prompt Smith v2.3.0 is a major documentation cleanup release. All `/prompt-smith
 ## [2.2.3] - 2026-01-03
 
 ### Summary
-Prompt Smith v2.2.3 improves documentation consistency, adds API parameter optimization guide, and introduces Prompt Chaining playbook for complex multi-step workflows.
+PromptShield v2.2.3 improves documentation consistency, adds API parameter optimization guide, and introduces Prompt Chaining playbook for complex multi-step workflows.
 
 ### Added
 
@@ -821,7 +821,7 @@ Prompt Smith v2.2.3 improves documentation consistency, adds API parameter optim
 ## [2.2.2] - 2026-01-03
 
 ### Summary
-Prompt Smith v2.2.2 simplifies input format for `/ps:r` and `/ps:a`. Backticks are now **optional** - plain text input is accepted directly.
+PromptShield v2.2.2 simplifies input format for `/ps:r` and `/ps:a`. Backticks are now **optional** - plain text input is accepted directly.
 
 ### Changed
 
@@ -843,7 +843,7 @@ Prompt Smith v2.2.2 simplifies input format for `/ps:r` and `/ps:a`. Backticks a
 ## [2.2.1] - 2026-01-03
 
 ### Summary
-Prompt Smith v2.2.1 adds strict tool call prevention for Review/Intercept modes. When `/ps:r` or `/ps:a` is invoked, Claude will now **always** perform Express LINT first, even if the input contains keywords like "웹검색", "파일 읽기", "search", "read file".
+PromptShield v2.2.1 adds strict tool call prevention for Review/Intercept modes. When `/ps:r` or `/ps:a` is invoked, Claude will now **always** perform Express LINT first, even if the input contains keywords like "웹검색", "파일 읽기", "search", "read file".
 
 ### Added
 
@@ -870,7 +870,7 @@ Prompt Smith v2.2.1 adds strict tool call prevention for Review/Intercept modes.
 ## [2.1.1] - 2026-01-03
 
 ### Summary
-Prompt Smith v2.1.1 improves input parsing for Review/Intercept modes.
+PromptShield v2.1.1 improves input parsing for Review/Intercept modes.
 
 ### Fixed
 
@@ -896,13 +896,13 @@ Prompt Smith v2.1.1 improves input parsing for Review/Intercept modes.
 ## [2.1.0] - 2026-01-02
 
 ### Summary
-Prompt Smith v2.1.0 adds Intercept Pipeline for real-time prompt improvement and transitions to English Primary with i18n support.
+PromptShield v2.1.0 adds Intercept Pipeline for real-time prompt improvement and transitions to English Primary with i18n support.
 
 ### Added
 
 #### Intercept Pipeline (New)
-- **Review Mode**: `/prompt-smith <prompt>` - Show improvements, await user approval, then execute
-- **Intercept Mode**: `/prompt-smith --auto <prompt>` - Auto-improve and execute immediately
+- **Review Mode**: `/prompt-shield <prompt>` - Show improvements, await user approval, then execute
+- **Intercept Mode**: `/prompt-shield --auto <prompt>` - Auto-improve and execute immediately
 - Options: `--threshold N` (minimum score improvement), `--verbose` (detailed analysis)
 
 #### i18n Support
@@ -921,17 +921,17 @@ Prompt Smith v2.1.0 adds Intercept Pipeline for real-time prompt improvement and
 - SKILL.md frontmatter includes i18n metadata
 
 ### Repository Structure
-- Migrated from `refs/prompt-smith/` to root
+- Migrated from `refs/prompt-shield/` to root
 - Added `.github/workflows/lint.yml` for CI validation
 - Added `CONTRIBUTING.md`
-- Repository renamed to `prompt-smith`
+- Repository renamed to `prompt-shield`
 
 ---
 
 ## [2.0.0] - 2026-01-01
 
 ### Summary
-Prompt Smith v2.0.0 메이저 업데이트. 7-Point Quality Check로 확장하고 BUILD Mode 추가.
+PromptShield v2.0.0 메이저 업데이트. 7-Point Quality Check로 확장하고 BUILD Mode 추가.
 
 ### Breaking Changes
 - 5-Point → 7-Point Quality Check 확장
@@ -989,7 +989,7 @@ Prompt Smith v2.0.0 메이저 업데이트. 7-Point Quality Check로 확장하�
 ## [1.0.0] - 2026-01-01
 
 ### Summary
-Prompt Smith v1.0.0 출시. 프롬프트 품질관리를 위한 LINT 모드 제공.
+PromptShield v1.0.0 출시. 프롬프트 품질관리를 위한 LINT 모드 제공.
 
 ### Added
 

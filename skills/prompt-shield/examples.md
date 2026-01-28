@@ -1,6 +1,6 @@
 # Examples
 
-Prompt Smith 사용 예시(입력/출력 스케치). 실제 출력은 모드/컨텍스트에 따라 달라질 수 있습니다.
+PromptShield 사용 예시(입력/출력 스케치). 실제 출력은 모드/컨텍스트에 따라 달라질 수 있습니다.
 
 ## Example 1: LINT (진단)
 
@@ -151,7 +151,7 @@ Output (요약):
 
 Output (샘플 포맷):
 ```
-[Prompt Smith] 활성화됨 (4→7점)
+[PromptShield] 활성화됨 (4→7점)
 
 실행 프롬프트 (참고용):
 You are a log analyst.

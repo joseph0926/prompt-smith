@@ -1,5 +1,5 @@
 {
-  "description": "Prompt Smith quality check hooks",
+  "description": "PromptShield quality check hooks",
   "hooks": {
     "UserPromptSubmit": [
       {

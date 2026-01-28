@@ -1,9 +1,9 @@
 ---
-description: Show prompt-smith usage guide and command reference
+description: Show prompt-shield usage guide and command reference
 argument-hint: [topic]
 ---
 
-# Prompt Smith - Help
+# PromptShield - Help
 
 **Input:** $ARGUMENTS
 
@@ -37,7 +37,7 @@ Parse the input argument to determine which help topic to show:
 
 ```
 +----------------------------------------------------------+
-| Prompt Smith                                              |
+| PromptShield                                              |
 +----------------------------------------------------------+
 
 COMMANDS
@@ -71,7 +71,7 @@ MORE INFO
 
 ```
 +----------------------------------------------------------+
-| Prompt Smith Commands                                     |
+| PromptShield Commands                                     |
 +----------------------------------------------------------+
 
 /ps:r <prompt>
@@ -291,7 +291,7 @@ WORKFLOW
 
 OUTPUT FORMAT (Token-efficient)
   If improved:
-    [Prompt Smith] 활성화됨 (X→Y점)
+    [PromptShield] 활성화됨 (X→Y점)
     (Then executes improved prompt immediately)
 
   If not improved:

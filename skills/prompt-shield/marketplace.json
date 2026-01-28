@@ -1,12 +1,12 @@
 {
-  "name": "prompt-smith",
+  "name": "prompt-shield",
   "version": "3.4.0",
   "description": "Prompt quality management skill with 8-Point Quality Check, LINT/BUILD modes, Intercept Pipeline, and advanced guides (Extended Thinking, Prefill, Token Efficiency).",
   "short_description": "Prompt QA skill (8-Point Check + LINT + BUILD + Intercept)",
   "author": "joseph0926",
   "license": "MIT",
-  "repository": "https://github.com/joseph0926/prompt-smith",
-  "homepage": "https://github.com/joseph0926/prompt-smith",
+  "repository": "https://github.com/joseph0926/prompt-shield",
+  "homepage": "https://github.com/joseph0926/prompt-shield",
   "keywords": [
     "prompt",
     "quality",

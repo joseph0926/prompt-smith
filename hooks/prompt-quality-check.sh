@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prompt Smith - UserPromptSubmit quality gate
+# PromptShield - UserPromptSubmit quality gate
 # Notes:
 # - For UserPromptSubmit hooks, stdout (exit code 0) is injected into Claude's context.
 # - Prefer structured JSON output with hookSpecificOutput.additionalContext to avoid transcript noise.
@@ -416,7 +416,7 @@ if [[ "$quality_percent" -lt "${MIN_QUALITY_PERCENT:-60}" ]]; then
 
   additional_context=$(
     cat <<EOF
-[Prompt Smith Lint]
+[PromptShield Lint]
 - Quality: ${quality_percent}/100
 - Missing: ${missing_list:-none}
 $(if [[ ${#detected_anti[@]} -gt 0 ]]; then echo "- Anti-patterns: ${anti_list}"; fi)
@@ -428,7 +428,7 @@ Tip: Run /ps:r for guided improvement or /ps:lint for detailed analysis.
 EOF
   )
 
-  system_message="Prompt Smith: prompt quality ${quality_percent}/100."
+  system_message="PromptShield: prompt quality ${quality_percent}/100."
   if [[ ${#detected_anti[@]} -gt 0 ]]; then
     system_message="${system_message} Anti-patterns detected: ${anti_list}."
   fi
@@ -442,7 +442,7 @@ EOF
   if [[ "${MODE:-warn}" == "block" ]]; then
     decision="block"
     reason="${BLOCK_REASON_BASE} (quality ${quality_percent}/100; missing: ${missing_list}; anti-patterns: ${anti_list})"
-    system_message="Prompt Smith blocked this prompt (quality ${quality_percent}/100)."
+    system_message="PromptShield blocked this prompt (quality ${quality_percent}/100)."
   fi
 
   export ADDITIONAL_CONTEXT="$additional_context"

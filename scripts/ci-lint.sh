@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prompt Smith - CI LINT Script
+# PromptShield - CI LINT Script
 # Checks prompt quality for all prompt files in the repository
 
 set -e

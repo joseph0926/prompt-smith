@@ -5,9 +5,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 VERSION=$(cat "$PROJECT_ROOT/VERSION")
 DIST_DIR="$PROJECT_ROOT/dist"
-PACKAGE_NAME="prompt-smith-${VERSION}"
+PACKAGE_NAME="prompt-shield-${VERSION}"
 
-echo "Packaging prompt-smith v${VERSION}..."
+echo "Packaging prompt-shield v${VERSION}..."
 echo ""
 
 rm -rf "${DIST_DIR}"
