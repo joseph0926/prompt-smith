@@ -5,7 +5,7 @@
 > **[한국어 문서 (Korean)](README.ko.md)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-3.4.0-blue.svg)](https://github.com/joseph0926/prompt-shield/releases)
+[![Version](https://img.shields.io/badge/version-3.5.0-blue.svg)](https://github.com/joseph0926/prompt-shield/releases)
 
 ![ps_demo_02](https://github.com/user-attachments/assets/82cf7bf6-433a-4f3b-be3d-7389e341afaf)
 

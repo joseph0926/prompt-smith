@@ -1,6 +1,8 @@
 #!/bin/bash
 # PromptShield - CI LINT Script
 # Checks prompt quality for all prompt files in the repository
+# Uses lib/lint-engine for unified scoring (Sprint 2)
+#
 # Exit codes:
 #   0 = All prompts pass quality threshold
 #   1 = One or more prompts below threshold (Gate FAIL)
@@ -9,6 +11,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 CONFIG_FILE="$REPO_ROOT/ps.config.json"
+LINT_ENGINE="$REPO_ROOT/lib/lint-engine/index.js"
 
 # Default values (used if config file not found)
 MIN_SCORE_CI=6
@@ -27,6 +30,21 @@ error_exit() {
   exit 2
 }
 
+# Check required dependencies
+check_dependencies() {
+  if ! command -v node &> /dev/null; then
+    error_exit "Node.js is required but not found. Install Node.js to use lint-engine."
+  fi
+
+  if ! command -v jq &> /dev/null; then
+    error_exit "jq is required but not found. Install jq for JSON parsing."
+  fi
+
+  if [ ! -f "$LINT_ENGINE" ]; then
+    error_exit "Lint engine not found at $LINT_ENGINE"
+  fi
+}
+
 # Load config if exists
 load_config() {
   if [ ! -f "$CONFIG_FILE" ]; then
@@ -34,10 +52,7 @@ load_config() {
     return 0
   fi
 
-  if ! command -v jq &> /dev/null; then
-    echo "Warning: jq not found, using default thresholds"
-    return 0
-  fi
+  # jq is already verified in check_dependencies
 
   # Validate JSON
   if ! jq empty "$CONFIG_FILE" 2>/dev/null; then
@@ -111,10 +126,9 @@ FAILURES_FILE="/tmp/lint-failures.txt"
 FAILED=0
 CHECKED=0
 
+# Check prompt quality using lint-engine (unified scoring)
 check_prompt_quality() {
   local file="$1"
-  local score=0
-  local missing=()
 
   if [ ! -f "$file" ]; then
     return 1
@@ -122,56 +136,38 @@ check_prompt_quality() {
 
   local rel_file="${file#$REPO_ROOT/}"
 
-  local content
-  content=$(cat "$file") || error_exit "Failed to read file: $file"
+  # Call lint-engine with JSON output and configured max score
+  local lint_result
+  lint_result=$(node "$LINT_ENGINE" "$file" --json --max-score="$MAX_SCORE" 2>/dev/null)
 
-  # Scoring rules
-  if echo "$content" | grep -qiE '(you are|act as|role:|persona:)'; then
-    score=$((score + 2))
-  else
-    missing+=("ROLE")
+  if [ $? -eq 2 ]; then
+    echo "Warning: Failed to lint $rel_file" >&2
+    return 1
   fi
 
-  if echo "$content" | grep -qiE '(context:|background:|given:|##)'; then
-    score=$((score + 2))
-  else
-    missing+=("CONTEXT")
+  # Parse JSON result with jq
+  local score missing_str
+  score=$(echo "$lint_result" | jq -r '.score')
+  missing_str=$(echo "$lint_result" | jq -r '.missing | .[0:3] | join(", ")')
+
+  # Handle non-numeric score (fallback)
+  if ! [[ "$score" =~ ^[0-9.]+$ ]]; then
+    score=0
   fi
 
-  if echo "$content" | grep -qiE '(instruction:|task:|step[s]?:|##)'; then
-    score=$((score + 2))
-  else
-    missing+=("INSTRUCTION")
-  fi
-
-  if echo "$content" | grep -qiE '(example:|for instance:|e\.g\.|```)'; then
-    score=$((score + 2))
-  else
-    missing+=("EXAMPLE")
-  fi
-
-  if echo "$content" | grep -qiE '(format:|output:|response:|##)'; then
-    score=$((score + 2))
-  else
-    missing+=("FORMAT")
-  fi
-
-  local missing_str=""
-  if [ "${#missing[@]}" -gt 0 ]; then
-    local top_missing=("${missing[@]:0:3}")
-    local IFS=", "
-    missing_str="${top_missing[*]}"
-  fi
+  # Round score to integer for comparison
+  local score_int
+  score_int=$(printf "%.0f" "$score")
 
   local status="Pass"
   local status_icon="✅"
 
-  if [ "$score" -lt "$MIN_SCORE_CI" ]; then
+  if [ "$score_int" -lt "$MIN_SCORE_CI" ]; then
     status="FAIL"
     status_icon="❌"
     FAILED=$((FAILED + 1))
     echo "$rel_file|$score|$MIN_SCORE_CI|$missing_str" >> "$FAILURES_FILE"
-  elif [ "$score" -lt "$MIN_SCORE_WARN" ]; then
+  elif [ "$score_int" -lt "$MIN_SCORE_WARN" ]; then
     status="Warn"
     status_icon="⚠️"
   fi
@@ -181,6 +177,7 @@ check_prompt_quality() {
 }
 
 # Initialize
+check_dependencies
 load_config
 
 echo "| File | Score | Status |" > "$RESULTS_FILE"

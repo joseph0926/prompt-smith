@@ -26,7 +26,7 @@
 |--------|------|-----------------|--------|
 | 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | ✅ Done |
 | 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | ✅ Done |
-| 2 | Unified Rule Engine | Hook/CI 단일 규칙 엔진 | 📋 Planned |
+| 2 | Unified Rule Engine | CI 단일 규칙 엔진 (lint-engine) | ✅ Done |
 | 3 | Registry v2 | 버전 히스토리/롤백/디프 | 📋 Planned |
 | 4 | PromptPack v0.1 | pack/install 배포 단위 | 📋 Planned |
 | 5 | Eval Runner v2 | Claude CLI 실행 기반 평가 | 📋 Planned |
@@ -38,16 +38,21 @@
 
 ## Current State (2026-01-30)
 
-**Version**: 3.4.0
+**Version**: 3.5.0
 
 ### Completed
 - ✅ CI Gate 동작 중 (`scripts/ci-lint.sh` + `.github/workflows/prompt-quality.yml`)
 - ✅ MCP Registry v1.2.0 (`servers/prompt-registry.js`) - CRUD + MCP Prompts 지원
 - ✅ 8-Point Quality Check 문서화
 - ✅ Eval Runner dry-run 모드 구현
+- ✅ **Lint Engine 통합** (Sprint 2 완료)
+  - `lib/lint-engine/`: 단일 규칙 엔진 모듈
+  - CI에서 8-Point Quality Check 적용
+  - `--max-score`, `--threshold` CLI 옵션 지원
 
-### Technical Debt (Sprint 2 착수 권장)
-- ⚠️ **Lint Engine 분산**: `ci-lint.sh`와 Skill 내장 로직 간 점수 계산 로직 불일치 가능성
+### Technical Debt
+- ⚠️ **Hook/CI 스코어링 불일치**: Hook은 5-Point (grep 기반), CI는 8-Point (lint-engine)
+  - 후속 스프린트에서 Hook도 lint-engine으로 통합 예정
 - ⚠️ **Registry 버전 관리 미비**: 단일 content 저장만 지원 (rollback/diff 불가)
 - ⚠️ **Eval Runner 제한**: `--provider claude-cli` 미구현
 
@@ -89,18 +94,26 @@
 
 ---
 
-### Sprint 2 — Unified Rule Engine
+### Sprint 2 — Unified Rule Engine ✅
 
-**Goal**: Hook과 CI가 같은 룰/점수 엔진을 사용
+**Goal**: CI가 단일 룰/점수 엔진을 사용
 
 **Deliverables**:
-- `lint-engine` 모듈 (단일 진실의 원천)
-- CI/Hook 래퍼화
-- 룰 authoring 문서
+- [x] `lib/lint-engine/` 모듈 (단일 진실의 원천)
+  - `index.js`: 코어 lint 함수 + CLI
+  - `rules.js`: 8-Point Quality Check 규칙
+  - `lint-engine.test.js`: 22개 테스트
+- [x] `ci-lint.sh` 리팩터링 (lint-engine 호출)
+- [x] CLI 옵션: `--max-score`, `--threshold`, `--json`, `--no-extended`
+- [x] GitHub Actions Node.js 설정 추가
+- [x] ARCHITECTURE.md 업데이트
 
 **Acceptance Criteria**:
-- 동일 입력에 대해 Hook/CI 결과가 일치
-- 룰 변경이 한 곳에서만 필요
+- [x] CI가 8-Point Quality Check 사용
+- [x] 룰 변경이 `lib/lint-engine/rules.js` 한 곳에서만 필요
+- [ ] Hook도 lint-engine 사용 (후속 스프린트로 이관)
+
+**Note**: Hook 통합은 별도 작업으로 분리. Hook은 현재 5-Point grep 기반 유지.
 
 ---
 

@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.5.0] - 2026-01-30
+
+### Summary
+Sprint 2 완료: CI를 위한 통합 Lint Engine 모듈 구현. 8-Point Quality Check가 CI에서 단일 규칙 엔진으로 적용됨.
+
+### Added
+
+#### Lint Engine Module (`lib/lint-engine/`)
+- **New module**: `lib/lint-engine/index.js` - 코어 lint 함수 + CLI 인터페이스
+- **Rules file**: `lib/lint-engine/rules.js` - 8-Point Quality Check 규칙 정의
+- **Test suite**: `lib/lint-engine/lint-engine.test.js` - 22개 테스트 (node:test)
+- **CLI options**:
+  - `--json`: JSON 출력
+  - `--max-score=N`: 스코어 스케일 설정 (기본값: 10)
+  - `--threshold=N`: Pass/fail 임계값 (기본값: 6)
+  - `--no-extended`: 확장 차원 스킵
+
+#### CI Workflow Improvements
+- **Node.js setup**: `.github/workflows/prompt-quality.yml`에 Node.js v20 설정 추가
+- **Dependency check**: `ci-lint.sh`에서 jq 필수 의존성으로 변경
+
+### Changed
+
+#### CI Lint Script Refactoring
+- **Unified scoring**: `scripts/ci-lint.sh`가 lint-engine 모듈 호출로 변경
+- **8-Point Quality Check**: 6개 기본 차원 + 2개 확장 차원 (해당 시)
+- **Score scale**: `--max-score` 옵션으로 config의 `lint.maxScore` 전달
+
+#### Documentation Updates
+- **ARCHITECTURE.md**: Lint Engine 섹션 업데이트 (구현 완료 상태)
+- **ARCHITECTURE.md**: Hook/CI 스코어링 차이 명시
+- **ROADMAP.md**: Sprint 2 완료 표시, Technical Debt 업데이트
+
+### Technical Details
+
+| Component | Before | After |
+|-----------|--------|-------|
+| CI scoring | grep 기반 (5-Point) | lint-engine (8-Point) |
+| Hook scoring | grep 기반 (5-Point) | 변경 없음 (후속 스프린트) |
+| Score calculation | inline bash | `(rawScore / (applicableItems * 2)) * maxScore` |
+
+### Known Limitations
+- Hook은 여전히 5-Point grep 기반 스코어링 사용 (후속 스프린트에서 통합 예정)
+- Hook과 CI 간 스코어 불일치 가능성 있음
+
+---
+
 ## [3.4.0] - 2026-01-20
 
 ### Summary

@@ -15,8 +15,8 @@
 │      │              │                              │                     │
 │      │              ▼                              ▼                     │
 │      │       ┌──────────────┐              ┌──────────────┐             │
-│      │       │ Lint Engine  │              │ Lint Engine  │             │
-│      │       │  (shared)    │              │  (shared)    │             │
+│      │       │ Hook Script  │              │ Lint Engine  │             │
+│      │       │  (5-Point)   │              │  (8-Point)   │             │
 │      │       └──────────────┘              └──────────────┘             │
 │      │                                            │                     │
 │      │                                            ▼                     │
@@ -49,21 +49,47 @@
 
 ### 1. Lint Engine
 
-**위치**: `lib/lint-engine/` (Sprint 2에서 구현 예정)
+**위치**: `lib/lint-engine/`
 
 **역할**: 프롬프트 품질 평가의 단일 진실의 원천 (Single Source of Truth)
 
-**현재 상태** (v3.4.0):
-- 분산됨: `scripts/ci-lint.sh` (Bash, grep 기반), Skill 내장 로직 (마크다운 기반)
-- CI Gate: `ci-lint.sh` + `.github/workflows/prompt-quality.yml`
-- 통합 계획: Sprint 2에서 단일 모듈로 통합 예정
+**현재 상태** (v3.5.0):
+- ✅ 통합 완료 (Sprint 2)
+- `lib/lint-engine/index.js`: 코어 모듈 (lint 함수, CLI)
+- `lib/lint-engine/rules.js`: 8-Point Quality Check 규칙
+- `scripts/ci-lint.sh`: lint-engine 호출로 리팩터링됨
 
+**파일 구조**:
 ```
-Input                Output
-─────────────────────────────────────────
-prompt: string       score: number (0-10)
-config: Config   →   findings: Finding[]
-                     suggestions: string[]
+lib/lint-engine/
+├── index.js          # Core module: lint(), CLI interface
+├── rules.js          # 8 rule definitions
+└── lint-engine.test.js  # Unit tests (node:test)
+```
+
+**API**:
+```javascript
+const { lint } = require('./lib/lint-engine');
+
+const result = lint(promptContent, {
+  maxScore: 10,           // Default: 10
+  includeExtended: true   // Include STATE_TRACKING, TOOL_USAGE
+});
+
+// result: {
+//   score: number,        // Normalized (0-10)
+//   rawScore: number,     // Sum of dimension scores
+//   maxPossible: number,  // Maximum achievable
+//   applicableItems: number,
+//   findings: Finding[],
+//   missing: string[],
+//   breakdown: { [dim]: { score, message } }
+// }
+```
+
+**CLI**:
+```bash
+node lib/lint-engine/index.js <file> [--json] [--no-extended]
 ```
 
 **Finding 구조**:
@@ -72,21 +98,29 @@ interface Finding {
   rule: string;        // e.g., "missing-role", "weak-context"
   severity: "error" | "warn" | "info";
   message: string;
-  line?: number;
+  score?: number;
+  suggestions?: string[];
 }
 ```
 
 **8-Point Quality Check 규칙**:
 | Dimension | Weight | Applies When |
 |-----------|--------|--------------|
-| ROLE | 2 | Always |
-| CONTEXT | 2 | Always |
-| INSTRUCTION | 2 | Always |
-| EXAMPLE | 2 | Always |
-| FORMAT | 2 | Always |
-| SUCCESS_CRITERIA | 2 | Always |
-| STATE_TRACKING | 2 | Multi-step tasks |
-| TOOL_USAGE | 2 | Tool-using prompts |
+| ROLE | 0-2 | Always |
+| CONTEXT | 0-2 | Always |
+| INSTRUCTION | 0-2 | Always |
+| EXAMPLE | 0-2 | Always |
+| FORMAT | 0-2 | Always |
+| SUCCESS_CRITERIA | 0-2 | Always |
+| STATE_TRACKING | 0-2 | Multi-step/batch tasks (isApplicable) |
+| TOOL_USAGE | 0-2 | File/tool operations (isApplicable) |
+
+**점수 계산**:
+```
+normalizedScore = (rawScore / (applicableItems * 2)) * maxScore
+```
+
+Extended dimensions (STATE_TRACKING, TOOL_USAGE)는 `isApplicable()` 체크 후 해당되는 경우에만 평가됩니다. 해당되지 않으면 `score: "N/A"`로 표시됩니다.
 
 ---
 
@@ -112,19 +146,31 @@ interface Finding {
 
 **역할**: 작성 시점에서 품질 정책 강제
 
+**현재 상태** (v3.5.0):
+- ⚠️ 별도 스코어링 시스템 사용 (lint-engine 미통합)
+- 5-Point Check: ROLE, GOAL, CONTEXT, FORMAT, CONSTRAINTS
+- Anti-pattern 감지: VAGUE, AMBIGUOUS, OVERCONFIDENT
+- 계획: 후속 스프린트에서 lint-engine 통합 예정
+
 ```
-┌─────────────────┐     ┌──────────────┐     ┌─────────────┐
-│ UserPromptSubmit│ ──→ │ Lint Engine  │ ──→ │ warn/block  │
-│     Hook        │     │              │     │  decision   │
-└─────────────────┘     └──────────────┘     └─────────────┘
+┌─────────────────┐     ┌────────────────────┐     ┌─────────────┐
+│ UserPromptSubmit│ ──→ │ prompt-quality-    │ ──→ │ warn/block  │
+│     Hook        │     │ check.sh (grep)    │     │  decision   │
+└─────────────────┘     └────────────────────┘     └─────────────┘
+                               │
+                               ▼ (future)
+                        ┌──────────────┐
+                        │ Lint Engine  │
+                        └──────────────┘
 ```
 
 **정책 설정**: `hooks/policy.json`
 ```json
 {
   "userPromptSubmit": {
-    "action": "warn",     // "warn" | "block"
-    "minScore": 6
+    "mode": "warn",           // "warn" | "block"
+    "minQualityPercent": 60,  // 0-100
+    "minWordCount": 5
   }
 }
 ```
@@ -133,15 +179,23 @@ interface Finding {
 
 ### 4. CI Gate
 
-**위치**: `scripts/ci-lint.sh`, `.github/workflows/`
+**위치**: `scripts/ci-lint.sh`, `.github/workflows/prompt-quality.yml`
 
 **역할**: 머지 시점에서 품질 정책 강제
 
+**현재 상태** (v3.5.0):
+- ✅ lint-engine 통합 완료 (Sprint 2)
+- `ci-lint.sh`가 `node lib/lint-engine/index.js --json` 호출
+- 8-Point Quality Check 적용 (6 base + 2 extended)
+
 ```
 ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│  PR opened  │ ──→ │ Lint Engine  │ ──→ │  exit 0/1   │
-│             │     │              │     │             │
-└─────────────┘     └──────────────┘     └─────────────┘
+│  PR opened  │ ──→ │ ci-lint.sh   │ ──→ │  exit 0/1   │
+│             │     │      │       │     │             │
+└─────────────┘     │      ▼       │     └─────────────┘
+                    │ lint-engine  │
+                    │ (Node.js)    │
+                    └──────────────┘
                            │
                            ▼
                     ┌──────────────┐
@@ -150,7 +204,7 @@ interface Finding {
                     └──────────────┘
 ```
 
-**설정**: `ps.config.json` (Sprint 1에서 구현 예정)
+**설정**: `ps.config.json`
 ```json
 {
   "ci": {
@@ -415,15 +469,36 @@ Hook에서 품질 미달 프롬프트를 차단하려면:
 
 ### Adding New Lint Rules
 
-1. `lib/lint-engine/rules/` 에 규칙 파일 추가 (Sprint 2 이후)
+1. `lib/lint-engine/rules.js`에 규칙 추가
 2. 규칙 구조:
-   ```typescript
-   interface Rule {
-     id: string;
-     severity: "error" | "warn" | "info";
-     check(prompt: string, config: Config): Finding | null;
-   }
+   ```javascript
+   const NEW_RULE = {
+     patterns: {
+       strong: [/strong pattern/i],
+       weak: [/weak pattern/i]
+     },
+
+     // Optional: for extended dimensions
+     isApplicable(content, normalized) {
+       return { applicable: true, reason: '...' };
+     },
+
+     check(content, normalized) {
+       // Returns { score: 0|1|2, message: '...' }
+       for (const p of this.patterns.strong) {
+         if (p.test(content)) return { score: 2, message: 'Strong match' };
+       }
+       for (const p of this.patterns.weak) {
+         if (p.test(content)) return { score: 1, message: 'Weak match' };
+       }
+       return { score: 0, message: 'No match' };
+     },
+
+     suggestions: ['Improvement suggestion 1', 'Suggestion 2']
+   };
    ```
+3. `module.exports`에 규칙 추가
+4. `lib/lint-engine/index.js`의 dimension 배열에 추가
 
 ### Adding New Providers (Eval Runner)
 
