@@ -24,15 +24,32 @@
 
 | Sprint | Goal | Key Deliverable | Status |
 |--------|------|-----------------|--------|
-| 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | **Done** |
-| 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | **Done** |
-| 2 | Unified Rule Engine | Hook/CI 단일 규칙 엔진 | Planned |
-| 3 | Registry v2 | 버전 히스토리/롤백/디프 | Planned |
-| 4 | PromptPack v0.1 | pack/install 배포 단위 | Planned |
-| 5 | Eval Runner v2 | Claude CLI 실행 기반 평가 | Planned |
-| 6 | Regression Gate | baseline 비교 + PR 차단 | Planned |
-| 7 | promptfoo Adapter | export/run/ingest 연동 | Planned |
-| 8 | MCP Resources | prompt/eval/policy URI 제공 | Planned |
+| 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | ✅ Done |
+| 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | ✅ Done |
+| 2 | Unified Rule Engine | Hook/CI 단일 규칙 엔진 | 📋 Planned |
+| 3 | Registry v2 | 버전 히스토리/롤백/디프 | 📋 Planned |
+| 4 | PromptPack v0.1 | pack/install 배포 단위 | 📋 Planned |
+| 5 | Eval Runner v2 | Claude CLI 실행 기반 평가 | 📋 Planned |
+| 6 | Regression Gate | baseline 비교 + PR 차단 | 📋 Planned |
+| 7 | promptfoo Adapter | export/run/ingest 연동 | 📋 Planned |
+| 8 | MCP Resources | prompt/eval/policy URI 제공 | 📋 Planned |
+
+---
+
+## Current State (2026-01-30)
+
+**Version**: 3.4.0
+
+### Completed
+- ✅ CI Gate 동작 중 (`scripts/ci-lint.sh` + `.github/workflows/prompt-quality.yml`)
+- ✅ MCP Registry v1.2.0 (`servers/prompt-registry.js`) - CRUD + MCP Prompts 지원
+- ✅ 8-Point Quality Check 문서화
+- ✅ Eval Runner dry-run 모드 구현
+
+### Technical Debt (Sprint 2 착수 권장)
+- ⚠️ **Lint Engine 분산**: `ci-lint.sh`와 Skill 내장 로직 간 점수 계산 로직 불일치 가능성
+- ⚠️ **Registry 버전 관리 미비**: 단일 content 저장만 지원 (rollback/diff 불가)
+- ⚠️ **Eval Runner 제한**: `--provider claude-cli` 미구현
 
 ---
 

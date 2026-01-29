@@ -53,7 +53,10 @@
 
 **역할**: 프롬프트 품질 평가의 단일 진실의 원천 (Single Source of Truth)
 
-**현재 상태**: 분산됨 (`scripts/ci-lint.sh`, Skill 내장 로직)
+**현재 상태** (v3.4.0):
+- 분산됨: `scripts/ci-lint.sh` (Bash, grep 기반), Skill 내장 로직 (마크다운 기반)
+- CI Gate: `ci-lint.sh` + `.github/workflows/prompt-quality.yml`
+- 통합 계획: Sprint 2에서 단일 모듈로 통합 예정
 
 ```
 Input                Output
@@ -175,17 +178,24 @@ interface Finding {
 **역할**: 프롬프트 자산의 저장/검색/버전 관리
 
 **현재 기능** (v1.2.0):
-- `prompt_save`: 저장 (버전 자동 증가)
-- `prompt_get`: 조회
+- `prompt_save`: 저장 (버전 자동 증가, 단일 content 덮어쓰기)
+- `prompt_get`: 조회 (latest만)
 - `prompt_list`: 목록
 - `prompt_search`: 검색
 - `prompt_delete`: 삭제
+- **MCP Prompts**: 저장된 프롬프트를 slash command로 노출 (`prompts/list`, `prompts/get`)
+- **알림**: `notifications/prompts/list_changed` 이벤트 발송
+
+**제한사항** (v1.2.0):
+- 버전 히스토리 미지원 (단일 content만 저장)
+- rollback/diff 불가
 
 **계획된 기능** (Sprint 3):
 - `prompt_get(version)`: 특정 버전 조회
 - `prompt_versions`: 버전 목록
 - `prompt_diff`: 버전 간 비교
 - `prompt_rollback`: 롤백
+- 데이터 스키마 v2: `versions[]` 스냅샷 저장
 
 **데이터 흐름**:
 ```
@@ -221,12 +231,13 @@ MCP prompts/list_changed notification
                                           └──────────────┘
 ```
 
-**현재 상태**:
-- `--provider dry-run`: 구현됨 (기본값)
-- `--provider claude-cli`: 미구현 (Sprint 5)
-- `--baseline`: 미구현 (Sprint 6)
+**현재 상태** (v3.4.0):
+- `--provider dry-run`: ✅ 구현됨 (기본값)
+- `--provider claude-cli`: ❌ 미구현 (Sprint 5 계획)
+- `--baseline`: ❌ 미구현 (Sprint 6 계획)
+- `--llm-eval`: 옵션으로 모델 기반 평가 가능 (외부 API 호출)
 
-**Assertions** (Sprint 5):
+**Assertions** (Sprint 5 계획):
 - `contains`: 문자열 포함 여부
 - `regex`: 정규식 매칭
 - `json-schema`: JSON 스키마 검증
