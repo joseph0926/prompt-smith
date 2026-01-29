@@ -114,6 +114,7 @@ CHECKED=0
 check_prompt_quality() {
   local file="$1"
   local score=0
+  local missing=()
 
   if [ ! -f "$file" ]; then
     return 1
@@ -127,22 +128,39 @@ check_prompt_quality() {
   # Scoring rules
   if echo "$content" | grep -qiE '(you are|act as|role:|persona:)'; then
     score=$((score + 2))
+  else
+    missing+=("ROLE")
   fi
 
   if echo "$content" | grep -qiE '(context:|background:|given:|##)'; then
     score=$((score + 2))
+  else
+    missing+=("CONTEXT")
   fi
 
   if echo "$content" | grep -qiE '(instruction:|task:|step[s]?:|##)'; then
     score=$((score + 2))
+  else
+    missing+=("INSTRUCTION")
   fi
 
   if echo "$content" | grep -qiE '(example:|for instance:|e\.g\.|```)'; then
     score=$((score + 2))
+  else
+    missing+=("EXAMPLE")
   fi
 
   if echo "$content" | grep -qiE '(format:|output:|response:|##)'; then
     score=$((score + 2))
+  else
+    missing+=("FORMAT")
+  fi
+
+  local missing_str=""
+  if [ "${#missing[@]}" -gt 0 ]; then
+    local top_missing=("${missing[@]:0:3}")
+    local IFS=", "
+    missing_str="${top_missing[*]}"
   fi
 
   local status="Pass"
@@ -152,7 +170,7 @@ check_prompt_quality() {
     status="FAIL"
     status_icon="❌"
     FAILED=$((FAILED + 1))
-    echo "$rel_file|$score|$MIN_SCORE_CI" >> "$FAILURES_FILE"
+    echo "$rel_file|$score|$MIN_SCORE_CI|$missing_str" >> "$FAILURES_FILE"
   elif [ "$score" -lt "$MIN_SCORE_WARN" ]; then
     status="Warn"
     status_icon="⚠️"
@@ -196,9 +214,12 @@ if [ "$FAILED" -gt 0 ]; then
   echo "----------------------------------------"
   echo "  Failed Prompts (top $MAX_FAILURES_SHOWN)"
   echo "----------------------------------------"
-  head -n "$MAX_FAILURES_SHOWN" "$FAILURES_FILE" | while IFS='|' read -r file score threshold; do
+  head -n "$MAX_FAILURES_SHOWN" "$FAILURES_FILE" | while IFS='|' read -r file score threshold missing; do
     echo "  ❌ $file"
     echo "     Score: $score/$MAX_SCORE (required: $threshold)"
+    if [ -n "$missing" ]; then
+      echo "     Missing: $missing"
+    fi
   done
   echo ""
   echo "Run '/ps:lint' locally for detailed analysis."

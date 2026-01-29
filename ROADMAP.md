@@ -25,7 +25,7 @@
 | Sprint | Goal | Key Deliverable | Status |
 |--------|------|-----------------|--------|
 | 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | **Done** |
-| 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | **In Progress** |
+| 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | **Done** |
 | 2 | Unified Rule Engine | Hook/CI 단일 규칙 엔진 | Planned |
 | 3 | Registry v2 | 버전 히스토리/롤백/디프 | Planned |
 | 4 | PromptPack v0.1 | pack/install 배포 단위 | Planned |
