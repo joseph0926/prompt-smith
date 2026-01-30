@@ -54,6 +54,15 @@ sudo apt-get install jq
 | 1 | 하나 이상의 프롬프트가 threshold 미달 (FAIL) |
 | 2 | 설정/실행 오류 |
 
+## 엔터프라이즈 운영 체크리스트
+
+- **Branch Protection**: PR 필수 체크에 `CI Gate` 추가
+- **permissions 최소화**: 기본 `contents: read`로 시작, 필요 시만 확장
+- **Action pinning**: tag 고정(최소) 또는 SHA pinning(권장)
+- **Untrusted PR 정책**: `pull_request_target` 사용 시 secrets 접근 금지/격리
+- **아티팩트 보관**: 실패 로그/리포트 보관 기간 명시
+- **동시성 관리**: `concurrency`로 중복 실행 취소
+
 ## 점수 산정 기준
 
 | 항목 | 점수 | 설명 |

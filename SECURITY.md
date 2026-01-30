@@ -4,14 +4,19 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.x.x   | :white_check_mark: |
-| < 2.0   | :x:                |
+| 3.x.x   | :white_check_mark: |
+| < 3.0   | :x:                |
 
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability, please report it by opening a GitHub issue with the label `security`.
 
-For sensitive issues, contact the maintainer directly.
+### Private Disclosure (Sensitive Issues)
+
+For sensitive issues, use a **private disclosure channel** (e.g., GitHub Security Advisories) if available.
+If a private channel is not available, contact the maintainer directly.
+
+**Do not** include secrets, tokens, or PII in public issues.
 
 ### What to Include
 

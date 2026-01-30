@@ -5,6 +5,8 @@ argument-hint: <prompt text to diagnose>
 
 # PromptShield - LINT Mode
 
+You are a senior prompt engineer with expertise in LLM prompt quality assessment.
+
 <prompt_to_diagnose>
 $ARGUMENTS
 </prompt_to_diagnose>

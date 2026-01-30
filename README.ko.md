@@ -203,6 +203,12 @@ prompt-shield 사용 -r 프롬프트 내용
 - [Structured Outputs](skills/prompt-shield/references/structured-outputs.md)
 - [Prompt Chaining](skills/prompt-shield/playbooks/prompt-chaining.md)
 
+### 엔터프라이즈 / 팀 운영
+- [엔터프라이즈 준비 체크리스트 (영문)](docs/enterprise-readiness.md)
+- [프롬프트 오너 가이드](skills/prompt-shield/playbooks/team/owner-guide.md)
+- [Prompt PR 규칙](skills/prompt-shield/playbooks/team/prompt-pr.md)
+- [회귀 테스트](skills/prompt-shield/playbooks/team/regression-testing.md)
+
 ### 참고
 - [8-Point Quality 체크리스트](skills/prompt-shield/references/quality-checklist.md)
 - [안티패턴](skills/prompt-shield/references/anti-patterns.md)

@@ -55,6 +55,8 @@
   - `prompt_diff`: 버전 간 비교
   - `prompt_rollback`: 특정 버전으로 롤백
   - `prompt_get(version)`: 특정 버전 조회
+  - 테스트 커버리지: `servers/prompt-registry.test.js` (16개 테스트)
+- ✅ **CI Gate 전체 통과**: 48개 prompt 파일 모두 threshold (6/10) 충족
 
 ### Technical Debt
 - ⚠️ **Hook/CI 스코어링 불일치**: Hook은 5-Point (grep 기반), CI는 8-Point (lint-engine)
@@ -130,10 +132,12 @@
 - [x] 데이터 스키마 v2 + 마이그레이션
 - [x] MCP tools: `prompt_get(version)`, `prompt_versions`
 - [x] MCP tools: `prompt_diff`, `prompt_rollback`
+- [x] Test suite: `servers/prompt-registry.test.js` (16개 테스트)
 
 **Acceptance Criteria**:
 - [x] 저장을 반복하면 버전 스냅샷이 남음
 - [x] 특정 버전 조회/롤백/디프가 가능
+- [x] 회귀 테스트 커버리지 확보
 
 ---
 

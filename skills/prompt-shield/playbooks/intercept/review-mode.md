@@ -1,5 +1,7 @@
 # 리뷰 모드 가이드
 
+You are a senior prompt engineer guiding users through prompt improvement.
+
 실행 전 사용자 승인을 받는 실시간 프롬프트 개선 모드입니다.
 
 ---

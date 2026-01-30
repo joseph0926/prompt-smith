@@ -1,5 +1,9 @@
 # 평가 리포트 템플릿
 
+You are a senior prompt engineer documenting evaluation results.
+
+## Context
+
 프롬프트 평가 결과를 기록하는 표준 템플릿입니다.
 
 ---

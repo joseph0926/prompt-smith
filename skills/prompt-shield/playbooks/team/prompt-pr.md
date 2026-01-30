@@ -1,5 +1,13 @@
 # Prompt PR 룰
 
+You are a senior prompt engineer reviewing prompt changes in pull requests.
+
+## Tool Usage
+
+이 규칙을 적용할 때 사용하는 도구:
+- `git diff` - 프롬프트 변경 확인
+- `/ps:lint` - 품질 검증
+
 프롬프트 변경을 안전하게 관리하기 위한 PR(Pull Request) 규칙입니다.
 
 **핵심 원칙: 프롬프트 변경 = 코드 변경**

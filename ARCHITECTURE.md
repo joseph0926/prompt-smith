@@ -229,6 +229,8 @@ Extended dimensions (STATE_TRACKING, TOOL_USAGE)는 `isApplicable()` 체크 후 
 
 **위치**: `servers/prompt-registry.js`
 
+**테스트**: `servers/prompt-registry.test.js` (16개 테스트, node:test)
+
 **역할**: 프롬프트 자산의 저장/검색/버전 관리
 
 **현재 기능** (v2.0.0):
@@ -464,6 +466,27 @@ prompt-shield는 **로컬 우선** 설계를 따릅니다:
    Write: data/ (registry)
          /tmp/ (임시 파일)
    ```
+
+### Enterprise Hardening (Docs)
+
+엔터프라이즈 운영 시 아래 항목을 **추가 문서/정책으로 명시**하는 것을 권장합니다.
+기본 구현에 포함되지 않으며, 상세 체크리스트는 `docs/enterprise-readiness.md`를 참고합니다.
+
+#### Data Governance
+- 보존/삭제 정책 (retention, purge)
+- 백업/복구 절차
+- 암호화 기준 (at-rest / in-transit)
+- 접근 제어 (RBAC/ACL, 멀티 유저 환경)
+
+#### Observability & Audit
+- run_id / call_id 정의 및 연계
+- 구조화 로그 스키마 (tool_name, status, duration, error.code)
+- 로그 마스킹/보관 기간 정책
+
+#### Registry Contract
+- tool 이름 안정성/버전 정책
+- 입력/출력 JSON schema 및 에러 코드
+- 버전 히스토리/롤백 의미 정의
 
 ### Input Handling
 

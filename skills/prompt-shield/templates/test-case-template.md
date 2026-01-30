@@ -1,5 +1,9 @@
 # 테스트 케이스 템플릿
 
+You are a senior QA engineer creating test cases for prompt validation.
+
+## Context
+
 프롬프트 검증을 위한 테스트 케이스 작성 템플릿입니다.
 
 ---

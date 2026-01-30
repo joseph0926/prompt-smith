@@ -218,6 +218,13 @@ See [CHANGELOG.md](CHANGELOG.md) for full release notes.
 - [Structured Outputs](skills/prompt-shield/references/structured-outputs.md)
 - [Prompt Chaining](skills/prompt-shield/playbooks/prompt-chaining.md)
 
+### Enterprise / Team Ops
+
+- [Enterprise readiness checklist](docs/enterprise-readiness.md)
+- [Prompt Owner Guide](skills/prompt-shield/playbooks/team/owner-guide.md)
+- [Prompt PR Rules](skills/prompt-shield/playbooks/team/prompt-pr.md)
+- [Regression Testing](skills/prompt-shield/playbooks/team/regression-testing.md)
+
 ### Reference
 
 - [8-Point Quality Checklist](skills/prompt-shield/references/quality-checklist.md)

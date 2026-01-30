@@ -14,6 +14,16 @@ Sprint 3 완료: Registry v2 구현. 버전 히스토리, 롤백, diff 기능 �
 
 ### Added
 
+#### Registry v2 Tests (`servers/prompt-registry.test.js`)
+- **Test suite**: 16개 테스트 케이스 (node:test)
+  - prompt_save 버전 증가 검증
+  - prompt_get 버전별 조회
+  - prompt_versions 목록/totalVersions 반환
+  - prompt_diff 버전 비교
+  - prompt_rollback 롤백 후 새 버전 생성
+  - corrupted data 방어 (missing versions array)
+  - v1→v2 마이그레이션 검증
+
 #### Registry v2 - Version History Support
 - **Data schema v2**: `versions[]` 배열로 모든 버전 스냅샷 저장
 - **Auto-migration**: v1 데이터를 loadRegistry() 시 자동으로 v2로 변환
@@ -35,6 +45,24 @@ Sprint 3 완료: Registry v2 구현. 버전 히스토리, 롤백, diff 기능 �
 - **ARCHITECTURE.md**: Registry 섹션 업데이트 (v2 스키마 문서화)
 - **ROADMAP.md**: Sprint 3 완료 표시
 
+### Fixed
+
+#### CI Gate Quality Issues
+- **8 prompt files**: ROLE/CONTEXT/TOOL_USAGE 누락으로 CI Gate 실패하던 파일들 수정
+  - `commands/lint.md`, `commands/a.md`
+  - `skills/prompt-shield/references/input-handling-rules.md`
+  - `skills/prompt-shield/references/latency-optimization.md`
+  - `skills/prompt-shield/playbooks/intercept/review-mode.md`
+  - `skills/prompt-shield/playbooks/team/prompt-pr.md`
+  - `skills/prompt-shield/templates/test-case-template.md`
+  - `skills/prompt-shield/templates/eval-report.md`
+
+#### Registry v2 Schema Fixes
+- **Output schema alignment**: `prompt_versions`에 `totalVersions` 필드 추가
+- **Output schema alignment**: `prompt_diff`에 `name`, `fromCreatedAt`, `toCreatedAt` 필드 추가
+- **Tool namespace**: 도움말에서 Claude Code 네임스페이스 형식 (`mcp__plugin_ps_prompt-registry__*`) 반영
+- **Defensive coding**: `prompt_save`/`prompt_get`에서 corrupted versions 배열 방어 로직 추가
+
 ### Technical Details
 
 | Component | Before | After |
@@ -44,6 +72,8 @@ Sprint 3 완료: Registry v2 구현. 버전 히스토리, 롤백, diff 기능 �
 | Version query | Latest only | Any version via `version` param |
 | Diff support | None | `prompt_diff` tool |
 | Rollback support | None | `prompt_rollback` tool |
+| Test coverage | None | 16 test cases (node:test) |
+| CI Gate | 8 files failing | All 48 files passing |
 
 ### Migration Notes
 - 기존 v1 데이터는 서버 시작 시 자동으로 v2로 마이그레이션됨

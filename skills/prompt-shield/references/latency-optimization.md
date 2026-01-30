@@ -1,6 +1,14 @@
 # 지연시간 최적화 가이드
 
+## Context
+
 Claude API 응답 지연시간을 줄이기 위한 전략과 기법입니다.
+
+## Tool Usage
+
+이 가이드에서 다루는 API 호출 패턴:
+- `client.messages.create()` - 기본 API 호출
+- `client.messages.stream()` - 스트리밍 호출
 
 > **출처**: Anthropic 공식 문서 - Reduce Latency
 
