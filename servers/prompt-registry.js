@@ -27,6 +27,7 @@ const DATA_DIR =
 const REGISTRY_PATH = path.join(DATA_DIR, "prompts.json");
 
 const PROMPT_PAGE_SIZE = 50;
+const SCHEMA_VERSION = 2;
 
 // Prompt names exposed via MCP should be stable, discoverable, and slash-command friendly.
 // Claude Code also normalizes names (spaces -> underscores), but we normalize proactively.
@@ -94,21 +95,65 @@ function ensureDataDir() {
   }
 }
 
+/**
+ * Migrate v1 registry to v2 schema.
+ * v1: { prompts: { [name]: { name, content, tags, metadata, version, updatedAt } } }
+ * v2: { schemaVersion: 2, prompts: { [name]: { name, currentVersion, tags, metadata, updatedAt, versions: [...] } } }
+ */
+function migrateV1toV2(registry) {
+  const migrated = {
+    schemaVersion: SCHEMA_VERSION,
+    prompts: {},
+  };
+
+  for (const [key, p] of Object.entries(registry.prompts || {})) {
+    const version = typeof p.version === "number" ? p.version : 1;
+    const updatedAt = p.updatedAt || nowIso();
+
+    migrated.prompts[key] = {
+      name: p.name || key,
+      currentVersion: version,
+      tags: Array.isArray(p.tags) ? p.tags : [],
+      metadata: isPlainObject(p.metadata) ? p.metadata : {},
+      updatedAt,
+      versions: [
+        {
+          version,
+          content: String(p.content || ""),
+          tags: Array.isArray(p.tags) ? p.tags : [],
+          metadata: isPlainObject(p.metadata) ? p.metadata : {},
+          createdAt: updatedAt,
+        },
+      ],
+    };
+  }
+
+  return migrated;
+}
+
 function loadRegistry() {
   ensureDataDir();
   if (!fs.existsSync(REGISTRY_PATH)) {
-    return { prompts: {} };
+    return { schemaVersion: SCHEMA_VERSION, prompts: {} };
   }
   try {
     const raw = fs.readFileSync(REGISTRY_PATH, "utf8");
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object" || typeof parsed.prompts !== "object") {
-      return { prompts: {} };
+      return { schemaVersion: SCHEMA_VERSION, prompts: {} };
     }
+
+    // Check if migration is needed (v1 -> v2)
+    if (!parsed.schemaVersion || parsed.schemaVersion < SCHEMA_VERSION) {
+      const migrated = migrateV1toV2(parsed);
+      saveRegistry(migrated);
+      return migrated;
+    }
+
     return parsed;
   } catch {
     // Fail open: don't crash the server for a corrupt registry file.
-    return { prompts: {} };
+    return { schemaVersion: SCHEMA_VERSION, prompts: {} };
   }
 }
 
@@ -125,6 +170,81 @@ function nowIso() {
 
 function isPlainObject(v) {
   return !!v && typeof v === "object" && !Array.isArray(v);
+}
+
+/**
+ * Generate a simple line-based diff between two strings.
+ * Returns a unified-diff-like format.
+ */
+function generateSimpleDiff(oldText, newText) {
+  const oldLines = oldText.split("\n");
+  const newLines = newText.split("\n");
+
+  const diff = [];
+  const maxLen = Math.max(oldLines.length, newLines.length);
+
+  // Simple LCS-based diff for readability
+  let i = 0;
+  let j = 0;
+
+  while (i < oldLines.length || j < newLines.length) {
+    if (i >= oldLines.length) {
+      // Remaining lines are additions
+      diff.push(`+ ${newLines[j]}`);
+      j++;
+    } else if (j >= newLines.length) {
+      // Remaining lines are deletions
+      diff.push(`- ${oldLines[i]}`);
+      i++;
+    } else if (oldLines[i] === newLines[j]) {
+      // Lines match
+      diff.push(`  ${oldLines[i]}`);
+      i++;
+      j++;
+    } else {
+      // Look ahead to find matching lines
+      let foundInNew = -1;
+      let foundInOld = -1;
+
+      // Check if old line appears later in new
+      for (let k = j + 1; k < Math.min(j + 5, newLines.length); k++) {
+        if (oldLines[i] === newLines[k]) {
+          foundInNew = k;
+          break;
+        }
+      }
+
+      // Check if new line appears later in old
+      for (let k = i + 1; k < Math.min(i + 5, oldLines.length); k++) {
+        if (newLines[j] === oldLines[k]) {
+          foundInOld = k;
+          break;
+        }
+      }
+
+      if (foundInNew !== -1 && (foundInOld === -1 || foundInNew - j <= foundInOld - i)) {
+        // Add new lines until we reach the match
+        while (j < foundInNew) {
+          diff.push(`+ ${newLines[j]}`);
+          j++;
+        }
+      } else if (foundInOld !== -1) {
+        // Remove old lines until we reach the match
+        while (i < foundInOld) {
+          diff.push(`- ${oldLines[i]}`);
+          i++;
+        }
+      } else {
+        // No nearby match, treat as replacement
+        diff.push(`- ${oldLines[i]}`);
+        diff.push(`+ ${newLines[j]}`);
+        i++;
+        j++;
+      }
+    }
+  }
+
+  return diff.join("\n");
 }
 
 // ---------- JSON-RPC helpers ----------
@@ -275,13 +395,18 @@ function handlePromptsGet(id, params) {
           content: {
             type: "text",
             text:
-              "You have access to the Prompt Registry MCP server.\n\n" +
-              "1) Saved prompts are exposed as slash commands: /mcp__prompt-registry__<prompt_name>.\n" +
-              "2) Use tools to manage prompts:\n" +
-              "   - mcp__prompt-registry__prompt_save {name, content, tags?, metadata?}\n" +
-              "   - mcp__prompt-registry__prompt_list\n" +
-              "   - mcp__prompt-registry__prompt_get {name}\n" +
-              "   - mcp__prompt-registry__prompt_search {query}\n" +
+              "You have access to the Prompt Registry MCP server (v2 with version history).\n\n" +
+              "1) Saved prompts are exposed as slash commands: /mcp__plugin_ps_prompt-registry__<prompt_name>.\n" +
+              "2) Use tools to manage prompts (tool names are namespaced as mcp__plugin_ps_prompt-registry__*):\n" +
+              "   - prompt_save {name, content, tags?, metadata?} - Save/update prompt\n" +
+              "   - prompt_list - List all prompts\n" +
+              "   - prompt_get {name, version?} - Get prompt (optionally specific version)\n" +
+              "   - prompt_search {query} - Search prompts\n" +
+              "   - prompt_delete {name} - Delete prompt\n" +
+              "3) Version history tools:\n" +
+              "   - prompt_versions {name} - List all versions of a prompt\n" +
+              "   - prompt_diff {name, fromVersion, toVersion?} - Show diff between versions\n" +
+              "   - prompt_rollback {name, toVersion} - Rollback to a specific version\n" +
               "\nIf the user asks to reuse a saved prompt, fetch it (tool or slash command) and then apply it.\n" +
               "If the user asks to create reusable prompts, propose saving them to the registry.",
           },
@@ -306,7 +431,16 @@ function handlePromptsGet(id, params) {
   }
 
   const p = registry.prompts[key];
-  if (!p || typeof p.content !== "string") {
+  if (!p || !Array.isArray(p.versions) || p.versions.length === 0) {
+    sendError(id, -32602, "Invalid prompt name", { name: promptName });
+    return;
+  }
+
+  // Get the latest version's content
+  const latestVersion = p.versions[p.versions.length - 1];
+  const content = latestVersion.content;
+
+  if (typeof content !== "string") {
     sendError(id, -32602, "Invalid prompt name", { name: promptName });
     return;
   }
@@ -323,7 +457,7 @@ function handlePromptsGet(id, params) {
     }
   }
 
-  const rendered = renderTemplate(p.content, provided);
+  const rendered = renderTemplate(content, provided);
   const descFromMd = typeof md.description === "string" ? md.description.trim() : "";
   const description = descFromMd || `Saved prompt: ${p.name || key}`;
 
@@ -361,8 +495,8 @@ function handleInitialize(id, params) {
     serverInfo: {
       name: "prompt-registry",
       title: "Prompt Registry",
-      version: "1.2.0",
-      description: "Local prompt registry (CRUD) for PromptShield",
+      version: "2.0.0",
+      description: "Local prompt registry with version history (CRUD + versioning) for PromptShield",
     },
     instructions:
       "This server stores prompts locally. Saved prompts are also exposed via MCP prompts (slash commands). Tool errors are returned with isError=true so the model can self-correct.",
@@ -406,10 +540,13 @@ function toolDefinitions() {
     },
     {
       name: "prompt_get",
-      description: "Get a prompt by name.",
+      description: "Get a prompt by name. Optionally specify a version number to get a specific version.",
       inputSchema: {
         type: "object",
-        properties: { name: { type: "string" } },
+        properties: {
+          name: { type: "string" },
+          version: { type: "number", description: "Optional version number. If omitted, returns the latest version." },
+        },
         required: ["name"],
       },
       outputSchema: {
@@ -419,6 +556,73 @@ function toolDefinitions() {
           prompt: { type: "object" },
         },
         required: ["found"],
+      },
+    },
+    {
+      name: "prompt_versions",
+      description: "List all versions of a prompt.",
+      inputSchema: {
+        type: "object",
+        properties: { name: { type: "string" } },
+        required: ["name"],
+      },
+      outputSchema: {
+        type: "object",
+        properties: {
+          found: { type: "boolean" },
+          name: { type: "string" },
+          currentVersion: { type: "number" },
+          totalVersions: { type: "number" },
+          versions: { type: "array" },
+        },
+        required: ["found"],
+      },
+    },
+    {
+      name: "prompt_diff",
+      description: "Show the diff between two versions of a prompt.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          fromVersion: { type: "number", description: "The older version to compare from." },
+          toVersion: { type: "number", description: "The newer version to compare to. Defaults to current version." },
+        },
+        required: ["name", "fromVersion"],
+      },
+      outputSchema: {
+        type: "object",
+        properties: {
+          found: { type: "boolean" },
+          name: { type: "string" },
+          diff: { type: "string" },
+          fromVersion: { type: "number" },
+          toVersion: { type: "number" },
+          fromCreatedAt: { type: "string" },
+          toCreatedAt: { type: "string" },
+        },
+        required: ["found"],
+      },
+    },
+    {
+      name: "prompt_rollback",
+      description: "Rollback a prompt to a specific version. Creates a new version with the content of the target version.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          toVersion: { type: "number", description: "The version number to rollback to." },
+        },
+        required: ["name", "toVersion"],
+      },
+      outputSchema: {
+        ...baseOk,
+        properties: {
+          ...baseOk.properties,
+          name: { type: "string" },
+          rolledBackTo: { type: "number" },
+          newVersion: { type: "number" },
+        },
       },
     },
     {
@@ -525,17 +729,40 @@ function handleToolCall(id, params) {
         }
 
         const metadata = isPlainObject(args.metadata) ? args.metadata : {};
+        const now = nowIso();
 
-        const nextVersion = existing && typeof existing.version === "number" ? existing.version + 1 : 1;
+        const nextVersion = existing && typeof existing.currentVersion === "number" ? existing.currentVersion + 1 : 1;
 
-        registry.prompts[key] = {
-          name: key,
+        const versionSnapshot = {
+          version: nextVersion,
           content: String(args.content),
           tags,
           metadata,
-          version: nextVersion,
-          updatedAt: nowIso(),
+          createdAt: now,
         };
+
+        if (existing) {
+          // Ensure versions array exists (handle partial migration/corrupted data)
+          if (!Array.isArray(existing.versions)) {
+            existing.versions = [];
+          }
+          // Append to version history
+          existing.versions.push(versionSnapshot);
+          existing.currentVersion = nextVersion;
+          existing.tags = tags;
+          existing.metadata = metadata;
+          existing.updatedAt = now;
+        } else {
+          // Create new prompt with version history
+          registry.prompts[key] = {
+            name: key,
+            currentVersion: nextVersion,
+            tags,
+            metadata,
+            updatedAt: now,
+            versions: [versionSnapshot],
+          };
+        }
 
         saveRegistry(registry);
 
@@ -547,7 +774,7 @@ function handleToolCall(id, params) {
           message: "Saved",
           name: key,
           version: nextVersion,
-          updatedAt: registry.prompts[key].updatedAt,
+          updatedAt: now,
         });
         return;
       }
@@ -559,8 +786,8 @@ function handleToolCall(id, params) {
           return;
         }
         const key = args.name.trim();
-        const prompt = registry.prompts[key];
-        if (!prompt) {
+        const promptEntry = registry.prompts[key];
+        if (!promptEntry) {
           sendToolResult(
             id,
             { found: false, message: `Prompt '${key}' not found` },
@@ -568,13 +795,223 @@ function handleToolCall(id, params) {
           );
           return;
         }
+
+        // Handle corrupted/migrated data without versions array
+        if (!Array.isArray(promptEntry.versions) || promptEntry.versions.length === 0) {
+          sendToolResult(
+            id,
+            { found: false, message: `Prompt '${key}' has no version history (data may be corrupted)` },
+            { isError: true, humanText: `Error: ${key} has no version history` }
+          );
+          return;
+        }
+
+        // Determine which version to return
+        const requestedVersion = typeof args.version === "number" ? args.version : promptEntry.currentVersion;
+        const versionData = promptEntry.versions.find((v) => v.version === requestedVersion);
+
+        if (!versionData) {
+          sendToolResult(
+            id,
+            { found: false, message: `Version ${requestedVersion} not found for prompt '${key}'` },
+            { isError: true, humanText: `Version ${requestedVersion} not found` }
+          );
+          return;
+        }
+
+        // Return prompt with content from the requested version
+        const prompt = {
+          name: promptEntry.name,
+          content: versionData.content,
+          tags: versionData.tags,
+          metadata: versionData.metadata,
+          version: versionData.version,
+          currentVersion: promptEntry.currentVersion,
+          createdAt: versionData.createdAt,
+          updatedAt: promptEntry.updatedAt,
+        };
+
         sendToolResult(id, { found: true, prompt });
+        return;
+      }
+
+      case "prompt_versions": {
+        const errName = validateString("name", args.name);
+        if (errName) {
+          sendToolResult(id, { found: false, message: errName }, { isError: true, humanText: `Error: ${errName}` });
+          return;
+        }
+        const key = args.name.trim();
+        const promptEntry = registry.prompts[key];
+        if (!promptEntry) {
+          sendToolResult(
+            id,
+            { found: false, message: `Prompt '${key}' not found` },
+            { isError: true, humanText: `Not found: ${key}` }
+          );
+          return;
+        }
+
+        // Return version summaries (without full content for brevity)
+        const versionSummaries = promptEntry.versions.map((v) => ({
+          version: v.version,
+          createdAt: v.createdAt,
+          contentPreview: v.content.slice(0, 100) + (v.content.length > 100 ? "..." : ""),
+          tags: v.tags,
+        }));
+
+        sendToolResult(id, {
+          found: true,
+          name: key,
+          currentVersion: promptEntry.currentVersion,
+          totalVersions: promptEntry.versions.length,
+          versions: versionSummaries,
+        });
+        return;
+      }
+
+      case "prompt_diff": {
+        const errName = validateString("name", args.name);
+        if (errName) {
+          sendToolResult(id, { found: false, message: errName }, { isError: true, humanText: `Error: ${errName}` });
+          return;
+        }
+        if (typeof args.fromVersion !== "number") {
+          sendToolResult(
+            id,
+            { found: false, message: "fromVersion must be a number" },
+            { isError: true, humanText: "Error: fromVersion must be a number" }
+          );
+          return;
+        }
+
+        const key = args.name.trim();
+        const promptEntry = registry.prompts[key];
+        if (!promptEntry) {
+          sendToolResult(
+            id,
+            { found: false, message: `Prompt '${key}' not found` },
+            { isError: true, humanText: `Not found: ${key}` }
+          );
+          return;
+        }
+
+        const fromVersion = args.fromVersion;
+        const toVersion = typeof args.toVersion === "number" ? args.toVersion : promptEntry.currentVersion;
+
+        const fromData = promptEntry.versions.find((v) => v.version === fromVersion);
+        const toData = promptEntry.versions.find((v) => v.version === toVersion);
+
+        if (!fromData) {
+          sendToolResult(
+            id,
+            { found: false, message: `Version ${fromVersion} not found` },
+            { isError: true, humanText: `Version ${fromVersion} not found` }
+          );
+          return;
+        }
+        if (!toData) {
+          sendToolResult(
+            id,
+            { found: false, message: `Version ${toVersion} not found` },
+            { isError: true, humanText: `Version ${toVersion} not found` }
+          );
+          return;
+        }
+
+        // Simple line-based diff
+        const diff = generateSimpleDiff(fromData.content, toData.content);
+
+        sendToolResult(id, {
+          found: true,
+          name: key,
+          fromVersion,
+          toVersion,
+          diff,
+          fromCreatedAt: fromData.createdAt,
+          toCreatedAt: toData.createdAt,
+        });
+        return;
+      }
+
+      case "prompt_rollback": {
+        const errName = validateString("name", args.name);
+        if (errName) {
+          sendToolResult(id, { success: false, message: errName }, { isError: true, humanText: `Error: ${errName}` });
+          return;
+        }
+        if (typeof args.toVersion !== "number") {
+          sendToolResult(
+            id,
+            { success: false, message: "toVersion must be a number" },
+            { isError: true, humanText: "Error: toVersion must be a number" }
+          );
+          return;
+        }
+
+        const key = args.name.trim();
+        const promptEntry = registry.prompts[key];
+        if (!promptEntry) {
+          sendToolResult(
+            id,
+            { success: false, message: `Prompt '${key}' not found` },
+            { isError: true, humanText: `Not found: ${key}` }
+          );
+          return;
+        }
+
+        const targetVersion = args.toVersion;
+        const targetData = promptEntry.versions.find((v) => v.version === targetVersion);
+
+        if (!targetData) {
+          sendToolResult(
+            id,
+            { success: false, message: `Version ${targetVersion} not found` },
+            { isError: true, humanText: `Version ${targetVersion} not found` }
+          );
+          return;
+        }
+
+        // Create a new version with the content from target version
+        const now = nowIso();
+        const newVersion = promptEntry.currentVersion + 1;
+
+        const rollbackSnapshot = {
+          version: newVersion,
+          content: targetData.content,
+          tags: targetData.tags,
+          metadata: { ...targetData.metadata, rolledBackFrom: targetVersion },
+          createdAt: now,
+        };
+
+        promptEntry.versions.push(rollbackSnapshot);
+        promptEntry.currentVersion = newVersion;
+        promptEntry.tags = targetData.tags;
+        promptEntry.metadata = rollbackSnapshot.metadata;
+        promptEntry.updatedAt = now;
+
+        saveRegistry(registry);
+        sendNotification("notifications/prompts/list_changed");
+
+        sendToolResult(id, {
+          success: true,
+          message: `Rolled back to version ${targetVersion}`,
+          name: key,
+          rolledBackTo: targetVersion,
+          newVersion,
+        });
         return;
       }
 
       case "prompt_list": {
         const prompts = Object.values(registry.prompts || {})
-          .map((p) => ({ name: p.name, tags: p.tags || [], version: p.version || 1, updatedAt: p.updatedAt || null }))
+          .map((p) => ({
+            name: p.name,
+            tags: p.tags || [],
+            version: p.currentVersion || 1,
+            totalVersions: Array.isArray(p.versions) ? p.versions.length : 1,
+            updatedAt: p.updatedAt || null,
+          }))
           .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
         sendToolResult(id, { prompts });
         return;
@@ -592,12 +1029,22 @@ function handleToolCall(id, params) {
         const results = Object.values(registry.prompts || [])
           .filter((p) => {
             const name = String(p.name || "").toLowerCase();
-            const content = String(p.content || "").toLowerCase();
+            // Search in latest version's content
+            const latestVersion = Array.isArray(p.versions) && p.versions.length > 0
+              ? p.versions[p.versions.length - 1]
+              : null;
+            const content = latestVersion ? String(latestVersion.content || "").toLowerCase() : "";
             const tags = Array.isArray(p.tags) ? p.tags.join(" ").toLowerCase() : "";
             return name.includes(q) || content.includes(q) || tags.includes(q);
           })
           .slice(0, limit)
-          .map((p) => ({ name: p.name, tags: p.tags || [], version: p.version || 1, updatedAt: p.updatedAt || null }));
+          .map((p) => ({
+            name: p.name,
+            tags: p.tags || [],
+            version: p.currentVersion || 1,
+            totalVersions: Array.isArray(p.versions) ? p.versions.length : 1,
+            updatedAt: p.updatedAt || null,
+          }));
 
         sendToolResult(id, { results });
         return;

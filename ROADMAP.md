@@ -27,7 +27,7 @@
 | 0 | Foundations | ADR, ROADMAP, ARCHITECTURE | ✅ Done |
 | 1 | CI Gate v1 | 품질 미달 PR 머지 차단 | ✅ Done |
 | 2 | Unified Rule Engine | CI 단일 규칙 엔진 (lint-engine) | ✅ Done |
-| 3 | Registry v2 | 버전 히스토리/롤백/디프 | 📋 Planned |
+| 3 | Registry v2 | 버전 히스토리/롤백/디프 | ✅ Done |
 | 4 | PromptPack v0.1 | pack/install 배포 단위 | 📋 Planned |
 | 5 | Eval Runner v2 | Claude CLI 실행 기반 평가 | 📋 Planned |
 | 6 | Regression Gate | baseline 비교 + PR 차단 | 📋 Planned |
@@ -38,22 +38,27 @@
 
 ## Current State (2026-01-30)
 
-**Version**: 3.5.0
+**Version**: 3.6.0
 
 ### Completed
 - ✅ CI Gate 동작 중 (`scripts/ci-lint.sh` + `.github/workflows/prompt-quality.yml`)
-- ✅ MCP Registry v1.2.0 (`servers/prompt-registry.js`) - CRUD + MCP Prompts 지원
+- ✅ MCP Registry v2.0.0 (`servers/prompt-registry.js`) - CRUD + 버전 히스토리 + MCP Prompts 지원
 - ✅ 8-Point Quality Check 문서화
 - ✅ Eval Runner dry-run 모드 구현
 - ✅ **Lint Engine 통합** (Sprint 2 완료)
   - `lib/lint-engine/`: 단일 규칙 엔진 모듈
   - CI에서 8-Point Quality Check 적용
   - `--max-score`, `--threshold` CLI 옵션 지원
+- ✅ **Registry v2** (Sprint 3 완료)
+  - 버전 히스토리 저장 (`versions[]` 스냅샷)
+  - `prompt_versions`: 버전 목록 조회
+  - `prompt_diff`: 버전 간 비교
+  - `prompt_rollback`: 특정 버전으로 롤백
+  - `prompt_get(version)`: 특정 버전 조회
 
 ### Technical Debt
 - ⚠️ **Hook/CI 스코어링 불일치**: Hook은 5-Point (grep 기반), CI는 8-Point (lint-engine)
   - 후속 스프린트에서 Hook도 lint-engine으로 통합 예정
-- ⚠️ **Registry 버전 관리 미비**: 단일 content 저장만 지원 (rollback/diff 불가)
 - ⚠️ **Eval Runner 제한**: `--provider claude-cli` 미구현
 
 ---
@@ -117,18 +122,18 @@
 
 ---
 
-### Sprint 3 — Registry v2
+### Sprint 3 — Registry v2 ✅
 
 **Goal**: Registry가 버전 히스토리/롤백/디프를 지원
 
 **Deliverables**:
-- 데이터 스키마 v2 + 마이그레이션
-- MCP tools: `prompt_get(version)`, `prompt_versions`
-- MCP tools: `prompt_diff`, `prompt_rollback`
+- [x] 데이터 스키마 v2 + 마이그레이션
+- [x] MCP tools: `prompt_get(version)`, `prompt_versions`
+- [x] MCP tools: `prompt_diff`, `prompt_rollback`
 
 **Acceptance Criteria**:
-- 저장을 반복하면 버전 스냅샷이 남음
-- 특정 버전 조회/롤백/디프가 가능
+- [x] 저장을 반복하면 버전 스냅샷이 남음
+- [x] 특정 버전 조회/롤백/디프가 가능
 
 ---
 

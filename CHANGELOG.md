@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.6.0] - 2026-01-30
+
+### Summary
+Sprint 3 완료: Registry v2 구현. 버전 히스토리, 롤백, diff 기능 지원. 저장을 반복하면 버전 스냅샷이 남고, 특정 버전 조회/롤백/비교가 가능.
+
+### Added
+
+#### Registry v2 - Version History Support
+- **Data schema v2**: `versions[]` 배열로 모든 버전 스냅샷 저장
+- **Auto-migration**: v1 데이터를 loadRegistry() 시 자동으로 v2로 변환
+- **New tool: `prompt_versions`**: 프롬프트의 모든 버전 목록 조회
+- **New tool: `prompt_diff`**: 두 버전 간 content 비교 (line-based diff)
+- **New tool: `prompt_rollback`**: 특정 버전으로 롤백 (새 버전 생성)
+
+#### Enhanced Existing Tools
+- **`prompt_get`**: `version` 파라미터 추가 (특정 버전 조회 가능)
+- **`prompt_list`**: `totalVersions` 필드 추가
+- **`prompt_search`**: 최신 버전의 content에서 검색
+
+### Changed
+
+#### MCP Server Version
+- **prompt-registry**: v1.2.0 → v2.0.0
+
+#### Documentation Updates
+- **ARCHITECTURE.md**: Registry 섹션 업데이트 (v2 스키마 문서화)
+- **ROADMAP.md**: Sprint 3 완료 표시
+
+### Technical Details
+
+| Component | Before | After |
+|-----------|--------|-------|
+| Data schema | Single content | `versions[]` array with snapshots |
+| Version history | Lost on save | Preserved (append to array) |
+| Version query | Latest only | Any version via `version` param |
+| Diff support | None | `prompt_diff` tool |
+| Rollback support | None | `prompt_rollback` tool |
+
+### Migration Notes
+- 기존 v1 데이터는 서버 시작 시 자동으로 v2로 마이그레이션됨
+- 마이그레이션 후 기존 content는 versions[0]으로 저장됨
+- 롤백 시 새 버전이 생성됨 (히스토리 유지)
+
+---
+
 ## [3.5.0] - 2026-01-30
 
 ### Summary

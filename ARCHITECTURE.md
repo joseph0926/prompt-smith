@@ -53,7 +53,7 @@
 
 **역할**: 프롬프트 품질 평가의 단일 진실의 원천 (Single Source of Truth)
 
-**현재 상태** (v3.5.0):
+**현재 상태** (v3.6.0):
 - ✅ 통합 완료 (Sprint 2)
 - `lib/lint-engine/index.js`: 코어 모듈 (lint 함수, CLI)
 - `lib/lint-engine/rules.js`: 8-Point Quality Check 규칙
@@ -146,7 +146,7 @@ Extended dimensions (STATE_TRACKING, TOOL_USAGE)는 `isApplicable()` 체크 후 
 
 **역할**: 작성 시점에서 품질 정책 강제
 
-**현재 상태** (v3.5.0):
+**현재 상태** (v3.6.0):
 - ⚠️ 별도 스코어링 시스템 사용 (lint-engine 미통합)
 - 5-Point Check: ROLE, GOAL, CONTEXT, FORMAT, CONSTRAINTS
 - Anti-pattern 감지: VAGUE, AMBIGUOUS, OVERCONFIDENT
@@ -183,7 +183,7 @@ Extended dimensions (STATE_TRACKING, TOOL_USAGE)는 `isApplicable()` 체크 후 
 
 **역할**: 머지 시점에서 품질 정책 강제
 
-**현재 상태** (v3.5.0):
+**현재 상태** (v3.6.0):
 - ✅ lint-engine 통합 완료 (Sprint 2)
 - `ci-lint.sh`가 `node lib/lint-engine/index.js --json` 호출
 - 8-Point Quality Check 적용 (6 base + 2 extended)
@@ -231,25 +231,42 @@ Extended dimensions (STATE_TRACKING, TOOL_USAGE)는 `isApplicable()` 체크 후 
 
 **역할**: 프롬프트 자산의 저장/검색/버전 관리
 
-**현재 기능** (v1.2.0):
-- `prompt_save`: 저장 (버전 자동 증가, 단일 content 덮어쓰기)
-- `prompt_get`: 조회 (latest만)
-- `prompt_list`: 목록
+**현재 기능** (v2.0.0):
+- `prompt_save`: 저장 (버전 자동 증가, **버전 히스토리 유지**)
+- `prompt_get`: 조회 (**버전 파라미터 지원**)
+- `prompt_list`: 목록 (totalVersions 포함)
 - `prompt_search`: 검색
 - `prompt_delete`: 삭제
+- `prompt_versions`: **버전 목록 조회** (Sprint 3)
+- `prompt_diff`: **버전 간 비교** (Sprint 3)
+- `prompt_rollback`: **특정 버전으로 롤백** (Sprint 3)
 - **MCP Prompts**: 저장된 프롬프트를 slash command로 노출 (`prompts/list`, `prompts/get`)
 - **알림**: `notifications/prompts/list_changed` 이벤트 발송
 
-**제한사항** (v1.2.0):
-- 버전 히스토리 미지원 (단일 content만 저장)
-- rollback/diff 불가
-
-**계획된 기능** (Sprint 3):
-- `prompt_get(version)`: 특정 버전 조회
-- `prompt_versions`: 버전 목록
-- `prompt_diff`: 버전 간 비교
-- `prompt_rollback`: 롤백
-- 데이터 스키마 v2: `versions[]` 스냅샷 저장
+**데이터 스키마** (v2):
+```javascript
+{
+  schemaVersion: 2,
+  prompts: {
+    [name]: {
+      name: string,
+      currentVersion: number,
+      tags: string[],
+      metadata: object,
+      updatedAt: string,
+      versions: [
+        {
+          version: number,
+          content: string,
+          tags: string[],
+          metadata: object,
+          createdAt: string
+        }
+      ]
+    }
+  }
+}
+```
 
 **데이터 흐름**:
 ```
@@ -257,13 +274,15 @@ Save Request
      │
      ▼
 ┌────────────────┐
-│ prompts.json   │  ← 현재: 단일 content
-│ (local file)   │  ← 계획: versions[] 스냅샷
+│ prompts.json   │  ← schemaVersion: 2
+│ (local file)   │  ← versions[] 스냅샷 저장
 └────────────────┘
      │
      ▼
 MCP prompts/list_changed notification
 ```
+
+**마이그레이션**: v1 데이터는 loadRegistry() 시 자동으로 v2로 변환됨
 
 ---
 
